@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111111">
-<title>BAKSANA | İşletme Paneli</title>
+<meta name="theme-color" content="#6C4BF4">
+<title>BAKSANA İşletme Paneli</title>
 
 <style>
 *{
@@ -14,36 +14,28 @@
 }
 
 :root{
-    --black:#111111;
-    --dark:#181818;
-    --card:#ffffff;
-    --bg:#f5f6f7;
-    --text:#171717;
-    --muted:#7b7f86;
-    --border:#e8e8e8;
-    --accent:#111111;
-    --green:#198754;
-    --red:#dc3545;
-    --orange:#f59f00;
-    --blue:#3b82f6;
-    --shadow:0 10px 30px rgba(0,0,0,.06);
+    --primary:#6C4BF4;
+    --primary2:#8368F7;
+    --purple-light:#F0ECFF;
+    --blue:#3B82F6;
+    --green:#19A974;
+    --green-light:#E8F8F1;
+    --orange:#F59E0B;
+    --orange-light:#FFF5DE;
+    --red:#E05252;
+    --red-light:#FDECEC;
+    --text:#202124;
+    --muted:#7B8190;
+    --bg:#F7F8FC;
+    --white:#fff;
+    --border:#E9EAF0;
+    --shadow:0 8px 28px rgba(34,30,70,.07);
 }
 
 body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     background:var(--bg);
     color:var(--text);
-    min-height:100vh;
-}
-
-button,
-input{
-    font-family:inherit;
-}
-
-button{
-    cursor:pointer;
-    border:none;
 }
 
 /* =========================
@@ -55,79 +47,108 @@ button{
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:24px;
-    background:#111;
+    padding:22px;
+    background:
+        radial-gradient(circle at 10% 10%,#DDD5FF 0,transparent 30%),
+        radial-gradient(circle at 90% 90%,#DDEAFF 0,transparent 32%),
+        #F8F8FC;
 }
 
 .login-box{
     width:100%;
     max-width:430px;
-    background:#fff;
-    border-radius:28px;
+    background:white;
+    border-radius:30px;
     padding:34px 25px 28px;
-    box-shadow:0 30px 80px rgba(0,0,0,.25);
+    box-shadow:0 25px 70px rgba(63,52,130,.13);
 }
 
-.logo{
-    font-size:32px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand-mark{
+    width:43px;
+    height:43px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--primary),#8B72FF);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-weight:900;
-    letter-spacing:-1.8px;
+    font-size:18px;
+    box-shadow:0 8px 20px rgba(108,75,244,.25);
 }
 
-.logo span{
-    font-weight:500;
+.brand-name{
+    font-size:26px;
+    font-weight:900;
+    letter-spacing:-1.3px;
+}
+
+.login-title{
+    font-size:24px;
+    font-weight:850;
+    margin-top:31px;
 }
 
 .login-subtitle{
-    color:#777;
-    margin-top:8px;
-    margin-bottom:30px;
+    color:var(--muted);
     font-size:14px;
+    line-height:1.5;
+    margin-top:7px;
+    margin-bottom:27px;
 }
 
 .input-group{
-    margin-bottom:17px;
+    margin-bottom:16px;
 }
 
 .input-group label{
     display:block;
-    font-size:13px;
-    font-weight:700;
+    font-size:12px;
+    font-weight:800;
     margin-bottom:8px;
 }
 
 .input-group input{
     width:100%;
-    height:52px;
-    border:1px solid #ddd;
+    height:53px;
+    border:1px solid var(--border);
     border-radius:14px;
     padding:0 15px;
-    font-size:15px;
     outline:none;
+    font-size:14px;
+    background:#FAFAFC;
     transition:.2s;
 }
 
 .input-group input:focus{
-    border-color:#111;
-    box-shadow:0 0 0 3px rgba(17,17,17,.07);
+    border-color:var(--primary);
+    background:white;
+    box-shadow:0 0 0 4px rgba(108,75,244,.09);
 }
 
 .login-btn{
     width:100%;
     height:53px;
+    border:0;
     border-radius:15px;
-    background:#111;
-    color:#fff;
-    font-size:15px;
+    color:white;
+    font-size:14px;
     font-weight:800;
-    margin-top:5px;
+    background:linear-gradient(135deg,var(--primary),#856CF6);
+    box-shadow:0 9px 20px rgba(108,75,244,.22);
 }
 
-.login-demo{
+.demo-text{
     text-align:center;
-    margin-top:17px;
-    color:#999;
-    font-size:12px;
+    color:#A0A3AC;
+    font-size:11px;
+    margin-top:16px;
 }
 
 /* =========================
@@ -140,8 +161,9 @@ button{
 }
 
 .topbar{
-    height:68px;
-    background:#fff;
+    height:72px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(15px);
     border-bottom:1px solid var(--border);
     display:flex;
     align-items:center;
@@ -149,56 +171,81 @@ button{
     padding:0 20px;
     position:sticky;
     top:0;
-    z-index:20;
+    z-index:30;
+}
+
+.top-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
 }
 
 .top-logo{
     font-size:23px;
     font-weight:900;
-    letter-spacing:-1.2px;
+    color:var(--text);
 }
 
 .top-logo span{
-    font-weight:500;
+    color:var(--primary);
+}
+
+.top-business{
+    padding-left:11px;
+    border-left:1px solid #ddd;
+    color:var(--muted);
+    font-size:12px;
 }
 
 .top-actions{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:9px;
 }
 
 .icon-btn{
     width:40px;
     height:40px;
     border-radius:13px;
-    background:#f4f4f4;
-    font-size:18px;
+    border:1px solid var(--border);
+    background:white;
+    font-size:17px;
+    position:relative;
+}
+
+.notification-dot{
+    position:absolute;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#F04444;
+    right:8px;
+    top:7px;
+    border:1px solid white;
 }
 
 .avatar{
     width:40px;
     height:40px;
     border-radius:13px;
-    background:#111;
-    color:#fff;
+    background:var(--purple-light);
+    color:var(--primary);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:800;
-    font-size:14px;
-}
-
-.content{
-    width:100%;
-    max-width:1150px;
-    margin:auto;
-    padding:25px 18px 105px;
+    font-weight:900;
+    font-size:12px;
 }
 
 /* =========================
-   VIEWS
+   CONTENT
 ========================= */
+
+.content{
+    max-width:1250px;
+    margin:auto;
+    padding:27px 18px 105px;
+}
 
 .view{
     display:none;
@@ -208,106 +255,215 @@ button{
     display:block;
 }
 
+.page-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:15px;
+}
+
 .page-title{
     font-size:27px;
-    font-weight:850;
+    font-weight:900;
     letter-spacing:-.8px;
 }
 
 .page-desc{
     color:var(--muted);
-    margin-top:6px;
-    font-size:14px;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.date-chip{
+    display:none;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:9px 12px;
+    font-size:12px;
+    font-weight:700;
 }
 
 /* =========================
-   DASHBOARD
+   WELCOME
 ========================= */
 
 .welcome{
-    background:#111;
-    color:#fff;
-    border-radius:23px;
-    padding:23px;
     margin-top:22px;
+    padding:25px;
+    border-radius:23px;
+    color:white;
+    background:
+        radial-gradient(circle at 95% 15%,rgba(255,255,255,.20),transparent 25%),
+        linear-gradient(135deg,#6C4BF4,#8065F5 55%,#9A83FF);
     position:relative;
     overflow:hidden;
+    box-shadow:0 15px 30px rgba(108,75,244,.18);
 }
 
-.welcome:after{
+.welcome:before{
     content:"";
     position:absolute;
-    width:160px;
-    height:160px;
-    border:1px solid rgba(255,255,255,.12);
+    width:180px;
+    height:180px;
+    border:1px solid rgba(255,255,255,.15);
     border-radius:50%;
-    right:-55px;
-    top:-70px;
+    right:-65px;
+    bottom:-100px;
 }
 
 .welcome small{
-    color:#aaa;
-    font-size:12px;
+    font-size:11px;
+    opacity:.78;
 }
 
 .welcome h2{
-    font-size:22px;
-    margin-top:5px;
+    font-size:23px;
+    margin-top:6px;
+    letter-spacing:-.4px;
 }
+
+.welcome-row{
+    margin-top:19px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.welcome-info{
+    font-size:12px;
+    opacity:.88;
+}
+
+.online{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.17);
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.online-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#65E6A5;
+}
+
+/* =========================
+   STATS
+========================= */
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:12px;
-    margin-top:18px;
+    margin-top:15px;
 }
 
 .stat-card{
-    background:#fff;
+    background:white;
     border:1px solid var(--border);
     border-radius:18px;
     padding:17px;
     box-shadow:var(--shadow);
 }
 
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
 .stat-icon{
-    width:36px;
-    height:36px;
-    border-radius:11px;
-    background:#f3f3f3;
+    width:38px;
+    height:38px;
+    border-radius:12px;
     display:flex;
     align-items:center;
     justify-content:center;
-    margin-bottom:13px;
+    font-size:18px;
+}
+
+.stat-purple{
+    background:var(--purple-light);
+}
+
+.stat-orange{
+    background:var(--orange-light);
+}
+
+.stat-green{
+    background:var(--green-light);
+}
+
+.stat-blue{
+    background:#EAF2FF;
 }
 
 .stat-number{
     font-size:25px;
-    font-weight:850;
+    font-weight:900;
+    margin-top:13px;
 }
 
 .stat-label{
-    font-size:12px;
+    font-size:11px;
     color:var(--muted);
     margin-top:3px;
 }
 
+.stat-change{
+    font-size:10px;
+    color:var(--green);
+    font-weight:800;
+}
+
+/* =========================
+   SECTION
+========================= */
+
 .section-head{
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     margin:27px 0 13px;
 }
 
 .section-head h3{
     font-size:17px;
+    font-weight:850;
 }
 
 .section-head button{
+    border:0;
     background:none;
-    color:#666;
-    font-size:13px;
-    font-weight:700;
+    color:var(--primary);
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:15px;
+}
+
+.panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:var(--shadow);
 }
 
 /* =========================
@@ -316,139 +472,264 @@ button{
 
 .orders-list{
     display:grid;
-    gap:12px;
+    gap:11px;
 }
 
 .order-card{
-    background:#fff;
+    background:white;
     border:1px solid var(--border);
     border-radius:19px;
-    padding:17px;
-    box-shadow:var(--shadow);
+    padding:16px;
+    box-shadow:0 5px 20px rgba(30,30,60,.045);
 }
 
 .order-top{
     display:flex;
-    justify-content:space-between;
     align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
 }
 
 .service-info{
     display:flex;
-    gap:12px;
     align-items:center;
+    gap:11px;
 }
 
 .service-icon{
-    width:46px;
-    height:46px;
+    width:45px;
+    height:45px;
     border-radius:14px;
-    background:#f3f3f3;
+    background:var(--purple-light);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
+    font-size:21px;
 }
 
 .service-name{
-    font-size:15px;
-    font-weight:800;
+    font-size:14px;
+    font-weight:850;
 }
 
 .order-id{
-    color:#999;
-    font-size:11px;
+    font-size:10px;
+    color:#A0A3AD;
     margin-top:3px;
 }
 
 .status{
+    border-radius:20px;
     padding:6px 9px;
-    border-radius:9px;
-    font-size:10px;
-    font-weight:800;
+    font-size:9px;
+    font-weight:900;
+    white-space:nowrap;
 }
 
 .status.new{
-    background:#fff4d6;
-    color:#9a6700;
+    background:var(--orange-light);
+    color:#A96C00;
 }
 
 .status.active{
-    background:#e8f1ff;
-    color:#2361b5;
+    background:#EAF2FF;
+    color:#2563B8;
 }
 
 .status.done{
-    background:#e6f6ed;
-    color:#197342;
+    background:var(--green-light);
+    color:#198457;
 }
 
 .status.rejected{
-    background:#fdebec;
-    color:#b42332;
+    background:var(--red-light);
+    color:#B93A3A;
 }
 
 .order-details{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:9px;
-    margin-top:16px;
-}
-
-.detail{
-    background:#f7f7f7;
-    border-radius:12px;
-    padding:10px;
-}
-
-.detail-label{
-    font-size:10px;
-    color:#999;
-    margin-bottom:3px;
-}
-
-.detail-value{
-    font-size:12px;
-    font-weight:700;
-}
-
-.order-note{
-    background:#fafafa;
-    border-left:3px solid #ddd;
-    margin-top:11px;
-    padding:9px 11px;
-    font-size:12px;
-    color:#666;
-    border-radius:5px;
-}
-
-.order-actions{
-    display:flex;
+    grid-template-columns:repeat(2,1fr);
     gap:8px;
     margin-top:14px;
 }
 
+.detail{
+    background:#F8F9FC;
+    border-radius:11px;
+    padding:9px 10px;
+}
+
+.detail-label{
+    color:#9A9FAA;
+    font-size:9px;
+    margin-bottom:3px;
+}
+
+.detail-value{
+    font-size:11px;
+    font-weight:750;
+}
+
+.order-note{
+    margin-top:10px;
+    padding:9px 11px;
+    border-radius:10px;
+    background:#FAFAFC;
+    color:#747986;
+    font-size:10px;
+    line-height:1.45;
+}
+
+.order-actions{
+    display:flex;
+    gap:7px;
+    margin-top:12px;
+}
+
 .btn{
-    flex:1;
-    height:43px;
-    border-radius:12px;
-    font-size:12px;
-    font-weight:800;
+    min-height:40px;
+    border-radius:11px;
+    padding:0 13px;
+    font-size:11px;
+    font-weight:850;
+    border:0;
 }
 
 .btn-primary{
-    background:#111;
-    color:#fff;
+    background:var(--primary);
+    color:white;
+    flex:1;
+}
+
+.btn-green{
+    background:var(--green);
+    color:white;
+    flex:1;
 }
 
 .btn-light{
-    background:#f1f1f1;
-    color:#222;
+    background:#F2F3F7;
+    color:#3F4249;
 }
 
 .btn-danger{
-    background:#fff0f1;
-    color:#c52e3c;
+    background:var(--red-light);
+    color:var(--red);
+}
+
+/* =========================
+   QUICK ACTION
+========================= */
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.quick{
+    border:1px solid var(--border);
+    background:#FAFAFC;
+    border-radius:14px;
+    padding:13px;
+    text-align:left;
+}
+
+.quick-icon{
+    font-size:20px;
+}
+
+.quick-title{
+    margin-top:8px;
+    font-size:11px;
+    font-weight:850;
+}
+
+.quick-desc{
+    color:#999;
+    font-size:9px;
+    margin-top:3px;
+}
+
+/* =========================
+   PERFORMANCE
+========================= */
+
+.performance{
+    margin-top:15px;
+}
+
+.performance-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:14px;
+}
+
+.performance-label{
+    width:72px;
+    font-size:10px;
+    color:#777;
+}
+
+.progress{
+    flex:1;
+    height:8px;
+    background:#F0F1F5;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress span{
+    display:block;
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,var(--primary),#9A83FF);
+}
+
+.performance-percent{
+    width:35px;
+    text-align:right;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* =========================
+   EARNINGS
+========================= */
+
+.earning-box{
+    margin-top:15px;
+    background:linear-gradient(135deg,#F3F0FF,#F8F6FF);
+    border:1px solid #E6E0FF;
+    border-radius:19px;
+    padding:17px;
+}
+
+.earning-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.earning-title{
+    color:#777;
+    font-size:11px;
+}
+
+.earning-value{
+    font-size:25px;
+    font-weight:900;
+    margin-top:5px;
+}
+
+.earning-change{
+    background:white;
+    color:var(--green);
+    border-radius:9px;
+    padding:7px 9px;
+    font-size:10px;
+    font-weight:900;
 }
 
 /* =========================
@@ -469,18 +750,19 @@ button{
 
 .filter{
     white-space:nowrap;
-    background:#fff;
-    border:1px solid #e2e2e2;
+    border:1px solid var(--border);
+    background:white;
+    color:#777;
     padding:9px 14px;
     border-radius:20px;
-    font-size:12px;
-    font-weight:700;
+    font-size:11px;
+    font-weight:800;
 }
 
 .filter.active{
-    background:#111;
-    color:#fff;
-    border-color:#111;
+    background:var(--primary);
+    border-color:var(--primary);
+    color:white;
 }
 
 /* =========================
@@ -488,11 +770,12 @@ button{
 ========================= */
 
 .calendar-card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:18px;
     margin-top:20px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:21px;
+    padding:18px;
+    box-shadow:var(--shadow);
 }
 
 .calendar-header{
@@ -502,59 +785,66 @@ button{
     margin-bottom:18px;
 }
 
-.calendar-header h3{
-    font-size:17px;
-}
-
 .calendar-header button{
     width:35px;
     height:35px;
-    border-radius:10px;
-    background:#f3f3f3;
+    border:0;
+    background:#F1EFFF;
+    color:var(--primary);
+    border-radius:11px;
+    font-size:20px;
+}
+
+.calendar-header h3{
+    font-size:16px;
 }
 
 .calendar-grid{
     display:grid;
     grid-template-columns:repeat(7,1fr);
-    gap:5px;
+    gap:4px;
 }
 
 .day-name{
     text-align:center;
-    font-size:10px;
-    color:#999;
+    color:#9B9EA7;
+    font-size:9px;
     padding-bottom:7px;
-    font-weight:700;
+    font-weight:800;
 }
 
 .day{
     aspect-ratio:1;
-    border-radius:10px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:12px;
+    border-radius:11px;
+    font-size:11px;
     position:relative;
 }
 
+.day:hover{
+    background:#F2EFFF;
+}
+
 .day.today{
-    background:#111;
-    color:#fff;
-    font-weight:800;
+    background:var(--primary);
+    color:white;
+    font-weight:900;
 }
 
 .day.has-order:after{
     content:"";
-    position:absolute;
-    bottom:5px;
     width:4px;
     height:4px;
-    background:#111;
+    background:var(--orange);
+    position:absolute;
+    bottom:4px;
     border-radius:50%;
 }
 
 .day.today.has-order:after{
-    background:#fff;
+    background:white;
 }
 
 /* =========================
@@ -562,65 +852,79 @@ button{
 ========================= */
 
 .profile-card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:21px;
-    padding:22px;
     margin-top:20px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:20px;
+    box-shadow:var(--shadow);
 }
 
 .profile-header{
     display:flex;
     align-items:center;
-    gap:14px;
-    padding-bottom:20px;
+    gap:13px;
+    padding-bottom:19px;
     border-bottom:1px solid var(--border);
 }
 
 .big-avatar{
-    width:58px;
-    height:58px;
+    width:60px;
+    height:60px;
     border-radius:18px;
-    background:#111;
-    color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:20px;
-    font-weight:800;
+    background:linear-gradient(135deg,var(--primary),#927CFF);
+    color:white;
+    font-size:19px;
+    font-weight:900;
 }
 
 .profile-name{
-    font-size:17px;
-    font-weight:800;
+    font-size:16px;
+    font-weight:900;
 }
 
 .profile-type{
-    font-size:12px;
     color:#888;
+    font-size:11px;
     margin-top:3px;
+}
+
+.rating{
+    display:inline-flex;
+    margin-top:7px;
+    background:#FFF6DE;
+    color:#A36B00;
+    padding:5px 8px;
+    border-radius:8px;
+    font-size:10px;
+    font-weight:800;
 }
 
 .profile-row{
     display:flex;
     justify-content:space-between;
-    padding:16px 0;
-    border-bottom:1px solid #eee;
-    font-size:13px;
+    gap:20px;
+    padding:15px 0;
+    border-bottom:1px solid #F0F0F2;
+    font-size:12px;
 }
 
-.profile-row span:first-child{
-    color:#888;
+.profile-row span{
+    color:#8A8E99;
 }
 
 .logout{
     width:100%;
-    height:45px;
-    margin-top:20px;
-    border-radius:13px;
-    background:#fff0f1;
-    color:#c52e3c;
-    font-weight:800;
+    height:44px;
+    border:0;
+    border-radius:12px;
+    background:var(--red-light);
+    color:var(--red);
+    margin-top:19px;
+    font-weight:850;
 }
 
 /* =========================
@@ -632,40 +936,50 @@ button{
     bottom:0;
     left:0;
     right:0;
-    height:76px;
+    height:77px;
     background:rgba(255,255,255,.96);
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(16px);
     border-top:1px solid var(--border);
-    display:flex;
-    justify-content:center;
-    z-index:30;
+    z-index:50;
 }
 
 .nav-inner{
-    width:100%;
     max-width:650px;
+    height:100%;
+    margin:auto;
     display:grid;
     grid-template-columns:repeat(4,1fr);
 }
 
 .nav-btn{
+    border:0;
     background:none;
-    color:#999;
+    color:#A1A4AD;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     gap:4px;
-    font-size:10px;
-    font-weight:700;
+    font-size:9px;
+    font-weight:800;
 }
 
 .nav-icon{
-    font-size:20px;
+    width:34px;
+    height:29px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
 }
 
 .nav-btn.active{
-    color:#111;
+    color:var(--primary);
+}
+
+.nav-btn.active .nav-icon{
+    background:var(--purple-light);
 }
 
 /* =========================
@@ -676,7 +990,7 @@ button{
     display:none;
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.55);
+    background:rgba(30,25,55,.48);
     z-index:100;
     align-items:flex-end;
     justify-content:center;
@@ -688,39 +1002,62 @@ button{
 
 .modal{
     width:100%;
-    max-width:550px;
-    background:#fff;
-    border-radius:25px 25px 0 0;
-    padding:23px;
-    animation:slideUp .25s ease;
+    max-width:560px;
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    border-radius:27px 27px 0 0;
+    padding:22px;
+    animation:up .25s ease;
 }
 
-@keyframes slideUp{
-    from{
-        transform:translateY(100%);
-    }
-    to{
-        transform:translateY(0);
-    }
+@keyframes up{
+    from{transform:translateY(100%);}
+    to{transform:translateY(0);}
 }
 
 .modal-handle{
-    width:40px;
+    width:42px;
     height:4px;
-    background:#ddd;
-    border-radius:10px;
-    margin:0 auto 20px;
+    border-radius:20px;
+    background:#DDD;
+    margin:0 auto 19px;
 }
 
-.modal h3{
+.modal-title{
     font-size:19px;
-    margin-bottom:7px;
+    font-weight:900;
 }
 
-.modal p{
-    color:#777;
-    font-size:13px;
-    line-height:1.5;
+.modal-sub{
+    color:#8A8D97;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.modal-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:17px;
+}
+
+.modal-info div{
+    background:#F7F7FA;
+    padding:11px;
+    border-radius:11px;
+}
+
+.modal-info small{
+    display:block;
+    color:#999;
+    font-size:9px;
+}
+
+.modal-info strong{
+    display:block;
+    font-size:11px;
+    margin-top:3px;
 }
 
 .reason-list{
@@ -730,25 +1067,21 @@ button{
 }
 
 .reason{
-    width:100%;
+    border:0;
+    background:#F6F7FA;
     text-align:left;
     padding:14px;
-    background:#f6f6f6;
     border-radius:12px;
-    font-size:13px;
-    font-weight:700;
-}
-
-.reason:hover{
-    background:#eee;
+    font-size:12px;
+    font-weight:800;
 }
 
 .close-modal{
     width:100%;
     height:46px;
-    background:#111;
-    color:#fff;
+    border:0;
     border-radius:13px;
+    background:#F0F1F5;
     font-weight:800;
 }
 
@@ -759,14 +1092,14 @@ button{
 .toast{
     position:fixed;
     left:50%;
-    bottom:92px;
-    transform:translateX(-50%) translateY(20px);
-    background:#111;
-    color:#fff;
+    bottom:94px;
+    transform:translate(-50%,20px);
+    background:#202124;
+    color:white;
     padding:12px 17px;
     border-radius:12px;
-    font-size:12px;
-    font-weight:700;
+    font-size:11px;
+    font-weight:750;
     opacity:0;
     pointer-events:none;
     transition:.25s;
@@ -776,62 +1109,63 @@ button{
 
 .toast.show{
     opacity:1;
-    transform:translateX(-50%) translateY(0);
+    transform:translate(-50%,0);
 }
 
 /* =========================
    DESKTOP
 ========================= */
 
-@media(min-width:800px){
+@media(min-width:850px){
 
     .bottom-nav{
-        position:fixed;
-        width:250px;
-        height:100vh;
         left:0;
         top:0;
         bottom:auto;
-        border-top:none;
+        width:245px;
+        height:100vh;
+        border-top:0;
         border-right:1px solid var(--border);
-        display:block;
-        background:#fff;
     }
 
     .nav-inner{
         display:flex;
         flex-direction:column;
-        padding:95px 14px 20px;
-        gap:6px;
+        padding:100px 13px 20px;
+        gap:5px;
     }
 
     .nav-btn{
+        height:50px;
         flex-direction:row;
         justify-content:flex-start;
-        gap:13px;
-        height:50px;
+        gap:12px;
         padding:0 15px;
         border-radius:12px;
-        font-size:13px;
+        font-size:12px;
     }
 
     .nav-btn.active{
-        background:#111;
-        color:#fff;
+        background:var(--purple-light);
     }
 
     .nav-icon{
-        font-size:18px;
+        width:28px;
+        font-size:17px;
     }
 
     .topbar{
-        margin-left:250px;
+        margin-left:245px;
     }
 
     .content{
-        margin-left:250px;
+        margin-left:245px;
         max-width:none;
-        padding:35px 45px 50px;
+        padding:34px 42px 50px;
+    }
+
+    .date-chip{
+        display:block;
     }
 
     .modal-bg{
@@ -843,13 +1177,37 @@ button{
     }
 }
 
-@media(max-width:650px){
+@media(max-width:700px){
+
     .stats{
         grid-template-columns:1fr 1fr;
     }
 
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
     .page-title{
         font-size:24px;
+    }
+
+    .top-business{
+        display:none;
+    }
+}
+
+@media(max-width:380px){
+
+    .welcome{
+        padding:20px;
+    }
+
+    .stat-card{
+        padding:14px;
+    }
+
+    .stat-number{
+        font-size:22px;
     }
 }
 </style>
@@ -857,46 +1215,276 @@ button{
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
 
-<section id="loginScreen">
+<div id="loginScreen">
 
     <div class="login-box">
 
-        <div class="logo">
-            BAKSANA<span>.</span>
+        <div class="brand">
+            <div class="brand-mark">B</div>
+            <div class="brand-name">BAKSANA</div>
+        </div>
+
+        <div class="login-title">
+            İşletme Paneli
         </div>
 
         <div class="login-subtitle">
-            İşletme yönetim paneline hoş geldiniz.
+            Siparişlerinizi, müşterilerinizi ve günlük işlerinizi tek yerden yönetin.
         </div>
 
         <div class="input-group">
             <label>E-posta</label>
-            <input
-                id="email"
-                type="email"
-                placeholder="isletme@ornek.com"
-            >
+            <input id="email" type="email" placeholder="isletme@ornek.com">
         </div>
 
         <div class="input-group">
             <label>Şifre</label>
-            <input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-            >
+            <input id="password" type="password" placeholder="••••••••">
         </div>
 
         <button class="login-btn" onclick="login()">
-            İşletme Paneline Gir
+            Panelime Gir
         </button>
 
-        <div class="login-demo">
-            Demo sürüm • BAKSANA İşletme
+        <div class="demo-text">
+            BAKSANA İşletme Yönetim Sistemi • Demo
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- APP -->
+
+<div id="app">
+
+<header class="topbar">
+
+    <div class="top-left">
+
+        <div class="top-logo">
+            BAKSANA<span>.</span>
+        </div>
+
+        <div class="top-business">
+            İşletme Paneli
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button class="icon-btn" onclick="showToast('3 yeni bildiriminiz var')">
+            🔔
+            <span class="notification-dot"></span>
+        </button>
+
+        <div class="avatar">
+            TE
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="view active">
+
+    <div class="page-head">
+
+        <div>
+            <div class="page-title">Günaydın 👋</div>
+            <div class="page-desc">
+                Bugünkü işletme durumunuza genel bakış.
+            </div>
+        </div>
+
+        <div class="date-chip">
+            📅 30 Eylül 2026
+        </div>
+
+    </div>
+
+
+    <div class="welcome">
+
+        <small>İŞLETME HESABI</small>
+
+        <h2>Temiz Ev Hizmetleri</h2>
+
+        <div class="welcome-row">
+
+            <div class="welcome-info">
+                Bugün 3 yeni siparişiniz var.
+            </div>
+
+            <div class="online">
+                <span class="online-dot"></span>
+                Hizmete Açık
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <div class="stat-icon stat-orange">🆕</div>
+                <span class="stat-change">+2</span>
+            </div>
+
+            <div class="stat-number">3</div>
+            <div class="stat-label">Yeni Sipariş</div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <div class="stat-icon stat-blue">🔧</div>
+                <span class="stat-change">+1</span>
+            </div>
+
+            <div class="stat-number">2</div>
+            <div class="stat-label">Aktif İş</div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <div class="stat-icon stat-green">✓</div>
+                <span class="stat-change">+14%</span>
+            </div>
+
+            <div class="stat-number">18</div>
+            <div class="stat-label">Tamamlanan</div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <div class="stat-icon stat-purple">⭐</div>
+                <span class="stat-change">4.9</span>
+            </div>
+
+            <div class="stat-number">96%</div>
+            <div class="stat-label">Müşteri Memnuniyeti</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-head">
+        <h3>Yeni Siparişler</h3>
+        <button onclick="openView('orders',this)">Tümünü Gör →</button>
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="orders-list" id="dashboardOrders"></div>
+
+
+        <div>
+
+            <div class="panel">
+
+                <div class="section-head" style="margin:0 0 13px;">
+                    <h3>Hızlı İşlemler</h3>
+                </div>
+
+                <div class="quick-grid">
+
+                    <button class="quick" onclick="openView('orders')">
+                        <div class="quick-icon">📋</div>
+                        <div class="quick-title">Siparişler</div>
+                        <div class="quick-desc">Tüm işleri gör</div>
+                    </button>
+
+                    <button class="quick" onclick="openView('calendar')">
+                        <div class="quick-icon">📅</div>
+                        <div class="quick-title">Takvim</div>
+                        <div class="quick-desc">Programı görüntüle</div>
+                    </button>
+
+                    <button class="quick" onclick="showToast('Hizmet yönetimi yakında')">
+                        <div class="quick-icon">🧹</div>
+                        <div class="quick-title">Hizmetler</div>
+                        <div class="quick-desc">Hizmetlerini düzenle</div>
+                    </button>
+
+                    <button class="quick" onclick="showToast('Bildirimler açıldı')">
+                        <div class="quick-icon">🔔</div>
+                        <div class="quick-title">Bildirimler</div>
+                        <div class="quick-desc">Yeni bildirimler</div>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel performance">
+
+                <div class="section-head" style="margin:0;">
+                    <h3>Bu Haftanın Performansı</h3>
+                </div>
+
+                <div class="performance-row">
+                    <div class="performance-label">Sipariş</div>
+                    <div class="progress"><span style="width:82%"></span></div>
+                    <div class="performance-percent">82%</div>
+                </div>
+
+                <div class="performance-row">
+                    <div class="performance-label">Zamanında</div>
+                    <div class="progress"><span style="width:94%"></span></div>
+                    <div class="performance-percent">94%</div>
+                </div>
+
+                <div class="performance-row">
+                    <div class="performance-label">Memnuniyet</div>
+                    <div class="progress"><span style="width:96%"></span></div>
+                    <div class="performance-percent">96%</div>
+                </div>
+
+            </div>
+
+
+            <div class="earning-box">
+
+                <div class="earning-top">
+
+                    <div>
+                        <div class="earning-title">Bu Ayki Kazanç</div>
+                        <div class="earning-value">₺24.850</div>
+                    </div>
+
+                    <div class="earning-change">
+                        +18%
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -904,379 +1492,262 @@ button{
 </section>
 
 
-<!-- =========================
-     APP
-========================= -->
+<!-- ORDERS -->
 
-<div id="app">
+<section id="orders" class="view">
 
-    <header class="topbar">
+    <div class="page-title">Siparişler</div>
 
-        <div class="top-logo">
-            BAKSANA<span>.</span>
+    <div class="page-desc">
+        Size atanmış işleri buradan yönetin.
+    </div>
+
+
+    <div class="filter-row">
+
+        <button class="filter active" onclick="filterOrders('all',this)">
+            Tümü
+        </button>
+
+        <button class="filter" onclick="filterOrders('new',this)">
+            Yeni
+        </button>
+
+        <button class="filter" onclick="filterOrders('active',this)">
+            Aktif
+        </button>
+
+        <button class="filter" onclick="filterOrders('done',this)">
+            Tamamlanan
+        </button>
+
+        <button class="filter" onclick="filterOrders('rejected',this)">
+            Reddedilen
+        </button>
+
+    </div>
+
+
+    <div class="orders-list" id="allOrders"></div>
+
+</section>
+
+
+<!-- CALENDAR -->
+
+<section id="calendar" class="view">
+
+    <div class="page-title">Takvim</div>
+
+    <div class="page-desc">
+        Planlanan işleriniz ve randevularınız.
+    </div>
+
+
+    <div class="calendar-card">
+
+        <div class="calendar-header">
+
+            <button onclick="changeMonth(-1)">‹</button>
+
+            <h3 id="monthTitle"></h3>
+
+            <button onclick="changeMonth(1)">›</button>
+
         </div>
 
-        <div class="top-actions">
+        <div class="calendar-grid" id="calendarGrid"></div>
 
-            <button class="icon-btn" onclick="showToast('Yeni bildirim yok')">
-                🔔
-            </button>
+    </div>
 
-            <div class="avatar">
-                TE
-            </div>
 
-        </div>
+    <div class="section-head">
+        <h3>Yaklaşan İşler</h3>
+    </div>
 
-    </header>
+    <div class="orders-list">
 
+        <div class="order-card">
 
-    <main class="content">
+            <div class="order-top">
 
+                <div class="service-info">
 
-        <!-- =====================
-             DASHBOARD
-        ====================== -->
-
-        <section id="dashboard" class="view active">
-
-            <div class="page-title">
-                Günaydın 👋
-            </div>
-
-            <div class="page-desc">
-                İşletmenizin bugünkü durumuna genel bakış.
-            </div>
-
-
-            <div class="welcome">
-
-                <small>İŞLETME PANELİ</small>
-
-                <h2>
-                    Temiz Ev Hizmetleri
-                </h2>
-
-                <small style="display:block;margin-top:7px;">
-                    Bugün 3 yeni siparişiniz bulunuyor.
-                </small>
-
-            </div>
-
-
-            <div class="stats">
-
-                <div class="stat-card">
-                    <div class="stat-icon">🆕</div>
-                    <div class="stat-number" id="newCount">3</div>
-                    <div class="stat-label">Yeni Sipariş</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">🔧</div>
-                    <div class="stat-number">2</div>
-                    <div class="stat-label">Aktif İş</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-number">18</div>
-                    <div class="stat-label">Tamamlandı</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Bugünkü İş</div>
-                </div>
-
-            </div>
-
-
-            <div class="section-head">
-                <h3>Yeni Siparişler</h3>
-
-                <button onclick="openView('orders')">
-                    Tümünü Gör →
-                </button>
-            </div>
-
-
-            <div class="orders-list" id="dashboardOrders">
-            </div>
-
-        </section>
-
-
-        <!-- =====================
-             ORDERS
-        ====================== -->
-
-        <section id="orders" class="view">
-
-            <div class="page-title">
-                Siparişler
-            </div>
-
-            <div class="page-desc">
-                Size atanmış tüm işleri buradan yönetin.
-            </div>
-
-
-            <div class="filter-row">
-
-                <button
-                    class="filter active"
-                    onclick="filterOrders('all',this)">
-                    Tümü
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="filterOrders('new',this)">
-                    Yeni
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="filterOrders('active',this)">
-                    Aktif
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="filterOrders('done',this)">
-                    Tamamlanan
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="filterOrders('rejected',this)">
-                    Reddedilen
-                </button>
-
-            </div>
-
-
-            <div class="orders-list" id="allOrders">
-            </div>
-
-        </section>
-
-
-        <!-- =====================
-             CALENDAR
-        ====================== -->
-
-        <section id="calendar" class="view">
-
-            <div class="page-title">
-                Takvim
-            </div>
-
-            <div class="page-desc">
-                Planlanan işlerinizi kolayca takip edin.
-            </div>
-
-
-            <div class="calendar-card">
-
-                <div class="calendar-header">
-
-                    <button onclick="changeMonth(-1)">
-                        ‹
-                    </button>
-
-                    <h3 id="monthTitle">
-                        Ekim 2026
-                    </h3>
-
-                    <button onclick="changeMonth(1)">
-                        ›
-                    </button>
-
-                </div>
-
-
-                <div class="calendar-grid" id="calendarGrid">
-                </div>
-
-            </div>
-
-
-            <div class="section-head">
-                <h3>Bugünkü İşler</h3>
-            </div>
-
-            <div class="orders-list">
-
-                <div class="order-card">
-
-                    <div class="order-top">
-
-                        <div class="service-info">
-
-                            <div class="service-icon">
-                                🧹
-                            </div>
-
-                            <div>
-                                <div class="service-name">
-                                    Ev Temizliği
-                                </div>
-
-                                <div class="order-id">
-                                    #BK-1025
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <span class="status active">
-                            Aktif
-                        </span>
-
-                    </div>
-
-                    <div class="order-details">
-
-                        <div class="detail">
-                            <div class="detail-label">Saat</div>
-                            <div class="detail-value">14:00</div>
-                        </div>
-
-                        <div class="detail">
-                            <div class="detail-label">Site</div>
-                            <div class="detail-value">Nova Residence</div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================
-             PROFILE
-        ====================== -->
-
-        <section id="profile" class="view">
-
-            <div class="page-title">
-                Profil
-            </div>
-
-            <div class="page-desc">
-                İşletme bilgilerinizi yönetin.
-            </div>
-
-
-            <div class="profile-card">
-
-                <div class="profile-header">
-
-                    <div class="big-avatar">
-                        TE
-                    </div>
+                    <div class="service-icon">🧹</div>
 
                     <div>
-                        <div class="profile-name">
-                            Temiz Ev Hizmetleri
-                        </div>
-
-                        <div class="profile-type">
-                            Temizlik Hizmetleri
-                        </div>
+                        <div class="service-name">Ev Temizliği</div>
+                        <div class="order-id">#BK-1028</div>
                     </div>
 
                 </div>
 
-
-                <div class="profile-row">
-                    <span>Telefon</span>
-                    <strong>0532 000 00 00</strong>
-                </div>
-
-                <div class="profile-row">
-                    <span>E-posta</span>
-                    <strong>temizev@example.com</strong>
-                </div>
-
-                <div class="profile-row">
-                    <span>Hizmet Bölgesi</span>
-                    <strong>Bursa / Nilüfer</strong>
-                </div>
-
-                <div class="profile-row">
-                    <span>Durum</span>
-                    <strong style="color:#198754;">
-                        Aktif
-                    </strong>
-                </div>
-
-
-                <button
-                    class="logout"
-                    onclick="logout()">
-                    Çıkış Yap
-                </button>
+                <span class="status active">Aktif</span>
 
             </div>
 
-        </section>
+            <div class="order-details">
 
-    </main>
+                <div class="detail">
+                    <div class="detail-label">Tarih</div>
+                    <div class="detail-value">13 Ekim 2026</div>
+                </div>
 
+                <div class="detail">
+                    <div class="detail-label">Saat</div>
+                    <div class="detail-value">13:00</div>
+                </div>
 
-    <!-- =========================
-         BOTTOM NAV
-    ========================= -->
+                <div class="detail">
+                    <div class="detail-label">Site</div>
+                    <div class="detail-value">Nova Residence</div>
+                </div>
 
-    <nav class="bottom-nav">
+                <div class="detail">
+                    <div class="detail-label">Daire</div>
+                    <div class="detail-value">D Blok • 5</div>
+                </div>
 
-        <div class="nav-inner">
-
-            <button
-                class="nav-btn active"
-                onclick="openView('dashboard',this)">
-                <span class="nav-icon">⌂</span>
-                Ana Sayfa
-            </button>
-
-            <button
-                class="nav-btn"
-                onclick="openView('orders',this)">
-                <span class="nav-icon">▣</span>
-                Siparişler
-            </button>
-
-            <button
-                class="nav-btn"
-                onclick="openView('calendar',this)">
-                <span class="nav-icon">□</span>
-                Takvim
-            </button>
-
-            <button
-                class="nav-btn"
-                onclick="openView('profile',this)">
-                <span class="nav-icon">♙</span>
-                Profil
-            </button>
+            </div>
 
         </div>
 
-    </nav>
+    </div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="view">
+
+    <div class="page-title">Profil</div>
+
+    <div class="page-desc">
+        İşletme bilgilerinizi ve hesabınızı yönetin.
+    </div>
+
+
+    <div class="profile-card">
+
+        <div class="profile-header">
+
+            <div class="big-avatar">TE</div>
+
+            <div>
+                <div class="profile-name">
+                    Temiz Ev Hizmetleri
+                </div>
+
+                <div class="profile-type">
+                    Ev Temizliği • Bursa / Nilüfer
+                </div>
+
+                <div class="rating">
+                    ⭐ 4.9 • 126 değerlendirme
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="profile-row">
+            <span>Telefon</span>
+            <strong>0532 000 00 00</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>E-posta</span>
+            <strong>temizev@example.com</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Hizmet Bölgesi</span>
+            <strong>Nilüfer / Bursa</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Çalışma Saatleri</span>
+            <strong>09:00 — 20:00</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Hesap Durumu</span>
+            <strong style="color:var(--green)">
+                ● Aktif
+            </strong>
+        </div>
+
+
+        <button class="logout" onclick="logout()">
+            Çıkış Yap
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- NAV -->
+
+<nav class="bottom-nav">
+
+    <div class="nav-inner">
+
+        <button class="nav-btn active"
+                onclick="openView('dashboard',this)">
+            <span class="nav-icon">⌂</span>
+            Ana Sayfa
+        </button>
+
+        <button class="nav-btn"
+                onclick="openView('orders',this)">
+            <span class="nav-icon">▣</span>
+            Siparişler
+        </button>
+
+        <button class="nav-btn"
+                onclick="openView('calendar',this)">
+            <span class="nav-icon">□</span>
+            Takvim
+        </button>
+
+        <button class="nav-btn"
+                onclick="openView('profile',this)">
+            <span class="nav-icon">♙</span>
+            Profil
+        </button>
+
+    </div>
+
+</nav>
 
 </div>
 
 
-<!-- =========================
-     REJECT MODAL
-========================= -->
+<!-- ORDER DETAIL MODAL -->
+
+<div class="modal-bg" id="detailModal">
+
+    <div class="modal">
+
+        <div class="modal-handle"></div>
+
+        <div id="detailContent"></div>
+
+        <button class="close-modal"
+                onclick="closeDetail()">
+            Kapat
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- REJECT MODAL -->
 
 <div class="modal-bg" id="rejectModal">
 
@@ -1284,51 +1755,47 @@ button{
 
         <div class="modal-handle"></div>
 
-        <h3>Siparişi Reddet</h3>
+        <div class="modal-title">
+            Siparişi Reddet
+        </div>
 
-        <p>
-            Bu siparişi neden kabul edemediğinizi seçin.
-        </p>
+        <div class="modal-sub">
+            Lütfen reddetme nedeninizi seçin.
+        </div>
 
 
         <div class="reason-list">
 
-            <button
-                class="reason"
-                onclick="rejectOrder('Müsait değil')">
+            <button class="reason"
+                    onclick="rejectOrder('Müsait değil')">
                 🕐 Müsait değil
             </button>
 
-            <button
-                class="reason"
-                onclick="rejectOrder('Personel yetersiz')">
+            <button class="reason"
+                    onclick="rejectOrder('Personel yetersiz')">
                 👥 Personel yetersiz
             </button>
 
-            <button
-                class="reason"
-                onclick="rejectOrder('Tarih / saat uygun değil')">
+            <button class="reason"
+                    onclick="rejectOrder('Tarih / saat uygun değil')">
                 📅 Tarih / saat uygun değil
             </button>
 
-            <button
-                class="reason"
-                onclick="rejectOrder('Bölge dışında')">
+            <button class="reason"
+                    onclick="rejectOrder('Bölge dışında')">
                 📍 Bölge dışında
             </button>
 
-            <button
-                class="reason"
-                onclick="rejectOrder('Diğer')">
+            <button class="reason"
+                    onclick="rejectOrder('Diğer')">
                 ••• Diğer
             </button>
 
         </div>
 
 
-        <button
-            class="close-modal"
-            onclick="closeReject()">
+        <button class="close-modal"
+                onclick="closeReject()">
             Vazgeç
         </button>
 
@@ -1337,248 +1804,198 @@ button{
 </div>
 
 
-<div class="toast" id="toast">
-    İşlem başarılı
-</div>
+<div class="toast" id="toast"></div>
 
 
 <script>
 
-/* =========================================
-   DEMO DATA
-========================================= */
+let orders=[
 
-let orders = [
+{
+id:"BK-1025",
+service:"Ev Temizliği",
+icon:"🧹",
+site:"Nova Residence",
+block:"B Blok",
+apartment:"Daire 12",
+date:"12 Ekim 2026",
+time:"14:00",
+phone:"0532 000 00 00",
+note:"Salon ve mutfak özellikle temizlensin.",
+status:"new"
+},
 
-    {
-        id:"BK-1025",
-        service:"Ev Temizliği",
-        icon:"🧹",
-        site:"Nova Residence",
-        block:"B Blok",
-        apartment:"Daire 12",
-        date:"12 Ekim 2026",
-        time:"14:00",
-        phone:"0532 000 00 00",
-        note:"Salon ve mutfak özellikle temizlensin.",
-        status:"new"
-    },
+{
+id:"BK-1026",
+service:"Ev Temizliği",
+icon:"🧹",
+site:"Park Vadi Sitesi",
+block:"A Blok",
+apartment:"Daire 8",
+date:"12 Ekim 2026",
+time:"16:00",
+phone:"0541 000 00 00",
+note:"2+1 standart temizlik.",
+status:"new"
+},
 
-    {
-        id:"BK-1026",
-        service:"Ev Temizliği",
-        icon:"🧹",
-        site:"Park Vadi Sitesi",
-        block:"A Blok",
-        apartment:"Daire 8",
-        date:"12 Ekim 2026",
-        time:"16:00",
-        phone:"0541 000 00 00",
-        note:"2+1 standart temizlik.",
-        status:"new"
-    },
+{
+id:"BK-1027",
+service:"Koltuk Yıkama",
+icon:"🛋️",
+site:"Green Life",
+block:"C Blok",
+apartment:"Daire 21",
+date:"13 Ekim 2026",
+time:"11:00",
+phone:"0555 000 00 00",
+note:"1 adet koltuk takımı.",
+status:"new"
+},
 
-    {
-        id:"BK-1027",
-        service:"Koltuk Yıkama",
-        icon:"🛋️",
-        site:"Green Life",
-        block:"C Blok",
-        apartment:"Daire 21",
-        date:"13 Ekim 2026",
-        time:"11:00",
-        phone:"0555 000 00 00",
-        note:"1 adet koltuk takımı.",
-        status:"new"
-    },
+{
+id:"BK-1028",
+service:"Ev Temizliği",
+icon:"🧹",
+site:"Nova Residence",
+block:"D Blok",
+apartment:"Daire 5",
+date:"13 Ekim 2026",
+time:"13:00",
+phone:"0533 000 00 00",
+note:"Detaylı temizlik.",
+status:"active"
+},
 
-    {
-        id:"BK-1028",
-        service:"Ev Temizliği",
-        icon:"🧹",
-        site:"Nova Residence",
-        block:"D Blok",
-        apartment:"Daire 5",
-        date:"13 Ekim 2026",
-        time:"13:00",
-        phone:"0533 000 00 00",
-        note:"Detaylı temizlik.",
-        status:"active"
-    },
-
-    {
-        id:"BK-1029",
-        service:"Ev Temizliği",
-        icon:"🧹",
-        site:"Park Vadi Sitesi",
-        block:"B Blok",
-        apartment:"Daire 18",
-        date:"11 Ekim 2026",
-        time:"15:00",
-        phone:"0544 000 00 00",
-        note:"Standart temizlik.",
-        status:"done"
-    }
+{
+id:"BK-1029",
+service:"Ev Temizliği",
+icon:"🧹",
+site:"Park Vadi Sitesi",
+block:"B Blok",
+apartment:"Daire 18",
+date:"11 Ekim 2026",
+time:"15:00",
+phone:"0544 000 00 00",
+note:"Standart temizlik.",
+status:"done"
+}
 
 ];
 
-let selectedOrder = null;
-let currentFilter = "all";
+let currentFilter="all";
+let selectedOrder=null;
+let currentMonth=9;
+let currentYear=2026;
 
-let currentMonth = 9;
-let currentYear = 2026;
 
-
-/* =========================================
-   LOGIN
-========================================= */
+/* LOGIN */
 
 function login(){
 
-    const email =
-        document.getElementById("email").value.trim();
-
-    const password =
-        document.getElementById("password").value.trim();
+    const email=document.getElementById("email").value;
+    const password=document.getElementById("password").value;
 
     if(!email || !password){
-
         showToast("E-posta ve şifre girin.");
-
         return;
     }
 
     document.getElementById("loginScreen").style.display="none";
-
     document.getElementById("app").style.display="block";
 
     renderOrders();
-
     renderCalendar();
 
     showToast("Hoş geldiniz 👋");
 }
 
 
-/* =========================================
-   LOGOUT
-========================================= */
+/* LOGOUT */
 
 function logout(){
 
     document.getElementById("app").style.display="none";
-
     document.getElementById("loginScreen").style.display="flex";
 
     document.getElementById("email").value="";
     document.getElementById("password").value="";
 
-    showToast("Çıkış yapıldı.");
-
 }
 
 
-/* =========================================
-   NAVIGATION
-========================================= */
+/* NAV */
 
-function openView(viewId, button){
+function openView(id,button){
 
     document.querySelectorAll(".view")
-        .forEach(view => view.classList.remove("active"));
+    .forEach(v=>v.classList.remove("active"));
 
-    const target =
-        document.getElementById(viewId);
-
-    if(target){
-        target.classList.add("active");
-    }
-
+    document.getElementById(id).classList.add("active");
 
     document.querySelectorAll(".nav-btn")
-        .forEach(btn => btn.classList.remove("active"));
+    .forEach(b=>b.classList.remove("active"));
 
-    if(button){
+    if(button && button.classList.contains("nav-btn")){
         button.classList.add("active");
     }
 
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-
-    if(viewId==="orders"){
+    if(id==="orders"){
         renderOrders();
     }
 
-    if(viewId==="dashboard"){
-        renderDashboardOrders();
-    }
-
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
 
-/* =========================================
-   ORDER HTML
-========================================= */
+/* ORDER CARD */
 
 function orderHTML(order){
 
-    let statusText = "Yeni";
-    let statusClass = "new";
+    let text="Yeni";
+    let cls="new";
 
     if(order.status==="active"){
-        statusText="Aktif";
-        statusClass="active";
+        text="Aktif";
+        cls="active";
     }
 
     if(order.status==="done"){
-        statusText="Tamamlandı";
-        statusClass="done";
+        text="Tamamlandı";
+        cls="done";
     }
 
     if(order.status==="rejected"){
-        statusText="Reddedildi";
-        statusClass="rejected";
+        text="Reddedildi";
+        cls="rejected";
     }
 
 
     let actions="";
 
-
     if(order.status==="new"){
 
         actions=`
+        <button class="btn btn-primary"
+        onclick="acceptOrder('${order.id}')">
+        ✓ Kabul Et
+        </button>
 
-            <button
-                class="btn btn-primary"
-                onclick="acceptOrder('${order.id}')">
-                ✓ Kabul Et
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="openReject('${order.id}')">
-                Reddet
-            </button>
-
+        <button class="btn btn-danger"
+        onclick="openReject('${order.id}')">
+        Reddet
+        </button>
         `;
 
     }
 
-
     if(order.status==="active"){
 
         actions=`
-
-            <button
-                class="btn btn-primary"
-                onclick="completeOrder('${order.id}')">
-                ✓ İşi Tamamla
-            </button>
-
+        <button class="btn btn-green"
+        onclick="completeOrder('${order.id}')">
+        ✓ İşi Tamamla
+        </button>
         `;
 
     }
@@ -1586,222 +2003,140 @@ function orderHTML(order){
 
     return `
 
-        <div class="order-card">
+    <div class="order-card">
 
-            <div class="order-top">
+        <div class="order-top">
 
-                <div class="service-info">
+            <div class="service-info">
 
-                    <div class="service-icon">
-                        ${order.icon}
-                    </div>
-
-                    <div>
-
-                        <div class="service-name">
-                            ${order.service}
-                        </div>
-
-                        <div class="order-id">
-                            Sipariş #${order.id}
-                        </div>
-
-                    </div>
-
+                <div class="service-icon">
+                    ${order.icon}
                 </div>
 
+                <div>
 
-                <span class="status ${statusClass}">
-                    ${statusText}
-                </span>
-
-            </div>
-
-
-            <div class="order-details">
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Site
+                    <div class="service-name">
+                        ${order.service}
                     </div>
 
-                    <div class="detail-value">
-                        ${order.site}
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Konum
-                    </div>
-
-                    <div class="detail-value">
-                        ${order.block} • ${order.apartment}
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Tarih
-                    </div>
-
-                    <div class="detail-value">
-                        ${order.date}
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Saat
-                    </div>
-
-                    <div class="detail-value">
-                        ${order.time}
+                    <div class="order-id">
+                        Sipariş #${order.id}
                     </div>
 
                 </div>
 
             </div>
 
+            <span class="status ${cls}">
+                ${text}
+            </span>
 
-            <div class="order-note">
-                <strong>Not:</strong>
-                ${order.note}
+        </div>
+
+
+        <div class="order-details">
+
+            <div class="detail">
+                <div class="detail-label">Site</div>
+                <div class="detail-value">${order.site}</div>
             </div>
 
+            <div class="detail">
+                <div class="detail-label">Konum</div>
+                <div class="detail-value">
+                    ${order.block} • ${order.apartment}
+                </div>
+            </div>
 
-            <div class="order-actions">
+            <div class="detail">
+                <div class="detail-label">Tarih</div>
+                <div class="detail-value">${order.date}</div>
+            </div>
 
-                ${actions}
-
-                <button
-                    class="btn btn-light"
-                    onclick="showOrderDetails('${order.id}')">
-                    Detay
-                </button>
-
+            <div class="detail">
+                <div class="detail-label">Saat</div>
+                <div class="detail-value">${order.time}</div>
             </div>
 
         </div>
+
+
+        <div class="order-note">
+            <strong>Not:</strong> ${order.note}
+        </div>
+
+
+        <div class="order-actions">
+
+            ${actions}
+
+            <button class="btn btn-light"
+            onclick="showDetails('${order.id}')">
+            Detay
+            </button>
+
+        </div>
+
+    </div>
 
     `;
 }
 
 
-/* =========================================
-   DASHBOARD ORDERS
-========================================= */
+/* RENDER */
 
 function renderDashboardOrders(){
 
-    const container =
-        document.getElementById("dashboardOrders");
+    const container=document.getElementById("dashboardOrders");
 
-    const newOrders =
-        orders.filter(order => order.status==="new")
+    const list=orders
+        .filter(o=>o.status==="new")
         .slice(0,3);
 
+    container.innerHTML=
+        list.map(orderHTML).join("");
 
-    if(!newOrders.length){
-
-        container.innerHTML=`
-
-            <div class="order-card">
-                <div style="
-                    text-align:center;
-                    padding:20px;
-                    color:#888;
-                    font-size:13px;">
-                    🎉 Yeni sipariş bulunmuyor.
-                </div>
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    container.innerHTML =
-        newOrders.map(order => orderHTML(order)).join("");
 }
 
-
-/* =========================================
-   RENDER ORDERS
-========================================= */
 
 function renderOrders(){
 
     renderDashboardOrders();
 
+    const container=document.getElementById("allOrders");
 
-    const container =
-        document.getElementById("allOrders");
+    let list=orders;
 
-
-    let filtered = orders;
-
-
-    if(currentFilter !== "all"){
-
-        filtered =
-            orders.filter(
-                order => order.status === currentFilter
-            );
-
+    if(currentFilter!=="all"){
+        list=orders.filter(o=>o.status===currentFilter);
     }
 
-
-    if(!filtered.length){
+    if(!list.length){
 
         container.innerHTML=`
-
-            <div class="order-card">
-
-                <div style="
-                    text-align:center;
-                    padding:30px;
-                    color:#888;
-                    font-size:13px;">
-
-                    Bu kategoride sipariş bulunmuyor.
-
-                </div>
-
-            </div>
-
+        <div class="panel"
+        style="text-align:center;color:#999;padding:35px;">
+        Bu kategoride sipariş bulunmuyor.
+        </div>
         `;
 
         return;
     }
 
+    container.innerHTML=
+        list.map(orderHTML).join("");
 
-    container.innerHTML =
-        filtered.map(order => orderHTML(order)).join("");
 }
 
 
-/* =========================================
-   FILTER
-========================================= */
+/* FILTER */
 
-function filterOrders(filter, button){
+function filterOrders(filter,button){
 
     currentFilter=filter;
 
     document.querySelectorAll(".filter")
-        .forEach(btn => btn.classList.remove("active"));
+    .forEach(b=>b.classList.remove("active"));
 
     button.classList.add("active");
 
@@ -1809,59 +2144,172 @@ function filterOrders(filter, button){
 }
 
 
-/* =========================================
-   ACCEPT
-========================================= */
+/* ACCEPT */
 
 function acceptOrder(id){
 
-    const order =
-        orders.find(item => item.id===id);
+    const order=orders.find(o=>o.id===id);
 
-    if(!order) return;
-
+    if(!order)return;
 
     order.status="active";
 
     renderOrders();
 
     showToast("Sipariş kabul edildi ✓");
-
 }
 
 
-/* =========================================
-   COMPLETE
-========================================= */
+/* COMPLETE */
 
 function completeOrder(id){
 
-    const order =
-        orders.find(item => item.id===id);
+    const order=orders.find(o=>o.id===id);
 
-    if(!order) return;
-
+    if(!order)return;
 
     order.status="done";
 
     renderOrders();
 
     showToast("İş tamamlandı ✓");
+}
+
+
+/* DETAIL */
+
+function showDetails(id){
+
+    const order=orders.find(o=>o.id===id);
+
+    if(!order)return;
+
+    selectedOrder=id;
+
+    document.getElementById("detailContent").innerHTML=`
+
+        <div class="modal-title">
+            ${order.icon} ${order.service}
+        </div>
+
+        <div class="modal-sub">
+            Sipariş #${order.id}
+        </div>
+
+        <div class="modal-info">
+
+            <div>
+                <small>Site</small>
+                <strong>${order.site}</strong>
+            </div>
+
+            <div>
+                <small>Konum</small>
+                <strong>${order.block} • ${order.apartment}</strong>
+            </div>
+
+            <div>
+                <small>Tarih</small>
+                <strong>${order.date}</strong>
+            </div>
+
+            <div>
+                <small>Saat</small>
+                <strong>${order.time}</strong>
+            </div>
+
+            <div>
+                <small>Müşteri Telefonu</small>
+                <strong>${order.phone}</strong>
+            </div>
+
+            <div>
+                <small>Durum</small>
+                <strong>${statusName(order.status)}</strong>
+            </div>
+
+        </div>
+
+        <div style="
+        background:#F7F7FA;
+        border-radius:13px;
+        padding:13px;
+        margin:12px 0 18px;
+        font-size:11px;
+        color:#666;">
+        <strong>Müşteri Notu</strong><br><br>
+        ${order.note}
+        </div>
+
+        ${
+            order.status==="new"
+            ?
+            `
+            <div class="order-actions"
+            style="margin-bottom:10px;">
+
+                <button
+                class="btn btn-primary"
+                onclick="acceptFromDetail('${order.id}')">
+                ✓ Kabul Et
+                </button>
+
+                <button
+                class="btn btn-danger"
+                onclick="closeDetail();openReject('${order.id}')">
+                Reddet
+                </button>
+
+            </div>
+            `
+            :
+            ""
+        }
+
+    `;
+
+    document.getElementById("detailModal")
+    .classList.add("show");
 
 }
 
 
-/* =========================================
-   REJECT
-========================================= */
+function acceptFromDetail(id){
+
+    closeDetail();
+
+    acceptOrder(id);
+
+}
+
+
+function closeDetail(){
+
+    document.getElementById("detailModal")
+    .classList.remove("show");
+
+}
+
+
+function statusName(status){
+
+    if(status==="new")return "Yeni";
+    if(status==="active")return "Aktif";
+    if(status==="done")return "Tamamlandı";
+    if(status==="rejected")return "Reddedildi";
+
+    return status;
+}
+
+
+/* REJECT */
 
 function openReject(id){
 
     selectedOrder=id;
 
-    document
-        .getElementById("rejectModal")
-        .classList.add("show");
+    document.getElementById("rejectModal")
+    .classList.add("show");
 
 }
 
@@ -1870,242 +2318,131 @@ function closeReject(){
 
     selectedOrder=null;
 
-    document
-        .getElementById("rejectModal")
-        .classList.remove("show");
+    document.getElementById("rejectModal")
+    .classList.remove("show");
 
 }
 
 
 function rejectOrder(reason){
 
-    if(!selectedOrder) return;
-
-
-    const order =
-        orders.find(
-            item => item.id===selectedOrder
-        );
-
+    const order=
+        orders.find(o=>o.id===selectedOrder);
 
     if(order){
 
         order.status="rejected";
-
-        order.note =
-            `Red nedeni: ${reason}`;
+        order.note="Red nedeni: "+reason;
 
     }
-
 
     closeReject();
 
     renderOrders();
 
-    showToast(
-        "Sipariş reddedildi."
-    );
-
+    showToast("Sipariş reddedildi");
 }
 
 
-/* =========================================
-   ORDER DETAILS
-========================================= */
-
-function showOrderDetails(id){
-
-    const order =
-        orders.find(item => item.id===id);
-
-    if(!order) return;
-
-
-    alert(
-        "BAKSANA SİPARİŞ DETAYI\n\n" +
-
-        "Sipariş: #" + order.id + "\n" +
-        "Hizmet: " + order.service + "\n" +
-        "Site: " + order.site + "\n" +
-        "Konum: " + order.block +
-        " / " + order.apartment + "\n" +
-        "Tarih: " + order.date + "\n" +
-        "Saat: " + order.time + "\n" +
-        "Telefon: " + order.phone + "\n\n" +
-        "Not: " + order.note
-    );
-
-}
-
-
-/* =========================================
-   CALENDAR
-========================================= */
+/* CALENDAR */
 
 function renderCalendar(){
 
-    const grid =
-        document.getElementById("calendarGrid");
+    const grid=document.getElementById("calendarGrid");
 
-    const title =
-        document.getElementById("monthTitle");
+    const title=document.getElementById("monthTitle");
 
-
-    const months = [
-        "Ocak",
-        "Şubat",
-        "Mart",
-        "Nisan",
-        "Mayıs",
-        "Haziran",
-        "Temmuz",
-        "Ağustos",
-        "Eylül",
-        "Ekim",
-        "Kasım",
-        "Aralık"
+    const months=[
+        "Ocak","Şubat","Mart","Nisan",
+        "Mayıs","Haziran","Temmuz","Ağustos",
+        "Eylül","Ekim","Kasım","Aralık"
     ];
 
-
-    title.textContent =
-        months[currentMonth] +
-        " " +
-        currentYear;
-
+    title.textContent=
+        months[currentMonth]+" "+currentYear;
 
     const names=[
-        "Pzt",
-        "Sal",
-        "Çar",
-        "Per",
-        "Cum",
-        "Cmt",
-        "Paz"
+        "Pzt","Sal","Çar","Per",
+        "Cum","Cmt","Paz"
     ];
 
+    let html=names.map(
+        n=>`<div class="day-name">${n}</div>`
+    ).join("");
 
-    let html =
-        names.map(
-            name => `
-                <div class="day-name">
-                    ${name}
-                </div>
-            `
-        ).join("");
+    const first=
+        new Date(currentYear,currentMonth,1).getDay();
 
-
-    const firstDay =
-        new Date(
-            currentYear,
-            currentMonth,
-            1
-        ).getDay();
-
-
-    const offset =
-        firstDay===0 ? 6 : firstDay-1;
-
+    const offset=
+        first===0?6:first-1;
 
     for(let i=0;i<offset;i++){
-
-        html += `<div></div>`;
-
+        html+="<div></div>";
     }
 
+    const days=
+        new Date(currentYear,currentMonth+1,0).getDate();
 
-    const days =
-        new Date(
-            currentYear,
-            currentMonth+1,
-            0
-        ).getDate();
+    for(let d=1;d<=days;d++){
 
-
-    for(let day=1;day<=days;day++){
-
-        const isToday =
-            day===30 &&
+        const today=
+            d===30 &&
             currentMonth===8 &&
             currentYear===2026;
 
+        const has=
+            [11,12,13,15].includes(d);
 
-        const hasOrder =
-            [11,12,13,15].includes(day);
-
-
-        html += `
-
-            <div class="
-                day
-                ${isToday ? "today":""}
-                ${hasOrder ? "has-order":""}
-            ">
-                ${day}
-            </div>
-
-        `;
-
+        html+=`
+        <div class="day
+        ${today?"today":""}
+        ${has?"has-order":""}">
+        ${d}
+        </div>`;
     }
 
-
     grid.innerHTML=html;
-
 }
 
 
 function changeMonth(direction){
 
-    currentMonth += direction;
-
+    currentMonth+=direction;
 
     if(currentMonth<0){
-
         currentMonth=11;
         currentYear--;
-
     }
-
 
     if(currentMonth>11){
-
         currentMonth=0;
         currentYear++;
-
     }
 
-
     renderCalendar();
-
 }
 
 
-/* =========================================
-   TOAST
-========================================= */
+/* TOAST */
 
 function showToast(message){
 
-    const toast =
-        document.getElementById("toast");
+    const toast=document.getElementById("toast");
 
     toast.textContent=message;
 
     toast.classList.add("show");
 
-
-    setTimeout(
-        () => toast.classList.remove("show"),
-        2500
-    );
-
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2300);
 }
 
 
-/* =========================================
-   INITIAL
-========================================= */
+/* INIT */
 
 renderDashboardOrders();
+renderCalendar();
 
 </script>
 
