@@ -1,1282 +1,883 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BAKSANA İşletme Paneli</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>BAKSANA İşletme</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
 :root{
-    --purple:#7657e8;
-    --purple-dark:#6242d8;
-    --purple-light:#f0ecff;
-    --bg:#f7f7fb;
-    --text:#17151d;
-    --muted:#777384;
-    --border:#ebe8f2;
-    --white:#fff;
-    --green:#238653;
-    --red:#c43b3b;
+--purple:#7657e8;
+--purple2:#6242d8;
+--light:#f5f3fb;
+--border:#e9e6f0;
+--text:#191720;
+--muted:#77727f;
+--green:#23905a;
+--red:#c84444;
 }
 
 body{
-    font-family:Inter,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+background:var(--light);
+color:var(--text);
 }
 
 button,
 input{
-    font-family:inherit;
+font-family:inherit;
 }
 
-/* =========================
-   GİRİŞ EKRANI
-========================= */
 
-.login-screen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
+/* =====================
+LOGIN
+===================== */
 
-    background:
-        radial-gradient(
-            circle at top right,
-            #eee7ff 0%,
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom left,
-            #e9e5ff 0%,
-            transparent 35%
-        ),
-        #f8f7fc;
+.login{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:
+radial-gradient(
+circle at top right,
+#ebe4ff,
+transparent 35%
+),
+#f8f7fc;
 }
 
 .login-box{
-    width:100%;
-    max-width:430px;
-    background:white;
-    border:1px solid var(--border);
-    border-radius:28px;
-    padding:38px 32px;
-    box-shadow:
-        0 20px 60px rgba(52,35,110,.10);
+width:100%;
+max-width:420px;
+background:white;
+border:1px solid var(--border);
+border-radius:28px;
+padding:35px 30px;
+box-shadow:0 20px 60px rgba(40,20,100,.1);
 }
 
-.login-logo{
-    width:175px;
-    max-width:75%;
-    height:auto;
-    display:block;
-    margin:0 auto 25px;
+.logo{
+width:175px;
+display:block;
+margin:0 auto 25px;
 }
 
-.login-title{
-    text-align:center;
-    font-size:25px;
-    font-weight:800;
-    margin-bottom:8px;
+.login h1{
+text-align:center;
+font-size:25px;
+margin-bottom:8px;
 }
 
-.login-subtitle{
-    text-align:center;
-    color:var(--muted);
-    font-size:14px;
-    margin-bottom:30px;
+.login p{
+text-align:center;
+color:var(--muted);
+font-size:14px;
+margin-bottom:28px;
 }
 
-.form-group{
-    margin-bottom:17px;
+.input{
+margin-bottom:15px;
 }
 
-.form-group label{
-    display:block;
-    font-size:13px;
-    font-weight:700;
-    margin-bottom:8px;
+.input label{
+display:block;
+font-size:13px;
+font-weight:bold;
+margin-bottom:7px;
 }
 
-.form-group input{
-    width:100%;
-    height:52px;
-    border:1px solid #e5e2eb;
-    border-radius:14px;
-    padding:0 15px;
-    font-size:14px;
-    outline:none;
-    background:#fafafd;
-    transition:.2s;
+.input input{
+width:100%;
+height:52px;
+border:1px solid var(--border);
+border-radius:13px;
+padding:0 14px;
+outline:none;
 }
 
-.form-group input:focus{
-    border-color:var(--purple);
-    box-shadow:
-        0 0 0 4px rgba(118,87,232,.10);
-    background:white;
+.input input:focus{
+border-color:var(--purple);
+box-shadow:0 0 0 4px #7657e815;
 }
 
-.remember{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:13px;
-    color:#66616f;
-    margin:4px 0 20px;
+.login-btn{
+width:100%;
+height:53px;
+border:0;
+border-radius:14px;
+background:linear-gradient(
+135deg,
+#8065ef,
+#6242d8
+);
+color:white;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+margin-top:5px;
 }
 
-.remember input{
-    accent-color:var(--purple);
+.error{
+display:none;
+background:#fff0f0;
+border:1px solid #ffd5d5;
+color:var(--red);
+padding:11px;
+border-radius:11px;
+font-size:13px;
+margin-bottom:15px;
+text-align:center;
 }
 
-.login-button{
-    width:100%;
-    height:53px;
-    border:none;
-    border-radius:15px;
-    background:
-        linear-gradient(
-            135deg,
-            #8064ed,
-            #6242d8
-        );
-    color:white;
-    font-size:15px;
-    font-weight:800;
-    cursor:pointer;
-    box-shadow:
-        0 10px 25px rgba(105,70,215,.22);
-    transition:.2s;
-}
 
-.login-button:hover{
-    transform:translateY(-1px);
-}
-
-.login-error{
-    display:none;
-    background:#fff0f0;
-    color:var(--red);
-    border:1px solid #ffd7d7;
-    border-radius:12px;
-    padding:11px;
-    margin-bottom:15px;
-    font-size:13px;
-    text-align:center;
-}
-
-.forgot{
-    display:block;
-    text-align:center;
-    color:var(--purple);
-    font-size:13px;
-    font-weight:700;
-    margin-top:18px;
-    cursor:pointer;
-}
-
-.login-footer{
-    text-align:center;
-    color:#9994a3;
-    font-size:11px;
-    margin-top:30px;
-    line-height:1.6;
-}
-
-/* =========================
-   PANEL
-========================= */
+/* =====================
+PANEL
+===================== */
 
 .panel{
-    display:none;
-    min-height:100vh;
+display:none;
+min-height:100vh;
 }
 
 .sidebar{
-    width:250px;
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    background:white;
-    border-right:1px solid var(--border);
-    padding:24px 16px;
-    z-index:10;
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:245px;
+background:white;
+border-right:1px solid var(--border);
+padding:25px 15px;
 }
 
-.panel-logo{
-    width:145px;
-    height:auto;
-    display:block;
-    margin:4px 12px 34px;
+.sidebar .logo{
+width:145px;
+margin:0 12px 35px;
 }
 
-.nav{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
+.menu{
+display:flex;
+flex-direction:column;
+gap:5px;
 }
 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:13px 14px;
-    border-radius:14px;
-    color:#625f6b;
-    font-size:14px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.2s;
+.menu button{
+border:0;
+background:none;
+text-align:left;
+padding:13px;
+border-radius:13px;
+font-weight:bold;
+font-size:14px;
+color:#625e6a;
+cursor:pointer;
 }
 
-.nav-item:hover,
-.nav-item.active{
-    background:var(--purple-light);
-    color:var(--purple-dark);
+.menu button:hover,
+.menu button.active{
+background:#f0ebff;
+color:var(--purple2);
 }
 
 .logout{
-    position:absolute;
-    bottom:24px;
-    left:16px;
-    right:16px;
+position:absolute;
+bottom:25px;
+left:15px;
+right:15px;
 }
+
 
 .main{
-    margin-left:250px;
-    padding:28px 34px 40px;
+margin-left:245px;
+padding:28px;
 }
 
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:28px;
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
 }
 
-.welcome h1{
-    font-size:28px;
-    margin-bottom:5px;
+.top h1{
+font-size:27px;
+margin-bottom:5px;
 }
 
-.welcome p{
-    color:var(--muted);
-    font-size:14px;
+.top p{
+font-size:14px;
+color:var(--muted);
 }
 
-.profile{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:white;
-    border:1px solid var(--border);
-    border-radius:15px;
-    padding:8px 13px;
+.business{
+background:white;
+border:1px solid var(--border);
+padding:8px 13px;
+border-radius:14px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:13px;
+font-weight:bold;
 }
 
 .avatar{
-    width:38px;
-    height:38px;
-    border-radius:12px;
-    background:
-        linear-gradient(
-            135deg,
-            #8064ed,
-            #6242d8
-        );
-    color:white;
-    display:grid;
-    place-items:center;
-    font-weight:800;
-    font-size:12px;
+width:37px;
+height:37px;
+border-radius:11px;
+display:grid;
+place-items:center;
+background:linear-gradient(
+135deg,
+#8065ef,
+#6242d8
+);
+color:white;
 }
 
-.profile-name{
-    font-size:13px;
-    font-weight:800;
-}
 
-/* =========================
-   İSTATİSTİKLER
-========================= */
+/* =====================
+STATS
+===================== */
 
 .stats{
-    display:grid;
-    grid-template-columns:
-        repeat(4,1fr);
-    gap:15px;
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+gap:15px;
 }
 
 .stat{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:19px;
-    padding:19px;
-    box-shadow:
-        0 5px 20px rgba(39,27,76,.04);
+background:white;
+border:1px solid var(--border);
+border-radius:18px;
+padding:18px;
 }
 
 .stat-icon{
-    font-size:22px;
+font-size:22px;
 }
 
 .stat-number{
-    font-size:27px;
-    font-weight:900;
-    margin-top:10px;
+font-size:27px;
+font-weight:900;
+margin-top:9px;
 }
 
 .stat-label{
-    font-size:13px;
-    color:var(--muted);
-    margin-top:4px;
+font-size:13px;
+color:var(--muted);
+margin-top:4px;
 }
 
-/* =========================
-   ANA İÇERİK
-========================= */
 
-.content-grid{
-    display:grid;
-    grid-template-columns:
-        1.55fr 1fr;
-    gap:18px;
-    margin-top:20px;
+/* =====================
+CONTENT
+===================== */
+
+.content{
+margin-top:20px;
+background:white;
+border:1px solid var(--border);
+border-radius:20px;
+padding:20px;
 }
 
-.card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:20px;
-    box-shadow:
-        0 5px 20px rgba(39,27,76,.04);
+.content-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
 }
 
-.card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:16px;
+.content-head h2{
+font-size:18px;
 }
 
-.card-header h2{
-    font-size:17px;
+.orders{
+display:flex;
+flex-direction:column;
+gap:10px;
 }
-
-.card-link{
-    color:var(--purple-dark);
-    font-size:13px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-/* =========================
-   SİPARİŞ
-========================= */
 
 .order{
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:15px;
-    margin-bottom:10px;
+border:1px solid var(--border);
+border-radius:16px;
+padding:16px;
 }
 
 .order-top{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
+display:flex;
+justify-content:space-between;
+gap:15px;
 }
 
 .order-title{
-    font-size:14px;
-    font-weight:850;
+font-size:14px;
+font-weight:900;
 }
 
 .order-info{
-    color:var(--muted);
-    font-size:12px;
-    margin-top:5px;
-    line-height:1.6;
+font-size:12px;
+color:var(--muted);
+line-height:1.7;
+margin-top:5px;
 }
 
 .badge{
-    background:#fff3df;
-    color:#a66a00;
-    height:max-content;
-    padding:6px 9px;
-    border-radius:50px;
-    font-size:11px;
-    font-weight:800;
-    white-space:nowrap;
+padding:6px 9px;
+border-radius:50px;
+font-size:11px;
+font-weight:bold;
+height:max-content;
+white-space:nowrap;
+background:#fff3dd;
+color:#a86b00;
 }
 
 .badge.green{
-    background:#e8f8ef;
-    color:#20804b;
+background:#e7f8ee;
+color:#208451;
 }
 
 .badge.red{
-    background:#fff0f0;
-    color:#c43b3b;
+background:#fff0f0;
+color:#c33e3e;
 }
 
-.order-actions{
-    display:flex;
-    gap:8px;
-    margin-top:13px;
+.actions{
+display:flex;
+gap:8px;
+margin-top:13px;
 }
 
-.accept,
-.reject{
-    border:none;
-    border-radius:10px;
-    padding:10px 13px;
-    font-size:12px;
-    font-weight:800;
-    cursor:pointer;
+.actions button{
+border:0;
+padding:9px 13px;
+border-radius:10px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
 }
 
 .accept{
-    background:var(--purple);
-    color:white;
-}
-
-.accept:hover{
-    background:var(--purple-dark);
+background:var(--purple);
+color:white;
 }
 
 .reject{
-    background:#f3f1f6;
-    color:#625f6b;
+background:#f1eef5;
+color:#625e6a;
 }
 
-.reject:hover{
-    background:#ebe8ef;
+.complete{
+background:#238b56;
+color:white;
 }
 
-/* =========================
-   KAZANÇ
-========================= */
 
-.earn-label{
-    color:var(--muted);
-    font-size:13px;
+/* =====================
+EMPTY
+===================== */
+
+.empty{
+text-align:center;
+padding:50px 20px;
+color:var(--muted);
 }
 
-.earn-number{
-    font-size:34px;
-    font-weight:900;
-    margin:7px 0 3px;
+.empty-icon{
+font-size:40px;
+margin-bottom:10px;
 }
 
-.earn-change{
-    font-size:12px;
-    color:var(--green);
-    font-weight:700;
+
+/* =====================
+PROFILE
+===================== */
+
+.profile-card{
+max-width:600px;
 }
 
-.progress{
-    height:10px;
-    background:#eeeaf7;
-    border-radius:50px;
-    overflow:hidden;
-    margin:16px 0 20px;
+.profile-row{
+display:flex;
+justify-content:space-between;
+padding:15px 0;
+border-bottom:1px solid var(--border);
+font-size:14px;
 }
 
-.progress span{
-    display:block;
-    width:72%;
-    height:100%;
-    background:
-        linear-gradient(
-            90deg,
-            #8a72f3,
-            #6242d8
-        );
-    border-radius:50px;
+.profile-row:last-child{
+border:0;
 }
 
-.info-row{
-    display:flex;
-    justify-content:space-between;
-    padding:13px 0;
-    border-bottom:1px solid #eeeaf2;
-    font-size:13px;
+
+/* =====================
+MOBILE
+===================== */
+
+.bottom{
+display:none;
 }
 
-.info-row:last-child{
-    border-bottom:none;
+@media(max-width:850px){
+
+.sidebar{
+display:none;
 }
 
-/* =========================
-   ALT MENÜ
-========================= */
-
-.bottom-nav{
-    display:none;
+.main{
+margin-left:0;
+padding:20px 15px 90px;
 }
 
-/* =========================
-   MOBİL
-========================= */
-
-@media(max-width:900px){
-
-    .sidebar{
-        display:none;
-    }
-
-    .main{
-        margin-left:0;
-        padding:
-            20px
-            16px
-            90px;
-    }
-
-    .stats{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .content-grid{
-        grid-template-columns:1fr;
-    }
-
-    .topbar{
-        margin-bottom:20px;
-    }
-
-    .welcome h1{
-        font-size:22px;
-    }
-
-    .profile-name{
-        display:none;
-    }
-
-    .bottom-nav{
-        display:flex;
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        height:68px;
-        background:white;
-        border-top:1px solid var(--border);
-        z-index:20;
-        justify-content:space-around;
-        align-items:center;
-    }
-
-    .bottom-item{
-        text-align:center;
-        font-size:11px;
-        color:var(--muted);
-        font-weight:700;
-        cursor:pointer;
-    }
-
-    .bottom-item span{
-        display:block;
-        font-size:20px;
-        margin-bottom:3px;
-    }
-
-    .bottom-item.active{
-        color:var(--purple-dark);
-    }
+.stats{
+grid-template-columns:
+repeat(2,1fr);
 }
 
-@media(max-width:480px){
-
-    .login-box{
-        padding:32px 22px;
-        border-radius:24px;
-    }
-
-    .stats{
-        gap:10px;
-    }
-
-    .stat{
-        padding:15px;
-    }
-
-    .stat-number{
-        font-size:23px;
-    }
-
-    .order-top{
-        flex-direction:column;
-    }
-
-    .badge{
-        width:max-content;
-    }
-
-    .login-logo{
-        width:155px;
-    }
+.top h1{
+font-size:22px;
 }
+
+.business{
+font-size:0;
+}
+
+.content{
+padding:15px;
+}
+
+.bottom{
+display:flex;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:68px;
+background:white;
+border-top:1px solid var(--border);
+z-index:10;
+justify-content:space-around;
+}
+
+.bottom button{
+border:0;
+background:none;
+font-size:11px;
+color:var(--muted);
+font-weight:bold;
+}
+
+.bottom button span{
+display:block;
+font-size:20px;
+margin-bottom:3px;
+}
+
+}
+
 </style>
+
 </head>
 
 
 <body>
 
 
-<!-- ==================================================
-     GİRİŞ EKRANI
-================================================== -->
+<!-- =====================================================
+LOGIN
+===================================================== -->
 
 <div
-    class="login-screen"
-    id="loginScreen"
+class="login"
+id="loginScreen"
 >
 
-    <div class="login-box">
+<div class="login-box">
 
-        <!-- LOGO -->
-        <img
-            src="baksana-logo-cropped.png"
-            class="login-logo"
-            alt="BAKSANA"
-        >
+<img
+src="baksana-logo-cropped.png"
+class="logo"
+alt="BAKSANA"
+>
 
-        <div class="login-title">
-            İşletme Paneli
-        </div>
+<h1>
+İşletme Paneli
+</h1>
 
-        <div class="login-subtitle">
-            İşletme hesabınızla giriş yapın
-        </div>
+<p>
+İşletme hesabınızla giriş yapın
+</p>
 
+<div
+class="error"
+id="loginError"
+>
+Giriş yapılamadı.
+</div>
 
-        <!-- HATA -->
-        <div
-            class="login-error"
-            id="loginError"
-        >
-            Kullanıcı adı veya şifre hatalı.
-        </div>
+<form id="loginForm">
 
+<div class="input">
 
-        <form
-            onsubmit="login(event)"
-        >
+<label>
+E-posta
+</label>
 
-            <div class="form-group">
+<input
+type="email"
+id="email"
+placeholder="ornek@baksana.com"
+required
+>
 
-                <label>
-                    Kullanıcı Adı
-                </label>
-
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Kullanıcı adınızı girin"
-                    autocomplete="username"
-                    required
-                >
-
-            </div>
+</div>
 
 
-            <div class="form-group">
+<div class="input">
 
-                <label>
-                    Şifre
-                </label>
+<label>
+Şifre
+</label>
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Şifrenizi girin"
-                    autocomplete="current-password"
-                    required
-                >
+<input
+type="password"
+id="password"
+placeholder="Şifreniz"
+required
+>
 
-            </div>
-
-
-            <label class="remember">
-
-                <input
-                    type="checkbox"
-                    id="remember"
-                >
-
-                Beni hatırla
-
-            </label>
+</div>
 
 
-            <button
-                class="login-button"
-                type="submit"
-            >
-                GİRİŞ YAP
-            </button>
+<button
+class="login-btn"
+type="submit"
+>
+GİRİŞ YAP
+</button>
 
-        </form>
+</form>
 
-
-        <div
-            class="forgot"
-            onclick="forgotPassword()"
-        >
-            Şifremi unuttum
-        </div>
-
-
-        <div class="login-footer">
-
-            BAKSANA İşletme Paneli<br>
-            Güvenli işletme erişimi
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 
 
-<!-- ==================================================
-     İŞLETME PANELİ
-================================================== -->
+<!-- =====================================================
+PANEL
+===================================================== -->
 
 <div
-    class="panel"
-    id="panel"
+class="panel"
+id="panel"
 >
 
 
-    <!-- =========================
-         SOL MENÜ
-    ========================== -->
-
-    <aside class="sidebar">
-
-        <img
-            src="baksana-logo-cropped.png"
-            class="panel-logo"
-            alt="BAKSANA"
-        >
-
-
-        <nav class="nav">
-
-            <div
-                class="nav-item active"
-                onclick="showSection('home')"
-            >
-                🏠
-                Ana Sayfa
-            </div>
-
-            <div
-                class="nav-item"
-                onclick="showSection('orders')"
-            >
-                📦
-                Siparişler
-            </div>
-
-            <div
-                class="nav-item"
-                onclick="showSection('ongoing')"
-            >
-                🔄
-                Devam Edenler
-            </div>
+<aside class="sidebar">
 
-            <div
-                class="nav-item"
-                onclick="showSection('completed')"
-            >
-                ✅
-                Tamamlananlar
-            </div>
+<img
+src="baksana-logo-cropped.png"
+class="logo"
+alt="BAKSANA"
+>
 
-            <div
-                class="nav-item"
-                onclick="showSection('rejected')"
-            >
-                ❌
-                Reddedilenler
-            </div>
 
-            <div
-                class="nav-item"
-                onclick="showSection('earnings')"
-            >
-                💰
-                Kazançlar
-            </div>
+<div class="menu">
 
-            <div
-                class="nav-item"
-                onclick="showSection('stats')"
-            >
-                📊
-                İstatistikler
-            </div>
+<button
+class="active"
+onclick="showPage('home',this)"
+>
+🏠 Ana Sayfa
+</button>
 
-            <div
-                class="nav-item"
-                onclick="showSection('profile')"
-            >
-                👤
-                Profil
-            </div>
+<button
+onclick="showPage('orders',this)"
+>
+📦 Siparişler
+</button>
 
-        </nav>
+<button
+onclick="showPage('ongoing',this)"
+>
+🔄 Devam Edenler
+</button>
 
+<button
+onclick="showPage('completed',this)"
+>
+✅ Tamamlananlar
+</button>
 
-        <div
-            class="nav-item logout"
-            onclick="logout()"
-        >
-            🚪
-            Çıkış Yap
-        </div>
+<button
+onclick="showPage('rejected',this)"
+>
+❌ Reddedilenler
+</button>
 
-    </aside>
+<button
+onclick="showPage('earnings',this)"
+>
+💰 Kazançlar
+</button>
 
+<button
+onclick="showPage('stats',this)"
+>
+📊 İstatistikler
+</button>
 
+<button
+onclick="showPage('profile',this)"
+>
+👤 Profil
+</button>
 
-    <!-- =========================
-         ANA ALAN
-    ========================== -->
+</div>
 
-    <main class="main">
 
+<button
+class="menu logout"
+onclick="logout()"
+>
+🚪 Çıkış Yap
+</button>
 
-        <header class="topbar">
+</aside>
 
-            <div class="welcome">
 
-                <h1>
-                    Hoş geldin 👋
-                </h1>
 
-                <p>
-                    Temiz Ev Hizmetleri · İşletme Paneli
-                </p>
+<main class="main">
 
-            </div>
 
+<div class="top">
 
-            <div class="profile">
+<div>
 
-                <div class="avatar">
-                    TE
-                </div>
+<h1 id="pageTitle">
+Hoş geldin 👋
+</h1>
 
-                <div class="profile-name">
-                    Temiz Ev Hizmetleri
-                </div>
+<p id="pageSubtitle">
+İşletme paneliniz
+</p>
 
-                <span>
-                    ⌄
-                </span>
+</div>
 
-            </div>
 
-        </header>
+<div class="business">
 
+<div class="avatar">
+🏪
+</div>
 
+<span id="businessName">
+İşletme
+</span>
 
-        <!-- =========================
-             İSTATİSTİKLER
-        ========================== -->
+</div>
 
-        <section class="stats">
+</div>
 
 
-            <div class="stat">
+<!-- =====================================================
+ANA SAYFA
+===================================================== -->
 
-                <div class="stat-icon">
-                    📦
-                </div>
+<div id="homePage">
 
-                <div
-                    class="stat-number"
-                    id="pendingCount"
-                >
-                    7
-                </div>
+<div class="stats">
 
-                <div class="stat-label">
-                    Bekleyen sipariş
-                </div>
+<div class="stat">
 
-            </div>
+<div class="stat-icon">
+📦
+</div>
 
+<div
+class="stat-number"
+id="pendingStat"
+>
+0
+</div>
 
-            <div class="stat">
+<div class="stat-label">
+Bekleyen
+</div>
 
-                <div class="stat-icon">
-                    🔄
-                </div>
+</div>
 
-                <div class="stat-number">
-                    3
-                </div>
 
-                <div class="stat-label">
-                    Devam eden
-                </div>
+<div class="stat">
 
-            </div>
+<div class="stat-icon">
+🔄
+</div>
 
+<div
+class="stat-number"
+id="ongoingStat"
+>
+0
+</div>
 
-            <div class="stat">
+<div class="stat-label">
+Devam Eden
+</div>
 
-                <div class="stat-icon">
-                    ✅
-                </div>
+</div>
 
-                <div class="stat-number">
-                    48
-                </div>
 
-                <div class="stat-label">
-                    Tamamlanan
-                </div>
+<div class="stat">
 
-            </div>
+<div class="stat-icon">
+✅
+</div>
 
+<div
+class="stat-number"
+id="completedStat"
+>
+0
+</div>
 
-            <div class="stat">
+<div class="stat-label">
+Tamamlanan
+</div>
 
-                <div class="stat-icon">
-                    💰
-                </div>
+</div>
 
-                <div class="stat-number">
-                    18.450 ₺
-                </div>
 
-                <div class="stat-label">
-                    Bu ay kazanç
-                </div>
+<div class="stat">
 
-            </div>
+<div class="stat-icon">
+💰
+</div>
 
-        </section>
+<div
+class="stat-number"
+id="earningStat"
+>
+0 ₺
+</div>
 
+<div class="stat-label">
+Toplam Kazanç
+</div>
 
+</div>
 
-        <!-- =========================
-             İÇERİK
-        ========================== -->
+</div>
 
-        <section class="content-grid">
 
+<div class="content">
 
-            <!-- SİPARİŞLER -->
+<div class="content-head">
 
-            <div class="card">
+<h2>
+Son Siparişler
+</h2>
 
-                <div class="card-header">
+<button
+onclick="showPageByName('orders')"
+style="
+border:0;
+background:none;
+color:#6242d8;
+font-weight:bold;
+cursor:pointer;
+"
+>
+Tümünü Gör →
+</button>
 
-                    <h2>
-                        Yeni Siparişler
-                    </h2>
+</div>
 
-                    <span
-                        class="card-link"
-                        onclick="showSection('orders')"
-                    >
-                        Tümünü Gör →
-                    </span>
 
-                </div>
+<div
+class="orders"
+id="homeOrders"
+>
+</div>
 
+</div>
 
-                <!-- SİPARİŞ 1 -->
+</div>
 
-                <div
-                    class="order"
-                    id="order1"
-                >
 
-                    <div class="order-top">
+<!-- =====================================================
+DİĞER SAYFALAR
+===================================================== -->
 
-                        <div>
+<div
+id="dynamicPage"
+style="display:none"
+>
 
-                            <div class="order-title">
-                                BK-7F42K · Ev Temizliği
-                            </div>
+<div class="content">
 
-                            <div class="order-info">
+<div
+id="dynamicContent"
+>
+</div>
 
-                                Nova Residence ·
-                                A Blok / Daire 12<br>
+</div>
 
-                                12 Ekim · 14:00 ·
-                                2+1 Standart
+</div>
 
-                            </div>
 
-                        </div>
+</main>
 
 
-                        <span
-                            class="badge"
-                            id="badge1"
-                        >
-                            Yeni
-                        </span>
 
-                    </div>
+<!-- MOBILE -->
 
+<nav class="bottom">
 
-                    <div class="order-actions">
+<button onclick="showPageByName('home')">
+<span>🏠</span>
+Ana Sayfa
+</button>
 
-                        <button
-                            class="accept"
-                            onclick="acceptOrder(1)"
-                        >
-                            Kabul Et
-                        </button>
+<button onclick="showPageByName('orders')">
+<span>📦</span>
+Siparişler
+</button>
 
-                        <button
-                            class="reject"
-                            onclick="rejectOrder(1)"
-                        >
-                            Reddet
-                        </button>
+<button onclick="showPageByName('ongoing')">
+<span>🔄</span>
+Devam
+</button>
 
-                    </div>
+<button onclick="showPageByName('profile')">
+<span>👤</span>
+Profil
+</button>
 
-                </div>
+</nav>
 
-
-
-                <!-- SİPARİŞ 2 -->
-
-                <div
-                    class="order"
-                    id="order2"
-                >
-
-                    <div class="order-top">
-
-                        <div>
-
-                            <div class="order-title">
-                                BK-91Q2M · Detaylı Temizlik
-                            </div>
-
-                            <div class="order-info">
-
-                                Nova Residence ·
-                                C Blok / Daire 8<br>
-
-                                13 Ekim · 11:00 ·
-                                3+1
-
-                            </div>
-
-                        </div>
-
-
-                        <span
-                            class="badge"
-                            id="badge2"
-                        >
-                            Yeni
-                        </span>
-
-                    </div>
-
-
-                    <div class="order-actions">
-
-                        <button
-                            class="accept"
-                            onclick="acceptOrder(2)"
-                        >
-                            Kabul Et
-                        </button>
-
-                        <button
-                            class="reject"
-                            onclick="rejectOrder(2)"
-                        >
-                            Reddet
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- SİPARİŞ 3 -->
-
-                <div
-                    class="order"
-                    id="order3"
-                >
-
-                    <div class="order-top">
-
-                        <div>
-
-                            <div class="order-title">
-                                BK-18PLX · Ev Temizliği
-                            </div>
-
-                            <div class="order-info">
-
-                                Park Vadi ·
-                                B Blok / Daire 21<br>
-
-                                14 Ekim · 15:00 ·
-                                1+1
-
-                            </div>
-
-                        </div>
-
-
-                        <span class="badge green">
-                            Onaylandı
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- KAZANÇ -->
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <h2>
-                        Bu Ay
-                    </h2>
-
-                    <span class="card-link">
-                        Detay
-                    </span>
-
-                </div>
-
-
-                <div class="earn-label">
-                    Toplam kazanç
-                </div>
-
-
-                <div class="earn-number">
-                    18.450 ₺
-                </div>
-
-
-                <div class="earn-change">
-                    ↑ Geçen aya göre %18
-                </div>
-
-
-                <div class="progress">
-                    <span></span>
-                </div>
-
-
-                <div class="info-row">
-                    <span>Tamamlanan iş</span>
-                    <b>48</b>
-                </div>
-
-
-                <div class="info-row">
-                    <span>Ortalama puan</span>
-                    <b>4.8 ⭐</b>
-                </div>
-
-
-                <div class="info-row">
-                    <span>Kabul oranı</span>
-                    <b>%94</b>
-                </div>
-
-
-                <div class="info-row">
-                    <span>İlk 2 ay komisyon</span>
-                    <b>%0</b>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- =========================
-         MOBİL ALT MENÜ
-    ========================== -->
-
-    <nav class="bottom-nav">
-
-        <div
-            class="bottom-item active"
-            onclick="showSection('home')"
-        >
-            <span>🏠</span>
-            Ana Sayfa
-        </div>
-
-
-        <div
-            class="bottom-item"
-            onclick="showSection('orders')"
-        >
-            <span>📦</span>
-            Siparişler
-        </div>
-
-
-        <div
-            class="bottom-item"
-            onclick="showSection('earnings')"
-        >
-            <span>💰</span>
-            Kazanç
-        </div>
-
-
-        <div
-            class="bottom-item"
-            onclick="showSection('profile')"
-        >
-            <span>👤</span>
-            Profil
-        </div>
-
-    </nav>
 
 </div>
 
@@ -1284,360 +885,1163 @@ input{
 
 <script>
 
-/* ==================================================
-   DEMO İŞLETME HESABI
-================================================== */
+/* =====================================================
+SUPABASE
+===================================================== */
 
-const DEMO_USERNAME = "temizev";
-const DEMO_PASSWORD = "123456";
+const SUPABASE_URL =
+"https://ahvplyeunubpbtsdzldj.supabase.co";
 
+const SUPABASE_KEY =
+"sb_publishable_qF3PlPnw-g4dXeOiL-OSOw_LzKQ9kuO";
 
-/* ==================================================
-   GİRİŞ
-================================================== */
-
-function login(event){
-
-    event.preventDefault();
-
-    const username =
-        document
-        .getElementById("username")
-        .value
-        .trim();
-
-    const password =
-        document
-        .getElementById("password")
-        .value
-        .trim();
-
-    const error =
-        document
-        .getElementById("loginError");
-
-
-    if(
-        username === DEMO_USERNAME &&
-        password === DEMO_PASSWORD
-    ){
-
-        error.style.display = "none";
-
-
-        /*
-         * Giriş durumunu kaydet.
-         * Daha sonra gerçek Supabase Auth
-         * sistemi bunun yerini alacak.
-         */
-
-        if(
-            document
-            .getElementById("remember")
-            .checked
-        ){
-
-            localStorage.setItem(
-                "baksana_business_login",
-                "true"
-            );
-
-        }else{
-
-            sessionStorage.setItem(
-                "baksana_business_login",
-                "true"
-            );
-
-        }
-
-
-        openPanel();
-
-    }else{
-
-        error.style.display = "block";
-
-    }
-
-}
-
-
-/* ==================================================
-   PANELİ AÇ
-================================================== */
-
-function openPanel(){
-
-    document
-    .getElementById("loginScreen")
-    .style
-    .display = "none";
-
-
-    document
-    .getElementById("panel")
-    .style
-    .display = "block";
-
-}
-
-
-/* ==================================================
-   OTOMATİK GİRİŞ
-================================================== */
-
-window.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        const remembered =
-            localStorage.getItem(
-                "baksana_business_login"
-            );
-
-        const session =
-            sessionStorage.getItem(
-                "baksana_business_login"
-            );
-
-
-        if(
-            remembered === "true" ||
-            session === "true"
-        ){
-
-            openPanel();
-
-        }
-
-    }
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
-/* ==================================================
-   ÇIKIŞ
-================================================== */
+/* =====================================================
+GLOBAL
+===================================================== */
 
-function logout(){
-
-    localStorage.removeItem(
-        "baksana_business_login"
-    );
-
-    sessionStorage.removeItem(
-        "baksana_business_login"
-    );
+let business = null;
+let orders = [];
 
 
-    document
-    .getElementById("panel")
-    .style
-    .display = "none";
+/* =====================================================
+LOGIN
+===================================================== */
+
+document
+.getElementById("loginForm")
+.addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+const email =
+document
+.getElementById("email")
+.value
+.trim();
+
+const password =
+document
+.getElementById("password")
+.value;
 
 
-    document
-    .getElementById("loginScreen")
-    .style
-    .display = "flex";
+const {data,error} =
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
 
-    document
-    .getElementById("username")
-    .value = "";
+if(error){
 
-    document
-    .getElementById("password")
-    .value = "";
+document
+.getElementById("loginError")
+.style.display="block";
 
-}
+document
+.getElementById("loginError")
+.innerText =
+"Giriş bilgileri hatalı.";
 
-
-/* ==================================================
-   SİPARİŞ KABUL
-================================================== */
-
-function acceptOrder(id){
-
-    const badge =
-        document
-        .getElementById(
-            "badge" + id
-        );
-
-    const order =
-        document
-        .getElementById(
-            "order" + id
-        );
-
-
-    badge.innerText =
-        "Kabul Edildi";
-
-    badge.className =
-        "badge green";
-
-
-    const buttons =
-        order
-        .querySelectorAll("button");
-
-
-    buttons.forEach(
-        button => {
-            button.disabled = true;
-            button.style.opacity = ".5";
-        }
-    );
-
-
-    alert(
-        "Sipariş kabul edildi ✓\n\n" +
-        "Sipariş artık işletmenizin " +
-        "devam eden işlerine alınacak."
-    );
+return;
 
 }
 
 
-/* ==================================================
-   SİPARİŞ RED
-================================================== */
+await loadBusiness();
 
-function rejectOrder(id){
-
-    const reason =
-        prompt(
-            "Siparişi neden reddediyorsunuz?\n\n" +
-
-            "1 - Müsait değil\n" +
-            "2 - Personel yetersiz\n" +
-            "3 - Tarih/saat uygun değil\n" +
-            "4 - Bölge dışında\n" +
-            "5 - Diğer"
-        );
+}
+);
 
 
-    if(!reason){
-        return;
-    }
+/* =====================================================
+OTURUM KONTROL
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+async (event,session)=>{
+
+if(session){
+
+await loadBusiness();
+
+}else{
+
+showLogin();
+
+}
+
+}
+);
 
 
-    const badge =
-        document
-        .getElementById(
-            "badge" + id
-        );
+/* =====================================================
+İŞLETMEYİ YÜKLE
+===================================================== */
+
+async function loadBusiness(){
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("businesses")
+.select("*")
+.single();
 
 
-    badge.innerText =
-        "Reddedildi";
+if(error || !data){
 
-    badge.className =
-        "badge red";
+alert(
+"İşletme hesabınız sisteme tanımlanmamış."
+);
 
+await supabaseClient.auth.signOut();
 
-    const order =
-        document
-        .getElementById(
-            "order" + id
-        );
-
-
-    const buttons =
-        order
-        .querySelectorAll("button");
-
-
-    buttons.forEach(
-        button => {
-            button.disabled = true;
-            button.style.opacity = ".5";
-        }
-    );
-
-
-    alert(
-        "Sipariş reddedildi.\n\n" +
-        "BAKSANA yönetimi bu siparişi " +
-        "başka bir işletmeye atayabilir."
-    );
+return;
 
 }
 
 
-/* ==================================================
-   MENÜ
-================================================== */
+business=data;
 
-function showSection(section){
-
-    const messages = {
-
-        home:
-        "Ana Sayfa",
-
-        orders:
-        "Siparişler",
-
-        ongoing:
-        "Devam Edenler",
-
-        completed:
-        "Tamamlananlar",
-
-        rejected:
-        "Reddedilenler",
-
-        earnings:
-        "Kazançlar",
-
-        stats:
-        "İstatistikler",
-
-        profile:
-        "Profil"
-
-    };
+document
+.getElementById("businessName")
+.innerText =
+business.business_name;
 
 
-    /*
-     * Şimdilik demo olarak
-     * hangi bölüme tıklandığını gösteriyoruz.
-     *
-     * Bu bölümleri daha sonra gerçek
-     * Supabase verileriyle dolduracağız.
-     */
+document
+.getElementById("loginScreen")
+.style.display="none";
 
-    if(section !== "home"){
+document
+.getElementById("panel")
+.style.display="block";
 
-        alert(
-            messages[section] +
-            " bölümü bir sonraki aşamada " +
-            "gerçek verilerle aktif olacak."
-        );
 
-    }
+await loadOrders();
 
 }
 
 
-/* ==================================================
-   ŞİFREMİ UNUTTUM
-================================================== */
+/* =====================================================
+SİPARİŞLERİ YÜKLE
+===================================================== */
 
-function forgotPassword(){
+async function loadOrders(){
 
-    alert(
-        "Şifre yenileme sistemi gerçek sürümde " +
-        "BAKSANA yönetimi veya e-posta doğrulaması " +
-        "üzerinden çalışacak."
-    );
+if(!business){
+return;
+}
+
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("orders")
+.select("*")
+.eq(
+"business_id",
+business.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(error){
+
+console.error(error);
+
+return;
 
 }
+
+
+orders=data || [];
+
+renderHome();
+
+}
+
+
+/* =====================================================
+ANA SAYFA
+===================================================== */
+
+function renderHome(){
+
+const pending =
+orders.filter(
+o =>
+o.status === "Beklemede"
+);
+
+
+const ongoing =
+orders.filter(
+o =>
+o.status === "Kabul Edildi" ||
+o.status === "Devam Ediyor"
+);
+
+
+const completed =
+orders.filter(
+o =>
+o.status === "Tamamlandı"
+);
+
+
+const earnings =
+completed.reduce(
+(sum,o)=>
+sum + Number(o.price || 0),
+0
+);
+
+
+document
+.getElementById("pendingStat")
+.innerText =
+pending.length;
+
+
+document
+.getElementById("ongoingStat")
+.innerText =
+ongoing.length;
+
+
+document
+.getElementById("completedStat")
+.innerText =
+completed.length;
+
+
+document
+.getElementById("earningStat")
+.innerText =
+earnings.toLocaleString("tr-TR")
++
+" ₺";
+
+
+const container =
+document
+.getElementById("homeOrders");
+
+
+container.innerHTML="";
+
+
+if(!orders.length){
+
+container.innerHTML=emptyHTML(
+"📦",
+"Henüz sipariş yok"
+);
+
+return;
+
+}
+
+
+orders
+.slice(0,5)
+.forEach(
+order =>
+container
+.insertAdjacentHTML(
+"beforeend",
+orderHTML(order)
+)
+);
+
+}
+
+
+/* =====================================================
+SİPARİŞ HTML
+===================================================== */
+
+function orderHTML(order){
+
+let badge="";
+
+if(order.status==="Tamamlandı"){
+
+badge=
+'<span class="badge green">Tamamlandı</span>';
+
+}else if(
+order.status==="Reddedildi"
+){
+
+badge=
+'<span class="badge red">Reddedildi</span>';
+
+}else{
+
+badge=
+'<span class="badge">● '
++
+(order.status || "Beklemede")
++
+'</span>';
+
+}
+
+
+let buttons="";
+
+
+if(order.status==="Beklemede"){
+
+buttons=`
+
+<div class="actions">
+
+<button
+class="accept"
+onclick="acceptOrder(${order.id})"
+>
+Kabul Et
+</button>
+
+<button
+class="reject"
+onclick="rejectOrder(${order.id})"
+>
+Reddet
+</button>
+
+</div>
+
+`;
+
+}
+
+
+if(
+order.status==="Kabul Edildi" ||
+order.status==="Devam Ediyor"
+){
+
+buttons=`
+
+<div class="actions">
+
+<button
+class="complete"
+onclick="completeOrder(${order.id})"
+>
+İşi Tamamla ✓
+</button>
+
+</div>
+
+`;
+
+}
+
+
+return `
+
+<div class="order">
+
+<div class="order-top">
+
+<div>
+
+<div class="order-title">
+
+${order.service || "Hizmet"}
+
+</div>
+
+<div class="order-info">
+
+Sipariş:
+${order.id}
+
+<br>
+
+${order.block || ""}
+/
+${order.apartment || ""}
+
+<br>
+
+${order.service_date || ""}
+ ·
+${order.service_time || ""}
+
+<br>
+
+${order.customer_name || "Müşteri"}
+
+ ·
+${order.phone || ""}
+
+<br>
+
+${order.price
+?
+Number(order.price)
+.toLocaleString("tr-TR")
++
+" ₺"
+:
+"Fiyat belirtilmedi"
+}
+
+</div>
+
+</div>
+
+${badge}
+
+</div>
+
+${buttons}
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+BOŞ
+===================================================== */
+
+function emptyHTML(icon,text){
+
+return `
+
+<div class="empty">
+
+<div class="empty-icon">
+${icon}
+</div>
+
+<div>
+${text}
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+SAYFA
+===================================================== */
+
+function showPage(page,button){
+
+document
+.querySelectorAll(".menu button")
+.forEach(
+b=>b.classList.remove("active")
+);
+
+if(button){
+button.classList.add("active");
+}
+
+
+showPageByName(page);
+
+}
+
+
+/* =====================================================
+SAYFA GÖSTER
+===================================================== */
+
+function showPageByName(page){
+
+document
+.getElementById("homePage")
+.style.display =
+page==="home"
+?
+"block"
+:
+"none";
+
+
+document
+.getElementById("dynamicPage")
+.style.display =
+page==="home"
+?
+"none"
+:
+"block";
+
+
+if(page==="home"){
+
+document
+.getElementById("pageTitle")
+.innerText =
+"Hoş geldin 👋";
+
+document
+.getElementById("pageSubtitle")
+.innerText =
+"İşletme paneliniz";
+
+return;
+
+}
+
+
+const titles={
+
+orders:"📦 Siparişler",
+
+ongoing:"🔄 Devam Edenler",
+
+completed:"✅ Tamamlananlar",
+
+rejected:"❌ Reddedilenler",
+
+earnings:"💰 Kazançlar",
+
+stats:"📊 İstatistikler",
+
+profile:"👤 Profil"
+
+};
+
+
+document
+.getElementById("pageTitle")
+.innerText =
+titles[page] || "BAKSANA";
+
+
+document
+.getElementById("pageSubtitle")
+.innerText =
+"İşletme yönetimi";
+
+
+renderPage(page);
+
+}
+
+
+/* =====================================================
+SAYFA İÇERİĞİ
+===================================================== */
+
+function renderPage(page){
+
+const box =
+document
+.getElementById("dynamicContent");
+
+
+if(page==="orders"){
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>Tüm Siparişler</h2>
+</div>
+
+<div class="orders">
+
+${
+orders.length
+?
+orders
+.map(orderHTML)
+.join("")
+:
+emptyHTML(
+"📦",
+"Henüz sipariş bulunmuyor."
+)
+}
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="ongoing"){
+
+const list =
+orders.filter(
+o =>
+o.status==="Kabul Edildi" ||
+o.status==="Devam Ediyor"
+);
+
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>Devam Eden İşler</h2>
+</div>
+
+<div class="orders">
+
+${
+list.length
+?
+list.map(orderHTML).join("")
+:
+emptyHTML(
+"🔄",
+"Devam eden iş bulunmuyor."
+)
+}
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="completed"){
+
+const list =
+orders.filter(
+o =>
+o.status==="Tamamlandı"
+);
+
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>Tamamlanan İşler</h2>
+</div>
+
+<div class="orders">
+
+${
+list.length
+?
+list.map(orderHTML).join("")
+:
+emptyHTML(
+"✅",
+"Henüz tamamlanan iş yok."
+)
+}
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="rejected"){
+
+const list =
+orders.filter(
+o =>
+o.status==="Reddedildi"
+);
+
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>Reddedilen İşler</h2>
+</div>
+
+<div class="orders">
+
+${
+list.length
+?
+list.map(orderHTML).join("")
+:
+emptyHTML(
+"❌",
+"Reddedilen sipariş yok."
+)
+}
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="earnings"){
+
+const completed =
+orders.filter(
+o =>
+o.status==="Tamamlandı"
+);
+
+
+const total =
+completed.reduce(
+(sum,o)=>
+sum+Number(o.price||0),
+0
+);
+
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>Kazançlar</h2>
+</div>
+
+<div class="stat">
+
+<div class="stat-icon">
+💰
+</div>
+
+<div class="stat-number">
+
+${total.toLocaleString("tr-TR")} ₺
+
+</div>
+
+<div class="stat-label">
+Tamamlanan siparişlerden toplam kazanç
+</div>
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="stats"){
+
+const total=orders.length;
+
+const completed=
+orders.filter(
+o=>o.status==="Tamamlandı"
+).length;
+
+const rejected=
+orders.filter(
+o=>o.status==="Reddedildi"
+).length;
+
+const accepted=
+orders.filter(
+o =>
+o.status==="Kabul Edildi" ||
+o.status==="Devam Ediyor" ||
+o.status==="Tamamlandı"
+).length;
+
+
+const acceptance=
+total
+?
+Math.round(
+accepted/total*100
+)
+:
+0;
+
+
+box.innerHTML=`
+
+<div class="content-head">
+<h2>İstatistikler</h2>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="stat-icon">📦</div>
+
+<div class="stat-number">
+${total}
+</div>
+
+<div class="stat-label">
+Toplam Sipariş
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">✅</div>
+
+<div class="stat-number">
+${completed}
+</div>
+
+<div class="stat-label">
+Tamamlanan
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">❌</div>
+
+<div class="stat-number">
+${rejected}
+</div>
+
+<div class="stat-label">
+Reddedilen
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">📈</div>
+
+<div class="stat-number">
+%${acceptance}
+</div>
+
+<div class="stat-label">
+Kabul Oranı
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+else if(page==="profile"){
+
+box.innerHTML=`
+
+<div class="content profile-card">
+
+<div class="content-head">
+<h2>İşletme Profili</h2>
+</div>
+
+<div class="profile-row">
+<span>İşletme</span>
+<b>${business.business_name}</b>
+</div>
+
+<div class="profile-row">
+<span>Kullanıcı adı</span>
+<b>${business.username}</b>
+</div>
+
+<div class="profile-row">
+<span>Telefon</span>
+<b>${business.phone || "-"}</b>
+</div>
+
+<div class="profile-row">
+<span>Durum</span>
+<b style="color:#23905a">
+${business.active ? "Aktif" : "Pasif"}
+</b>
+</div>
+
+<div class="profile-row">
+<span>Hizmetler</span>
+<b>
+${
+(business.categories || []).join(", ")
+|| "-"
+}
+</b>
+</div>
+
+<div class="profile-row">
+<span>Hizmet bölgeleri</span>
+<b>
+${
+(business.service_areas || []).join(", ")
+|| "-"
+}
+</b>
+</div>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =====================================================
+KABUL
+===================================================== */
+
+async function acceptOrder(id){
+
+const {
+error
+} =
+await supabaseClient
+.from("orders")
+.update({
+status:"Kabul Edildi",
+accepted_at:
+new Date().toISOString()
+})
+.eq(
+"id",
+id
+)
+.eq(
+"business_id",
+business.id
+);
+
+
+if(error){
+
+alert(
+"Sipariş kabul edilirken hata oluştu."
+);
+
+console.error(error);
+
+return;
+
+}
+
+
+await loadOrders();
+
+alert(
+"Sipariş kabul edildi ✓"
+);
+
+}
+
+
+/* =====================================================
+REDDİT
+===================================================== */
+
+async function rejectOrder(id){
+
+const reason =
+prompt(
+"Red nedeni:\n\n" +
+"1 - Müsait değil\n" +
+"2 - Personel yetersiz\n" +
+"3 - Tarih/saat uygun değil\n" +
+"4 - Bölge dışında\n" +
+"5 - Diğer"
+);
+
+
+if(!reason){
+return;
+}
+
+
+const {
+error
+} =
+await supabaseClient
+.from("orders")
+.update({
+
+status:"Reddedildi",
+
+rejection_reason:reason,
+
+rejected_at:
+new Date().toISOString()
+
+})
+.eq(
+"id",
+id
+)
+.eq(
+"business_id",
+business.id
+);
+
+
+if(error){
+
+alert(
+"Sipariş reddedilirken hata oluştu."
+);
+
+return;
+
+}
+
+
+await loadOrders();
+
+alert(
+"Sipariş reddedildi."
+);
+
+}
+
+
+/* =====================================================
+TAMAMLA
+===================================================== */
+
+async function completeOrder(id){
+
+const {
+error
+} =
+await supabaseClient
+.from("orders")
+.update({
+
+status:"Tamamlandı",
+
+completed_at:
+new Date().toISOString()
+
+})
+.eq(
+"id",
+id
+)
+.eq(
+"business_id",
+business.id
+);
+
+
+if(error){
+
+alert(
+"Sipariş tamamlanırken hata oluştu."
+);
+
+return;
+
+}
+
+
+await loadOrders();
+
+alert(
+"İş tamamlandı ✓"
+);
+
+}
+
+
+/* =====================================================
+ÇIKIŞ
+===================================================== */
+
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+}
+
+
+/* =====================================================
+LOGIN GÖSTER
+===================================================== */
+
+function showLogin(){
+
+document
+.getElementById("panel")
+.style.display="none";
+
+document
+.getElementById("loginScreen")
+.style.display="flex";
+
+}
+
+
+/* =====================================================
+BAŞLANGIÇ
+===================================================== */
+
+async function init(){
+
+const {
+data
+} =
+await supabaseClient
+.auth
+.getSession();
+
+
+if(
+data &&
+data.session
+){
+
+await loadBusiness();
+
+}else{
+
+showLogin();
+
+}
+
+}
+
+
+init();
 
 </script>
 
 </body>
+
 </html>
