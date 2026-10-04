@@ -1564,17 +1564,19 @@ document
 
       if(error){
 
-        errorBox.textContent =
-          "E-posta veya şifre hatalı. Hesabınızın aktif olduğundan emin olun.";
+   if(error){
 
-        errorBox.style.display =
-          "block";
+  errorBox.textContent =
+    "Giriş hatası: " + error.message;
 
-        console.error(error);
+  errorBox.style.display =
+    "block";
 
-        return;
+  console.error("SUPABASE LOGIN ERROR:", error);
 
-      }
+  return;
+
+}
 
 
       currentSession =
