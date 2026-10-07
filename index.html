@@ -521,6 +521,104 @@ button{
 }
 
 
+/* GELİŞMİŞ SİPARİŞ / İŞLETME */
+
+.order-option{
+  display:inline-flex;
+  margin-top:8px;
+  padding:6px 9px;
+  border-radius:9px;
+  background:#f3efff;
+  color:#5b3ec9;
+  font-size:11px;
+  font-weight:800
+}
+
+.order-time{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:8px;
+  padding:7px 9px;
+  border-radius:10px;
+  background:#f7f5ff;
+  color:#5d42c4;
+  font-size:11px;
+  font-weight:800
+}
+
+.order-cancelled{
+  margin-top:10px;
+  background:#fff2f2;
+  border:1px solid #ffd8d8;
+  color:#b43a3a;
+  padding:10px 12px;
+  border-radius:11px;
+  font-size:12px;
+  line-height:1.5
+}
+
+.start{
+  background:#5d42c4;
+  color:#fff
+}
+
+.cancelled-page-note{
+  margin-bottom:14px;
+  background:#fff2f2;
+  border:1px solid #ffd8d8;
+  color:#9f4040;
+  padding:11px 12px;
+  border-radius:12px;
+  font-size:12px
+}
+
+.proposal-box{
+  margin-top:10px;
+  background:#f7f5ff;
+  border:1px solid #e3dbff;
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.5;
+  color:#5a4a93
+}
+
+.proposal-time{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:8px
+}
+
+.proposal-time input{
+  flex:1;
+  height:42px;
+  border:1px solid var(--bd);
+  border-radius:10px;
+  padding:0 10px;
+  background:#fff;
+  outline:0
+}
+
+.proposal-time button{
+  height:42px;
+  border:0;
+  border-radius:10px;
+  padding:0 12px;
+  background:var(--p);
+  color:#fff;
+  font-size:12px;
+  font-weight:800
+}
+
+.proposal-pending{
+  background:#fff7df;
+  border-color:#f0dfad;
+  color:#8b6708
+}
+
+
 /* TOAST */
 
 .toast{
@@ -779,6 +877,13 @@ onclick="showPage('rejected',this)"
 </button>
 
 <button
+data-page="cancelled"
+onclick="showPage('cancelled',this)"
+>
+🚫 İptal Edilenler
+</button>
+
+<button
 data-page="earnings"
 onclick="showPage('earnings',this)"
 >
@@ -924,6 +1029,26 @@ id="earningStat"
 
 <div class="stat-label">
 Toplam Kazanç
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+🚫
+</div>
+
+<div
+class="stat-number"
+id="cancelledStat"
+>
+0
+</div>
+
+<div class="stat-label">
+İptal Edilen
 </div>
 
 </div>
@@ -1085,6 +1210,48 @@ Siparişi Reddet
 
 
 <div
+  class="modal"
+  id="proposalModal"
+>
+  <div class="modal-box">
+
+    <h3>
+      Saat Öner
+    </h3>
+
+    <p>
+      Müşterinin istediği saat uygun değilse size uygun başka bir saat önerin.
+    </p>
+
+    <input
+      id="proposalTime"
+      type="time"
+      style="width:100%;height:48px;border:1px solid var(--bd);border-radius:11px;padding:0 10px;outline:0"
+    >
+
+    <div class="modal-actions">
+
+      <button
+        class="modal-cancel"
+        onclick="closeProposalModal()"
+      >
+        Vazgeç
+      </button>
+
+      <button
+        class="accept"
+        onclick="confirmProposal()"
+      >
+        Saati Öner
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div
 class="toast"
 id="toast"
 ></div>
@@ -1120,6 +1287,7 @@ let business = null;
 let orders = [];
 
 let rejectId = null;
+let proposalId = null;
 
 let poll = null;
 
@@ -1155,6 +1323,11 @@ completed:[
 rejected:[
 "❌ Reddedilenler",
 "Reddedilmiş siparişler"
+],
+
+cancelled:[
+"🚫 İptal Edilenler",
+"Müşteri tarafından iptal edilen siparişler"
 ],
 
 earnings:[
@@ -1735,6 +1908,11 @@ rejection_reason,
 accepted_at,
 rejected_at,
 completed_at,
+proposed_service_time,
+time_proposal_status,
+time_proposed_at,
+cancellation_reason,
+cancelled_at,
 sites(name,slug)
 `)
 .eq(
@@ -1923,6 +2101,20 @@ Reddedildi
 
 if(
 status ===
+"İptal Edildi"
+){
+
+return `
+<span class="badge red">
+🚫 İptal Edildi
+</span>
+`;
+
+}
+
+
+if(
+status ===
 "Kabul Edildi"
 ){
 
@@ -1979,226 +2171,336 @@ text
 ORDER HTML
 ===================================================== */
 
-function orderHTML(
-o
-){
-
-let actions="";
-
-
-if(
-o.status ===
-"Beklemede"
-){
-
-actions = `
-
-<div class="actions">
-
-<button
-class="accept"
-onclick="acceptOrder(${o.id})"
->
-Kabul Et
-</button>
-
-<button
-class="reject"
-onclick="openReject(${o.id})"
->
-Reddet
-</button>
-
-</div>
-
-`;
-
-}
-
-
-if(
-o.status ===
-"Kabul Edildi" ||
-o.status ===
-"Devam Ediyor"
-){
-
-actions = `
-
-<div class="actions">
-
-<button
-class="complete"
-onclick="completeOrder(${o.id})"
->
-İşi Tamamla ✓
-</button>
-
-</div>
-
-`;
-
-}
-
-
-const siteName =
-o.sites?.name ||
-"Site bilgisi";
-
-
-return `
-
-<div class="order">
-
-<div class="order-top">
-
-<div>
-
-<div class="order-title">
-
-${esc(
-o.service ||
-"Hizmet"
-)}
-
-</div>
-
-
-<div class="site-tag">
-
-🏢
-${esc(
-siteName
-)}
-
-</div>
-
-
-<div class="order-info">
-
-<b>Sipariş:</b>
-${esc(
-o.order_code ||
-("#" + o.id)
-)}
-
-<br>
-
-📍
-${esc(
-o.block ||
-"-"
-)}
-/
-${esc(
-o.apartment ||
-"-"
-)}
-
-<br>
-
-📅
-${esc(
-dateTR(
-o.service_date
-)
-)}
-
-·
-
-🕒
-${esc(
-o.service_time ||
-"-"
-)}
-
-<br>
-
-👤
-${esc(
-o.customer_name ||
-"Müşteri"
-)}
-
-·
-
-${esc(
-o.phone ||
-"-"
-)}
-
-<br>
-
-🕓
-${esc(
-dateTR(
-o.created_at
-)
-)}
-
-</div>
-
-
-<div class="order-price">
-
-${
-o.price != null
-?
-money(
-o.price
-)
-:
-"Fiyat belirtilmedi"
-}
-
-</div>
-
-
-${
-o.note
-?
-`
-<div class="order-note">
-<b>Not:</b>
-${esc(o.note)}
-</div>
-`
-:
-""
-}
-
-
-${
-o.rejection_reason
-?
-`
-<div class="order-note">
-<b>Red nedeni:</b>
-${esc(
-o.rejection_reason
-)}
-</div>
-`
-:
-""
-}
-
-
-</div>
-
-
-${badge(
-o.status
-)}
-
-</div>
-
-
-${actions}
-
-</div>
-
-`;
+function orderHTML(o){
+
+  let actions="";
+
+  if(o.status === "Beklemede"){
+    actions = `
+      <div class="actions">
+        <button class="accept" onclick="acceptOrder(${o.id})">Kabul Et</button>
+        <button class="start" onclick="openProposal(${o.id})">Saat Öner</button>
+        <button class="reject" onclick="openReject(${o.id})">Reddet</button>
+      </div>
+    `;
+  }
+
+  if(o.status === "Kabul Edildi"){
+    actions = `
+      <div class="actions">
+        <button class="start" onclick="startOrder(${o.id})">İşi Başlat ▶</button>
+      </div>
+    `;
+  }
+
+  if(o.status === "Devam Ediyor"){
+    actions = `
+      <div class="actions">
+        <button class="complete" onclick="completeOrder(${o.id})">İşi Tamamla ✓</button>
+      </div>
+    `;
+  }
+
+  const siteName =
+    o.sites?.name ||
+    "Site bilgisi";
+
+  let option = "";
+
+  try{
+    option =
+      o.details?.option ||
+      (typeof o.details === "string"
+        ? JSON.parse(o.details || "{}").option
+        : "") ||
+      "";
+  }catch(e){
+    option = "";
+  }
+
+  const cancelled =
+    o.status === "İptal Edildi";
+
+  return `
+    <div class="order">
+
+      <div class="order-top">
+
+        <div>
+
+          <div class="order-title">
+            ${esc(
+              o.service ||
+              "Hizmet"
+            )}
+          </div>
+
+          <div class="site-tag">
+            🏢
+            ${esc(
+              siteName
+            )}
+          </div>
+
+          <div class="order-info">
+
+            <b>Sipariş:</b>
+            ${esc(
+              o.order_code ||
+              ("#" + o.id)
+            )}
+
+            <br>
+
+            📍
+            ${esc(
+              o.block ||
+              "-"
+            )}
+            /
+            ${esc(
+              o.apartment ||
+              "-"
+            )}
+
+            <br>
+
+            👤
+            ${esc(
+              o.customer_name ||
+              "Müşteri"
+            )}
+            ·
+            ${esc(
+              o.phone ||
+              "-"
+            )}
+
+            <br>
+
+            📅
+            ${esc(
+              dateTR(
+                o.service_date
+              )
+            )}
+
+          </div>
+
+
+          <div class="order-time">
+            🕒
+            Müşterinin istediği saat:
+            ${esc(
+              o.service_time ||
+              "-"
+            )}
+          </div>
+
+
+          ${
+            option
+            ?
+            `
+              <div class="order-option">
+                ${esc(
+                  option
+                )}
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          <div class="order-price">
+
+            ${
+              o.price != null
+              ?
+              money(
+                o.price
+              )
+              :
+              "Fiyat belirtilmedi"
+            }
+
+          </div>
+
+
+          ${
+            o.note
+            ?
+            `
+              <div class="order-note">
+
+                <b>
+                  Müşteri notu:
+                </b>
+
+                ${esc(
+                  o.note
+                )}
+
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            o.rejection_reason
+            ?
+            `
+              <div class="order-note">
+
+                <b>
+                  Red nedeni:
+                </b>
+
+                ${esc(
+                  o.rejection_reason
+                )}
+
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            o.proposed_service_time &&
+            o.time_proposal_status ===
+            "pending"
+            ?
+            `
+              <div class="proposal-box proposal-pending">
+
+                <b>
+                  Saat önerisi bekleniyor.
+                </b>
+
+                <br>
+
+                Müşteriye önerilen saat:
+                <b>
+                  ${esc(
+                    o.proposed_service_time
+                  )}
+                </b>
+
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            o.proposed_service_time &&
+            o.time_proposal_status ===
+            "accepted"
+            ?
+            `
+              <div class="proposal-box">
+
+                Müşteri önerilen saati kabul etti:
+                <b>
+                  ${esc(
+                    o.proposed_service_time
+                  )}
+                </b>
+
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            o.proposed_service_time &&
+            o.time_proposal_status ===
+            "declined"
+            ?
+            `
+              <div class="order-note">
+
+                <b>
+                  Saat önerisi reddedildi.
+                </b>
+
+                Müşteri ilk saatini tercih ediyor.
+
+              </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            cancelled
+            ?
+            `
+              <div class="order-cancelled">
+
+                <b>
+                  Müşteri siparişi iptal etti.
+                </b>
+
+                ${
+                  o.cancellation_reason
+                  ?
+                  `
+                    <br>
+                    İptal nedeni:
+                    ${esc(
+                      o.cancellation_reason
+                    )}
+                  `
+                  :
+                  ""
+                }
+
+                ${
+                  o.cancelled_at
+                  ?
+                  `
+                    <br>
+                    İptal zamanı:
+                    ${esc(
+                      dateTR(
+                        o.cancelled_at
+                      )
+                    )}
+                  `
+                  :
+                  ""
+                }
+
+              </div>
+            `
+            :
+            ""
+          }
+
+        </div>
+
+
+        ${badge(
+          o.status
+        )}
+
+      </div>
+
+
+      ${actions}
+
+    </div>
+  `;
 
 }
 
@@ -2235,6 +2537,14 @@ o =>
 o.status ===
 "Tamamlandı"
 );
+
+
+const cancelled =
+orders.filter(
+o =>
+o.status ===
+"İptal Edildi"
+).length;
 
 
 const total =
@@ -2284,6 +2594,17 @@ document
 money(
 total
 );
+
+
+const cancelledEl =
+document.getElementById(
+"cancelledStat"
+);
+
+
+if(cancelledEl)
+  cancelledEl.textContent =
+    cancelled;
 
 
 document
@@ -2364,7 +2685,8 @@ document
 x =>
 x.classList.toggle(
 "active",
-x.dataset.page === page
+x.dataset.page ===
+page
 )
 );
 
@@ -2656,6 +2978,66 @@ orderHTML
 empty(
 "❌",
 "Reddedilen sipariş yok."
+)
+}
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+/* İPTAL EDİLEN */
+
+if(
+page ===
+"cancelled"
+){
+
+const list =
+orders.filter(
+o =>
+o.status ===
+"İptal Edildi"
+);
+
+
+box.innerHTML = `
+
+<div class="cancelled-page-note">
+
+Müşteri tarafından iptal edilen
+siparişler burada görünür.
+
+</div>
+
+
+<div class="content-head">
+
+<h2>
+İptal Edilen Siparişler
+</h2>
+
+</div>
+
+
+<div class="orders">
+
+${
+list.length
+?
+list
+.map(
+orderHTML
+)
+.join("")
+:
+empty(
+"🚫",
+"İptal edilen sipariş yok."
 )
 }
 
@@ -3103,6 +3485,161 @@ toast(
 
 
 /* =====================================================
+SAAT ÖNER
+===================================================== */
+
+function openProposal(
+id
+){
+
+proposalId =
+id;
+
+
+const order =
+orders.find(
+x =>
+x.id ===
+id
+);
+
+
+const current =
+order?.service_time ||
+"";
+
+
+document
+.getElementById(
+"proposalTime"
+)
+.value =
+current;
+
+
+document
+.getElementById(
+"proposalModal"
+)
+.classList
+.add(
+"show"
+);
+
+}
+
+
+function closeProposalModal(){
+
+proposalId =
+null;
+
+
+document
+.getElementById(
+"proposalModal"
+)
+.classList
+.remove(
+"show"
+);
+
+}
+
+
+async function confirmProposal(){
+
+if(!proposalId)
+return;
+
+
+const time =
+document
+.getElementById(
+"proposalTime"
+)
+.value;
+
+
+if(
+!/^([01]\d|2[0-3]):[0-5]\d$/.test(
+time
+)
+){
+
+toast(
+"Geçerli bir saat seç.",
+"error"
+);
+
+return;
+
+}
+
+
+const {
+error
+} =
+await supabaseClient
+.from(
+"orders"
+)
+.update({
+
+proposed_service_time:
+time,
+
+time_proposal_status:
+"pending",
+
+time_proposed_at:
+new Date()
+.toISOString()
+
+})
+.eq(
+"id",
+proposalId
+)
+.eq(
+"business_id",
+business.id
+)
+.eq(
+"status",
+"Beklemede"
+);
+
+
+if(error){
+
+toast(
+"Saat önerilemedi: " +
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+closeProposalModal();
+
+
+await loadOrders(
+false
+);
+
+
+toast(
+"Saat önerisi müşteriye gönderildi ✓"
+);
+
+}
+
+
+/* =====================================================
 RED MODAL
 ===================================================== */
 
@@ -3239,6 +3776,66 @@ false
 
 toast(
 "Sipariş reddedildi"
+);
+
+}
+
+
+/* =====================================================
+İŞİ BAŞLAT
+===================================================== */
+
+async function startOrder(
+id
+){
+
+const {
+error
+} =
+await supabaseClient
+.from(
+"orders"
+)
+.update({
+
+status:
+"Devam Ediyor"
+
+})
+.eq(
+"id",
+id
+)
+.eq(
+"business_id",
+business.id
+)
+.eq(
+"status",
+"Kabul Edildi"
+);
+
+
+if(error){
+
+toast(
+"İş başlatılamadı: " +
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+await loadOrders(
+false
+);
+
+
+toast(
+"İş başladı ▶"
 );
 
 }
