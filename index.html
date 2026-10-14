@@ -168,9 +168,72 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
   .login-box{padding:28px 20px}
   .actions .btn{flex:1 1 auto}
 }
+/* ===== v2 görünüm ===== */
+body{background:#f4f4f9;letter-spacing:-.005em}
+.main{max-width:1180px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.menu button .ic{opacity:.75}.menu button.active .ic{opacity:1}
+.menu button,.sidebar .logout{gap:12px}
+.avatar .ic{width:18px;height:18px}
+.hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:16px;border-radius:24px;padding:26px 28px;margin-bottom:16px;color:#fff;background:linear-gradient(135deg,#3f1fa8,#6a4be0 62%,#8b6cf6);box-shadow:0 16px 36px rgba(85,56,200,.22)}
+.hero:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-120px;background:rgba(255,255,255,.1)}
+.hero>*{position:relative}
+.hero small{opacity:.8;font-size:12px;text-transform:capitalize}
+.hero h2{font-size:24px;letter-spacing:-.6px;margin:6px 0}
+.hero p{opacity:.92;font-size:14px}
+.hero-btn{background:#fff;color:var(--p2);border:0;border-radius:12px;padding:12px 18px;font-weight:750;font-size:13px;white-space:nowrap}
+.stat{transition:transform .15s,box-shadow .15s}.stat:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(23,22,34,.08)}
+.stat-icon{color:var(--p2)}
+.tone-wait .stat-icon{background:#fff3d7;color:var(--amber)}.tone-prog .stat-icon{background:var(--soft2);color:var(--p2)}.tone-done .stat-icon{background:#e4f7ed;color:var(--green)}.tone-canc .stat-icon{background:#eeedf3;color:#6a6874}.tone-earn .stat-icon{background:#e4f7ed;color:var(--green)}
+.todo-ico .ic{width:19px;height:19px}
+.t-new{color:var(--p2)}.t-wait{color:var(--amber)}.t-resp{color:var(--green)}
+.order{border-left:4px solid var(--c,#d9d7e3);padding:18px 18px 16px;box-shadow:var(--sh)}
+.st-wait{--c:#f2b134}.st-acc{--c:#4b8be8}.st-prog{--c:var(--p)}.st-done{--c:#32a874}.st-rej{--c:#e06666}.st-canc{--c:#b5b3c2}
+.order.closed{box-shadow:none;background:#fcfcfe}
+.order.closed .kv{background:transparent;border-color:transparent;padding:4px 2px}
+.order-title{font-size:17px;letter-spacing:-.3px}
+.kv span{display:flex;align-items:center;gap:5px}.kv span .ic{width:13px;height:13px}
+.prop-head .ic{width:18px;height:18px}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:0 12px;height:46px;color:var(--mut)}
+.search input{border:0;outline:0;flex:1;font-size:16px;background:transparent;height:100%;color:var(--ink)}
+.search:focus-within{border-color:var(--p);box-shadow:0 0 0 4px rgba(106,75,224,.1)}
+.toolbar select{height:46px;border:1px solid var(--bd);border-radius:12px;padding:0 12px;background:#fff;font-size:14px}
+.empty-ic{width:64px;height:64px;border-radius:20px;background:var(--soft);color:var(--p);display:grid;place-items:center;margin:0 auto 14px}
+.empty-ic .ic{width:28px;height:28px}
+.ok-note .ic{width:20px;height:20px}
+.more-list .ic{color:var(--p)}.more-list .out .ic{color:var(--red)}
+@media(max-width:850px){
+  .hero{flex-direction:column;align-items:flex-start;padding:20px}
+  .hero-btn{width:100%}
+  .bottom button .ic{width:22px;height:22px}
+}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></symbol>
+<symbol id="i-cycle" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 3v6h-6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7zm0 0V6a2 2 0 012-2h11M16 14h2"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2M5.5 5h13l3.5 7v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6l3.5-7z"/></symbol>
+<symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 012-2h8a2 2 0 012 2v16M16 9h2a2 2 0 012 2v10M3 21h18M8 8h4M8 12h4M8 16h4"/></symbol>
+<symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.5 3.5-5.5 7-5.5s7 2 7 5.5"/></symbol>
+</defs></svg>
 
 <!-- LOGIN -->
 <div class="login" id="loginScreen">
@@ -193,25 +256,25 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
   <aside class="sidebar">
     <img src="baksana-logo-cropped.png" class="logo" alt="BAKSANA">
     <div class="menu">
-      <button data-page="home" class="active" onclick="showPage('home',this)">🏠 Ana Sayfa</button>
-      <button data-page="orders" onclick="showPage('orders',this)">📦 Siparişler <span class="nbadge" id="navBadge" style="display:none">0</span></button>
-      <button data-page="ongoing" onclick="showPage('ongoing',this)">🔄 Devam Edenler</button>
-      <button data-page="completed" onclick="showPage('completed',this)">✅ Tamamlananlar</button>
-      <button data-page="rejected" onclick="showPage('rejected',this)">❌ Reddedilenler</button>
-      <button data-page="cancelled" onclick="showPage('cancelled',this)">🚫 İptal Edilenler</button>
-      <button data-page="earnings" onclick="showPage('earnings',this)">💰 Kazançlar</button>
-      <button data-page="stats" onclick="showPage('stats',this)">📊 İstatistikler</button>
-      <button data-page="profile" onclick="showPage('profile',this)">👤 Profil</button>
+      <button data-page="home" class="active" onclick="showPage('home',this)"><svg class="ic"><use href="#i-home"/></svg>Ana Sayfa</button>
+      <button data-page="orders" onclick="showPage('orders',this)"><svg class="ic"><use href="#i-box"/></svg>Siparişler <span class="nbadge" id="navBadge" style="display:none">0</span></button>
+      <button data-page="ongoing" onclick="showPage('ongoing',this)"><svg class="ic"><use href="#i-cycle"/></svg>Devam Edenler</button>
+      <button data-page="completed" onclick="showPage('completed',this)"><svg class="ic"><use href="#i-check"/></svg>Tamamlananlar</button>
+      <button data-page="rejected" onclick="showPage('rejected',this)"><svg class="ic"><use href="#i-x"/></svg>Reddedilenler</button>
+      <button data-page="cancelled" onclick="showPage('cancelled',this)"><svg class="ic"><use href="#i-ban"/></svg>İptal Edilenler</button>
+      <button data-page="earnings" onclick="showPage('earnings',this)"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
+      <button data-page="stats" onclick="showPage('stats',this)"><svg class="ic"><use href="#i-chart"/></svg>İstatistikler</button>
+      <button data-page="profile" onclick="showPage('profile',this)"><svg class="ic"><use href="#i-user"/></svg>Profil</button>
     </div>
-    <button class="logout" onclick="logout()">🚪 Çıkış Yap</button>
+    <button class="logout" onclick="logout()"><svg class="ic"><use href="#i-logout"/></svg>Çıkış Yap</button>
   </aside>
 
   <main class="main">
     <div class="top">
       <div><h1 id="pageTitle">Hoş geldin 👋</h1><p id="pageSubtitle">İşletme paneliniz</p></div>
       <div class="top-right">
-        <button class="icon-btn" id="refreshBtn" onclick="loadOrders(true)" aria-label="Yenile">↻ <span class="lbl">Yenile</span></button>
-        <div class="business"><div class="avatar">🏪</div><span id="businessName">İşletme</span></div>
+        <button class="icon-btn" id="refreshBtn" onclick="loadOrders(true)" aria-label="Yenile"><svg class="ic"><use href="#i-refresh"/></svg> <span class="lbl">Yenile</span></button>
+        <div class="business"><div class="avatar"><svg class="ic"><use href="#i-building"/></svg></div><span id="businessName">İşletme</span></div>
       </div>
     </div>
     <div id="homePage"></div>
@@ -219,10 +282,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
   </main>
 
   <nav class="bottom">
-    <button data-page="home" onclick="showPageByName('home')"><span>🏠</span>Ana Sayfa</button>
-    <button data-page="orders" onclick="showPageByName('orders')"><span>📦</span>Sipariş<b class="nbadge" id="navBadgeM" style="display:none">0</b></button>
-    <button data-page="ongoing" onclick="showPageByName('ongoing')"><span>🔄</span>Devam</button>
-    <button data-page="more" onclick="openModal('moreModal')"><span>☰</span>Daha Fazla</button>
+    <button data-page="home" onclick="showPageByName('home')"><svg class="ic"><use href="#i-home"/></svg>Ana Sayfa</button>
+    <button data-page="orders" onclick="showPageByName('orders')"><svg class="ic"><use href="#i-box"/></svg>Sipariş<b class="nbadge" id="navBadgeM" style="display:none">0</b></button>
+    <button data-page="ongoing" onclick="showPageByName('ongoing')"><svg class="ic"><use href="#i-cycle"/></svg>Devam</button>
+    <button data-page="more" onclick="openModal('moreModal')"><svg class="ic"><use href="#i-menu"/></svg>Daha Fazla</button>
   </nav>
 </div>
 
@@ -249,13 +312,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <div class="modal" id="moreModal"><div class="modal-box">
   <h3>Menü</h3><p style="margin-bottom:12px">Diğer sayfalar</p>
   <div class="more-list">
-    <button onclick="closeModal('moreModal');showPageByName('completed')">✅ Tamamlananlar</button>
-    <button onclick="closeModal('moreModal');showPageByName('rejected')">❌ Reddedilenler</button>
-    <button onclick="closeModal('moreModal');showPageByName('cancelled')">🚫 İptal Edilenler</button>
-    <button onclick="closeModal('moreModal');showPageByName('earnings')">💰 Kazançlar</button>
-    <button onclick="closeModal('moreModal');showPageByName('stats')">📊 İstatistikler</button>
-    <button onclick="closeModal('moreModal');showPageByName('profile')">👤 Profil</button>
-    <button class="out" onclick="closeModal('moreModal');logout()">🚪 Çıkış Yap</button>
+    <button onclick="closeModal('moreModal');showPageByName('completed')"><svg class="ic"><use href="#i-check"/></svg>Tamamlananlar</button>
+    <button onclick="closeModal('moreModal');showPageByName('rejected')"><svg class="ic"><use href="#i-x"/></svg>Reddedilenler</button>
+    <button onclick="closeModal('moreModal');showPageByName('cancelled')"><svg class="ic"><use href="#i-ban"/></svg>İptal Edilenler</button>
+    <button onclick="closeModal('moreModal');showPageByName('earnings')"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
+    <button onclick="closeModal('moreModal');showPageByName('stats')"><svg class="ic"><use href="#i-chart"/></svg>İstatistikler</button>
+    <button onclick="closeModal('moreModal');showPageByName('profile')"><svg class="ic"><use href="#i-user"/></svg>Profil</button>
+    <button class="out" onclick="closeModal('moreModal');logout()"><svg class="ic"><use href="#i-logout"/></svg>Çıkış Yap</button>
   </div>
 </div></div>
 
@@ -267,6 +330,11 @@ const SUPABASE_URL="https://ahvplyeunubpbtsdzldj.supabase.co";
 const SUPABASE_KEY="sb_publishable_qF3PlPnw-g4dXeOiL-OSOw_LzKQ9kuO";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
+const ic=(n,c)=>`<svg class="ic ${c||""}"><use href="#i-${n}"/></svg>`;
+const EMOJI2IC={"📦":"box","🔄":"cycle","✅":"check","❌":"x","🚫":"ban","💰":"wallet","📈":"chart","📥":"inbox","💬":"msg","🕒":"clock"};
+const SKEY={"Beklemede":"wait","Kabul Edildi":"acc","Devam Ediyor":"prog","Tamamlandı":"done","Reddedildi":"rej","İptal Edildi":"canc"};
+let fq="",fs="";
+function statCard(emoji,n,label,tone){return `<div class="stat tone-${tone||""}"><div class="stat-icon">${ic(EMOJI2IC[emoji]||"box")}</div><div class="stat-number">${n}</div><div class="stat-label">${label}</div></div>`}
 
 /* ===== GLOBAL ===== */
 let session=null,business=null,orders=[];
@@ -277,15 +345,15 @@ let loading=false,again=false;
 const busyIds=new Set();
 
 const titles={
-  home:["Hoş geldin 👋","İşletme paneliniz"],
-  orders:["📦 Siparişler","Tüm işletme siparişleri"],
-  ongoing:["🔄 Devam Edenler","Kabul edilen ve devam eden işler"],
-  completed:["✅ Tamamlananlar","Tamamlanan işler ve geçmiş"],
-  rejected:["❌ Reddedilenler","Reddedilmiş siparişler"],
-  cancelled:["🚫 İptal Edilenler","Müşteri tarafından iptal edilen siparişler"],
-  earnings:["💰 Kazançlar","Tamamlanan siparişlerden kazanç"],
-  stats:["📊 İstatistikler","İşletme performansı"],
-  profile:["👤 Profil","İşletme bilgileri"]
+  home:["Hoş geldin","İşletme paneliniz"],
+  orders:["Siparişler","Tüm işletme siparişleri"],
+  ongoing:["Devam Edenler","Kabul edilen ve devam eden işler"],
+  completed:["Tamamlananlar","Tamamlanan işler ve geçmiş"],
+  rejected:["Reddedilenler","Reddedilmiş siparişler"],
+  cancelled:["İptal Edilenler","Müşteri tarafından iptal edilen siparişler"],
+  earnings:["Kazançlar","Tamamlanan siparişlerden kazanç"],
+  stats:["İstatistikler","İşletme performansı"],
+  profile:["Profil","İşletme bilgileri"]
 };
 
 /* ===== YARDIMCILAR ===== */
@@ -438,12 +506,12 @@ function setupRealtime(){
 
 /* ===== ROZET ===== */
 function badge(status){
-  const map={"Tamamlandı":["green","Tamamlandı"],"Reddedildi":["red","Reddedildi"],"İptal Edildi":["gray","🚫 İptal Edildi"],"Kabul Edildi":["blue","Kabul Edildi"],"Devam Ediyor":["purple","Devam Ediyor"]};
+  const map={"Tamamlandı":["green","Tamamlandı"],"Reddedildi":["red","Reddedildi"],"İptal Edildi":["gray","İptal Edildi"],"Kabul Edildi":["blue","Kabul Edildi"],"Devam Ediyor":["purple","Devam Ediyor"]};
   const m=map[status];
   if(m)return `<span class="badge ${m[0]}">${m[1]}</span>`;
   return `<span class="badge">● ${esc(status||"Beklemede")}</span>`;
 }
-function empty(icon,text){return `<div class="empty"><div class="empty-icon">${icon}</div>${esc(text)}</div>`}
+function empty(icon,text){return `<div class="empty"><div class="empty-ic">${ic(EMOJI2IC[icon]||"box")}</div>${esc(text)}</div>`}
 function skeleton(){return `<div class="orders">${[1,2,3].map(()=>`<div class="sk"><i style="width:40%"></i><i style="width:75%"></i><i style="width:55%"></i></div>`).join("")}</div>`}
 function errorBox(){return `<div class="errbox">Siparişler yüklenemedi.<br><small>${esc(loadError)}</small><br><button class="btn soft" onclick="loadOrders(true)">Tekrar Dene</button></div>`}
 
@@ -454,9 +522,9 @@ function proposalHTML(o){
   const req=hhmm(o.service_time)||"-",prop=hhmm(o.proposed_service_time);
   const when=o.time_proposed_at?` · ${esc(dateTimeTR(o.time_proposed_at))}`:"";
   const times=`<div class="prop-times"><div><small>İstenen saat</small><strong>${esc(req)}</strong></div><span>→</span><div><small>Önerilen saat</small><strong>${esc(prop)}</strong></div></div>`;
-  if(ps==="pending")return `<div class="prop pending"><div class="prop-head">🕒 <b>Müşteri yanıtı bekleniyor${when}</b></div>${times}</div>`;
-  if(ps==="accepted")return `<div class="prop accepted"><div class="prop-head">✅ <b>Müşteri önerilen saati kabul etti</b></div>${times}</div>`;
-  return `<div class="prop declined"><div class="prop-head">✖️ <b>Müşteri saat önerisini reddetti</b></div>${times}<div style="margin-top:8px">Müşteri ilk istediği saati tercih ediyor. Yeniden saat önerebilir veya siparişi kabul edebilirsiniz.</div></div>`;
+  if(ps==="pending")return `<div class="prop pending"><div class="prop-head">${ic("clock")} <b>Müşteri yanıtı bekleniyor${when}</b></div>${times}</div>`;
+  if(ps==="accepted")return `<div class="prop accepted"><div class="prop-head">${ic("check")} <b>Müşteri önerilen saati kabul etti</b></div>${times}</div>`;
+  return `<div class="prop declined"><div class="prop-head">${ic("x")} <b>Müşteri saat önerisini reddetti</b></div>${times}<div style="margin-top:8px">Müşteri ilk istediği saati tercih ediyor. Yeniden saat önerebilir veya siparişi kabul edebilirsiniz.</div></div>`;
 }
 
 function orderHTML(o){
@@ -477,21 +545,21 @@ function orderHTML(o){
   }
   if(o.status==="Kabul Edildi")actions=`<div class="actions"><button class="btn start" onclick="startOrder(${o.id})">İşi Başlat ▶</button></div>`;
   if(o.status==="Devam Ediyor")actions=`<div class="actions"><button class="btn done" onclick="completeOrder(${o.id})">İşi Tamamla ✓</button></div>`;
-
+  const closed=["Tamamlandı","Reddedildi","İptal Edildi"].includes(o.status);
   const tel=phoneDigits(o.phone);
   return `
-  <div class="order ${busyIds.has(o.id)?"busy":""}" data-id="${esc(o.id)}">
+  <div class="order st-${SKEY[o.status]||"wait"} ${closed?"closed":""} ${busyIds.has(o.id)?"busy":""}" data-id="${esc(o.id)}">
     <div class="order-top">
       <div><div class="order-title">${esc(o.service||"Hizmet")}</div><div class="order-code">${esc(o.order_code||("#"+o.id))}</div></div>
       ${badge(o.status)}
     </div>
     <div class="kvs">
-      <div class="kv"><span>🏢 Site</span><b>${esc(o.sites?.name||"Site bilgisi")}</b></div>
-      <div class="kv"><span>📍 Konum</span><b>${esc(o.block||"-")} / ${esc(o.apartment||"-")}</b></div>
-      <div class="kv"><span>👤 Müşteri</span><b>${esc(o.customer_name||"Müşteri")}</b></div>
-      <div class="kv"><span>📞 Telefon</span><b>${tel?`<a href="tel:${esc(tel)}">${esc(o.phone)}</a>`:"-"}</b></div>
-      <div class="kv"><span>📅 Tarih</span><b>${esc(dateTR(o.service_date))}</b></div>
-      <div class="kv hi"><span>🕒 Müşterinin istediği saat</span><b>${esc(hhmm(o.service_time)||"-")}</b></div>
+      <div class="kv"><span>${ic("building")} Site</span><b>${esc(o.sites?.name||"Site bilgisi")}</b></div>
+      <div class="kv"><span>${ic("pin")} Konum</span><b>${esc(o.block||"-")} / ${esc(o.apartment||"-")}</b></div>
+      <div class="kv"><span>${ic("person")} Müşteri</span><b>${esc(o.customer_name||"Müşteri")}</b></div>
+      <div class="kv"><span>${ic("phone")} Telefon</span><b>${tel?`<a href="tel:${esc(tel)}">${esc(o.phone)}</a>`:"-"}</b></div>
+      <div class="kv"><span>${ic("calendar")} Tarih</span><b>${esc(dateTR(o.service_date))}</b></div>
+      <div class="kv hi"><span>${ic("clock")} Müşterinin istediği saat</span><b>${esc(hhmm(o.service_time)||"-")}</b></div>
     </div>
     <div class="chips">
       ${option?`<span class="chip">${esc(option)}</span>`:""}
@@ -522,31 +590,33 @@ function renderHome(){
   const completed=orders.filter(o=>o.status==="Tamamlandı");
   const total=completed.reduce((s,o)=>s+Number(o.price||0),0);
   const cnt=f=>orders.filter(f).length;
-  const stat=(icon,n,label)=>`<div class="stat"><div class="stat-icon">${icon}</div><div class="stat-number">${n}</div><div class="stat-label">${label}</div></div>`;
-
   const b=orders.filter(o=>o.status==="Beklemede");
   const waiting=b.filter(o=>propState(o)==="pending").length;
   const responded=b.filter(o=>["accepted","declined"].includes(propState(o))).length;
   const fresh=b.length-waiting-responded;
-  const row=(cls,ico,title,sub,n)=>`<button class="todo-row" onclick="showPageByName('orders')"><div class="todo-ico ${cls}">${ico}</div><main><strong>${title}</strong><small>${sub}</small></main><span class="todo-n">${n}</span></button>`;
+  const row=(cls,ico,title,sub,n)=>`<button class="todo-row" onclick="showPageByName('orders')"><div class="todo-ico ${cls}">${ic(ico)}</div><main><strong>${title}</strong><small>${sub}</small></main><span class="todo-n">${n}</span></button>`;
   const rows=[
-    responded?row("t-resp","💬","Müşteri saat önerisine yanıt verdi","Karar vermeniz bekleniyor",responded):"",
-    fresh?row("t-new","📥","Onay bekleyen siparişler","Kabul et, saat öner ya da reddet",fresh):"",
-    waiting?row("t-wait","🕒","Müşteri yanıtı bekleniyor","Bu siparişler yanıt gelene kadar kabul edilemez",waiting):""
+    responded?row("t-resp","msg","Müşteri saat önerisine yanıt verdi","Karar vermeniz bekleniyor",responded):"",
+    fresh?row("t-new","inbox","Onay bekleyen siparişler","Kabul et, saat öner ya da reddet",fresh):"",
+    waiting?row("t-wait","clock","Müşteri yanıtı bekleniyor","Bu siparişler yanıt gelene kadar kabul edilemez",waiting):""
   ].join("");
-
   let pendingBody;
   if(loadError&&!ordersLoaded)pendingBody=errorBox();
   else if(!ordersLoaded)pendingBody=`<div class="sk"><i style="width:50%"></i><i style="width:70%"></i></div>`;
-  else pendingBody=rows?`<div class="todo">${rows}</div>`:`<div class="ok-note">✓ Bekleyen işlem yok</div>`;
-
+  else pendingBody=rows?`<div class="todo">${rows}</div>`:`<div class="ok-note">${ic("check")} Bekleyen işlem yok</div>`;
+  const today=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
+  const heroText=!ordersLoaded?"Siparişler yükleniyor...":b.length?`${b.length} sipariş işleminizi bekliyor`:"Bekleyen sipariş yok, her şey güncel";
   $("homePage").innerHTML=`
+    <div class="hero">
+      <div><small>${esc(today)}</small><h2>${business?esc(business.name):"İşletme"}</h2><p>${heroText}</p></div>
+      <button class="hero-btn" onclick="showPageByName('orders')">Siparişlere git →</button>
+    </div>
     <div class="stats">
-      ${stat("📦",cnt(o=>o.status==="Beklemede"),"Bekleyen")}
-      ${stat("🔄",cnt(o=>["Kabul Edildi","Devam Ediyor"].includes(o.status)),"Devam Eden")}
-      ${stat("✅",completed.length,"Tamamlanan")}
-      ${stat("🚫",cnt(o=>o.status==="İptal Edildi"),"İptal Edilen")}
-      ${stat("💰",money(total),"Toplam Kazanç")}
+      ${statCard("📦",cnt(o=>o.status==="Beklemede"),"Bekleyen","wait")}
+      ${statCard("🔄",cnt(o=>["Kabul Edildi","Devam Ediyor"].includes(o.status)),"Devam Eden","prog")}
+      ${statCard("✅",completed.length,"Tamamlanan","done")}
+      ${statCard("🚫",cnt(o=>o.status==="İptal Edildi"),"İptal Edilen","canc")}
+      ${statCard("💰",money(total),"Toplam Kazanç","earn")}
     </div>
     <div class="content"><div class="content-head"><h2>Bekleyen İşlemler</h2></div>${pendingBody}</div>
     <div class="content"><div class="content-head"><h2>Son Siparişler</h2><button class="btn soft" onclick="showPageByName('orders')">Tümü →</button></div>
@@ -570,16 +640,31 @@ function showPageByName(page){
 function pageCard(title,inner,extra){
   return `<div class="content">${extra||""}<div class="content-head"><h2>${title}</h2></div>${inner}</div>`;
 }
+function filteredOrders(){
+  const t=fq.trim().toLowerCase();
+  return orders.filter(o=>(!fs||o.status===fs)&&(!t||[o.service,o.order_code,o.customer_name,o.phone,o.block,o.apartment,o.sites?.name].some(v=>String(v||"").toLowerCase().includes(t))));
+}
+function filteredHTML(){return listHTML(filteredOrders(),"📦",(fq||fs)?"Aramanıza uyan sipariş yok.":"Henüz sipariş bulunmuyor.")}
+function onOrderFilter(){fq=$("ordSearch").value;fs=$("ordStatus").value;$("ordersListBox").innerHTML=filteredHTML()}
 function renderPage(page){
   const box=$("dynamicContent");
+  const prev=box.dataset.page;box.dataset.page=page;
   const by=s=>orders.filter(o=>o.status===s);
-  if(page==="orders"){box.innerHTML=pageCard("Tüm Siparişler",listHTML(orders,"📦","Henüz sipariş bulunmuyor."));return}
+  if(page==="orders"){
+    if(prev==="orders"&&$("ordersListBox")){$("ordersListBox").innerHTML=filteredHTML();return}
+    const opts=["","Beklemede","Kabul Edildi","Devam Ediyor","Tamamlandı","Reddedildi","İptal Edildi"].map(v=>`<option value="${v}" ${fs===v?"selected":""}>${v||"Tüm durumlar"}</option>`).join("");
+    box.innerHTML=`<div class="content"><div class="content-head"><h2>Tüm Siparişler</h2></div>
+      <div class="toolbar"><label class="search">${ic("search")}<input id="ordSearch" type="search" placeholder="Kod, müşteri, hizmet veya telefon ara" value="${esc(fq)}" oninput="onOrderFilter()"></label>
+      <select id="ordStatus" onchange="onOrderFilter()" aria-label="Durum filtresi">${opts}</select></div>
+      <div id="ordersListBox">${filteredHTML()}</div></div>`;
+    return;
+  }
   if(page==="ongoing"){box.innerHTML=pageCard("Devam Eden İşler",listHTML(orders.filter(o=>["Kabul Edildi","Devam Ediyor"].includes(o.status)),"🔄","Devam eden iş bulunmuyor."));return}
   if(page==="completed"){box.innerHTML=pageCard("Tamamlanan İşler",listHTML(by("Tamamlandı"),"✅","Henüz tamamlanan iş yok."));return}
   if(page==="rejected"){box.innerHTML=pageCard("Reddedilen İşler",listHTML(by("Reddedildi"),"❌","Reddedilen sipariş yok."));return}
   if(page==="cancelled"){box.innerHTML=pageCard("İptal Edilen Siparişler",listHTML(by("İptal Edildi"),"🚫","İptal edilen sipariş yok."),`<div class="cancelled-page-note">Müşteri tarafından iptal edilen siparişler burada görünür.</div>`);return}
 
-  const stat=(icon,n,label)=>`<div class="stat"><div class="stat-icon">${icon}</div><div class="stat-number">${n}</div><div class="stat-label">${label}</div></div>`;
+  const stat=(icon,n,label)=>statCard(icon,n,label,icon==="💰"?"earn":icon==="✅"?"done":"");
   if(page==="earnings"){
     const list=by("Tamamlandı"),total=list.reduce((s,o)=>s+Number(o.price||0),0);
     box.innerHTML=pageCard("Kazançlar",`<div class="stats">${stat("💰",money(total),"Tamamlanan siparişlerin toplamı")}${stat("✅",list.length,"Tamamlanan sipariş")}</div>`);return;
