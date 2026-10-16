@@ -3,326 +3,579 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6242d8">
+<meta name="theme-color" content="#ffffff">
 <title>BAKSANA İşletme (TEST)</title>
+<link rel="icon" type="image/png" href="baksana-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+/* ===== TASARIM SİSTEMİ ===== */
+:root{
+  --brand:#5b3cc4;--brand-h:#4b2fab;--brand-soft:#f3f0fd;--brand-line:#ddd4fa;
+  --bg:#f7f7f9;--surface:#fff;--surface-2:#fafafb;--hover:#f4f4f7;
+  --line:#e7e7ec;--line-2:#efeff3;
+  --ink:#16151d;--ink-2:#3d3c48;--mut:#6b6a78;--mut-2:#8d8c99;
+  --green:#127a4a;--green-bg:#ebf7f0;--green-line:#c9ead7;
+  --amber:#8a5a00;--amber-bg:#fdf5e3;--amber-line:#f1dfb1;
+  --red:#b42323;--red-bg:#fdf0f0;--red-line:#f5d0d0;
+  --blue:#1f5fbf;--blue-bg:#eef4fd;--blue-line:#cfe0f8;
+  --violet:#5b3cc4;--violet-bg:#f3f0fd;
+  --gray:#5d5c68;--gray-bg:#f1f1f4;
+  --r-sm:6px;--r:8px;--r-lg:12px;
+  --sh-1:0 1px 2px rgba(22,21,29,.05);
+  --sh-2:0 8px 24px rgba(22,21,29,.08),0 1px 3px rgba(22,21,29,.06);
+  --sh-3:0 24px 60px rgba(22,21,29,.18);
+  --side:248px;--side-c:68px;
+  --font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--p:#6a4be0;--p2:#5538c8;--soft:#f3efff;--soft2:#e8e1ff;--bg:#f6f6fa;--bd:#e8e7f0;--ink:#171622;--mut:#77768a;--green:#1f8a58;--red:#c43d3d;--amber:#a86b00;--sh:0 1px 2px rgba(23,22,34,.04),0 6px 20px rgba(23,22,34,.05)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
-button,input,select{font:inherit;color:inherit}button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);font-size:14px;line-height:1.45;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+body.locked{overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.num{font-variant-numeric:tabular-nums}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* login */
-.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at top right,#e9e1ff,transparent 38%),#f8f7fc}
-.login-box{width:min(430px,100%);background:#fff;border:1px solid var(--bd);border-radius:26px;padding:34px 30px;box-shadow:0 20px 60px rgba(40,20,100,.1)}
-.logo{width:165px;display:block;margin:0 auto 22px}
-.login h1{text-align:center;font-size:24px;margin-bottom:8px}
-.login p{text-align:center;color:var(--mut);font-size:14px;margin-bottom:26px}
-.test-pill{display:block;width:max-content;margin:0 auto 14px;background:#fff3d7;color:var(--amber);font-size:11px;font-weight:800;padding:5px 10px;border-radius:20px}
-.field{margin-bottom:15px}
-.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.field input{width:100%;height:50px;border:1px solid var(--bd);border-radius:13px;padding:0 14px;font-size:16px;background:#fff}
-.field input:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(106,75,224,.12);outline:0}
-.login-btn{width:100%;height:52px;border:0;border-radius:14px;background:linear-gradient(135deg,#7a5cf0,#5538c8);color:#fff;font-weight:700;box-shadow:0 10px 22px rgba(106,75,224,.22)}
-.login-btn:disabled{opacity:.65;cursor:not-allowed}
-.error{display:none;background:#fff0f0;border:1px solid #ffd5d5;color:var(--red);padding:11px;border-radius:11px;font-size:13px;margin-bottom:15px;text-align:center}
+/* ===== BUTONLAR ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:var(--r);font-size:13.5px;font-weight:600;white-space:nowrap;border:1px solid transparent;transition:background .12s,border-color .12s,color .12s}
+.btn .ic{width:16px;height:16px}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-h)}
+.btn-secondary{background:var(--surface);border-color:var(--line);color:var(--ink-2);box-shadow:var(--sh-1)}
+.btn-secondary:hover{background:var(--hover)}
+.btn-ghost{color:var(--ink-2)}
+.btn-ghost:hover{background:var(--hover)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#9a1c1c}
+.btn-danger-soft{background:var(--surface);border-color:var(--line);color:var(--red)}
+.btn-danger-soft:hover{background:var(--red-bg);border-color:var(--red-line)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#0e6a3f}
+.btn-lg{height:44px;padding:0 18px;font-size:14px}
+.btn-block{width:100%}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.5;cursor:not-allowed}
+.btn.loading{position:relative;color:transparent!important;pointer-events:none}
+.btn.loading:after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-color:rgba(255,255,255,.9) rgba(255,255,255,.9) transparent transparent;animation:spin .7s linear infinite}
+.btn-secondary.loading:after,.btn-ghost.loading:after,.btn-danger-soft.loading:after{border-color:var(--mut) var(--mut) transparent transparent}
+@keyframes spin{to{transform:rotate(360deg)}}
+.icon-btn{position:relative;display:inline-grid;place-items:center;width:36px;height:36px;border-radius:var(--r);color:var(--ink-2)}
+.icon-btn:hover{background:var(--hover)}
+.icon-btn:disabled{opacity:.5;cursor:default}
+.icon-btn.spinning .ic{animation:spin .8s linear infinite}
+.dot-count{position:absolute;top:4px;right:3px;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:var(--brand);color:#fff;font-size:9.5px;font-weight:700;line-height:15px;text-align:center;box-shadow:0 0 0 2px var(--surface)}
+.dot-count[hidden]{display:none}
 
-/* shell */
-.panel{display:none;min-height:100vh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:248px;background:#fff;border-right:1px solid var(--bd);padding:24px 14px;z-index:20;display:flex;flex-direction:column}
-.sidebar .logo{width:140px;margin:0 12px 28px}
-.menu{display:flex;flex-direction:column;gap:3px;flex:1;overflow:auto}
-.menu button,.sidebar .logout{display:flex;align-items:center;gap:10px;border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:12px;font-weight:650;font-size:14px;color:#5f5c6b;position:relative}
-.menu button:hover{background:#f7f5ff}
-.menu button.active{background:var(--soft);color:var(--p2)}
-.menu button.active:before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:var(--p)}
-.nbadge{margin-left:auto;background:#ffb020;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:20px}
-.sidebar .logout{margin-top:10px;border-top:1px solid var(--bd);border-radius:0;padding-top:16px;color:var(--red)}
-.main{margin-left:248px;padding:28px 32px;max-width:1240px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
-.top h1{font-size:26px;letter-spacing:-.5px;margin-bottom:4px}
-.top p{font-size:14px;color:var(--mut)}
-.top-right{display:flex;align-items:center;gap:10px}
-.business{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--bd);padding:7px 14px 7px 8px;border-radius:14px;font-size:13px;font-weight:700;box-shadow:var(--sh)}
-.avatar{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#7a5cf0,#5538c8);color:#fff}
-.icon-btn{height:44px;padding:0 14px;border:1px solid var(--bd);border-radius:12px;background:#fff;color:#4f4a57;font-weight:700;font-size:13px;box-shadow:var(--sh)}
-.icon-btn:disabled{opacity:.6}
+/* ===== FORMLAR ===== */
+.label{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+.input,.select{width:100%;height:40px;border:1px solid var(--line);border-radius:var(--r);padding:0 12px;background:var(--surface);font-size:14px;transition:border-color .12s,box-shadow .12s}
+.input:hover,.select:hover{border-color:#d6d6de}
+.input:focus,.select:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px rgba(91,60,196,.15)}
+.input[aria-invalid=true]{border-color:var(--red)}
+.field{margin-bottom:16px}
+.field-help{font-size:12px;color:var(--mut);margin-top:6px}
+.field-err{font-size:12.5px;color:var(--red);margin-top:6px;min-height:0}
+.field-err:empty{display:none}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:var(--r);font-size:13px;border:1px solid;line-height:1.5}
+.alert .ic{width:16px;height:16px;margin-top:2px}
+.alert-error{background:var(--red-bg);border-color:var(--red-line);color:var(--red)}
+.alert-warn{background:var(--amber-bg);border-color:var(--amber-line);color:var(--amber)}
+.alert-info{background:var(--surface-2);border-color:var(--line);color:var(--ink-2)}
+.alert[hidden]{display:none}
 
-/* cards */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-.stat{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:18px;box-shadow:var(--sh)}
-.stat-icon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:20px}
-.stat-number{font-size:26px;font-weight:850;margin-top:12px;letter-spacing:-.5px}
-.stat-label{font-size:13px;color:var(--mut);margin-top:3px}
-.content{margin-top:18px;background:#fff;border:1px solid var(--bd);border-radius:20px;padding:20px;box-shadow:var(--sh)}
-.content:first-child{margin-top:0}
-.content-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
-.content-head h2{font-size:18px}
-.sub{font-size:13px;color:var(--mut)}
-.todo{display:flex;flex-direction:column;gap:8px}
-.todo-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--bd);background:#fff;border-radius:14px;padding:13px 14px}
-.todo-row:hover{background:#faf9ff}
-.todo-ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex:none}
-.todo-row main{flex:1}.todo-row strong{display:block;font-size:14px}.todo-row small{color:var(--mut);font-size:12px}
-.todo-n{font-size:20px;font-weight:850}
-.t-new{background:var(--soft)}.t-wait{background:#fff3d7}.t-resp{background:#e4f7ed}
-.ok-note{display:flex;gap:10px;align-items:center;color:var(--green);font-weight:650;font-size:14px;padding:6px 2px}
+/* ===== GİRİŞ ===== */
+.login{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px 16px;background:var(--bg)}
+.login-card{width:min(400px,100%)}
+.login-brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px}
+.login-brand img{width:36px;height:36px}
+.login-brand b{font-size:17px;letter-spacing:.06em;font-weight:700}
+.login-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-1)}
+.login-box h1{font-size:20px;font-weight:650;letter-spacing:-.02em}
+.login-box>p{color:var(--mut);margin:4px 0 22px}
+.login-box .alert{margin-bottom:16px}
+.login-foot{text-align:center;font-size:12px;color:var(--mut-2);margin-top:18px;display:flex;gap:8px;justify-content:center;align-items:center}
+.env-tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;background:var(--amber-bg);color:var(--amber);font-size:11px;font-weight:600;border:1px solid var(--amber-line)}
 
-/* orders */
-.orders{display:flex;flex-direction:column;gap:12px}
-.order{border:1px solid var(--bd);border-radius:18px;padding:16px;background:#fff;transition:opacity .15s}
-.order.busy{opacity:.65}
-.order.busy .actions button{pointer-events:none}
-.order-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-.order-title{font-size:16px;font-weight:800}
-.order-code{font-size:12px;color:var(--p2);font-weight:800;margin-top:3px;letter-spacing:.3px}
-.badge{padding:6px 11px;border-radius:50px;font-size:11px;font-weight:800;white-space:nowrap;background:#fff3dd;color:var(--amber);height:max-content}
-.badge.blue{background:#e8f1ff;color:#2867c7}.badge.purple{background:var(--soft2);color:var(--p2)}.badge.green{background:#e4f7ed;color:var(--green)}.badge.red{background:#ffe8e8;color:var(--red)}.badge.gray{background:#eeedf3;color:#6a6874}
-.kvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:14px}
-.kv{background:#faf9fd;border:1px solid #f0eef6;border-radius:12px;padding:9px 11px;min-width:0}
-.kv span{display:block;font-size:11px;color:var(--mut);margin-bottom:2px}
-.kv b{font-size:13px;overflow-wrap:anywhere}
-.kv b a{color:inherit;text-decoration:none}
-.kv.hi{background:var(--soft);border-color:var(--soft2)}
-.kv.hi b{color:var(--p2)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.chip{display:inline-flex;padding:6px 10px;border-radius:9px;background:var(--soft);color:var(--p2);font-size:12px;font-weight:700}
-.chip.price{background:#eef9f3;color:var(--green)}
-.order-note{margin-top:10px;background:#faf9fd;border:1px solid var(--bd);padding:10px 12px;border-radius:12px;font-size:13px;line-height:1.55}
-.order-cancelled{margin-top:10px;background:#fff2f2;border:1px solid #ffd8d8;color:#b43a3a;padding:10px 12px;border-radius:12px;font-size:13px;line-height:1.55}
-.prop{margin-top:12px;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.55;border:1px solid}
-.prop-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.prop-head b{flex:1}
-.prop-times{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.prop-times div{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:7px 12px}
-.prop-times small{display:block;font-size:11px;color:var(--mut)}
-.prop-times strong{font-size:17px}
-.prop.pending{background:#fff8e6;border-color:#f3dfa4;color:#7d5a05}
-.prop.accepted{background:#eefaf3;border-color:#c5ead5;color:#1b6f47}
-.prop.declined{background:#fff3f3;border-color:#ffd5d5;color:#a73a3a}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.btn{border:0;padding:11px 16px;border-radius:11px;font-size:13px;font-weight:750;min-height:42px}
-.btn.primary{background:var(--p);color:#fff}
-.btn.start{background:var(--p2);color:#fff}
-.btn.done{background:var(--green);color:#fff}
-.btn.soft{background:var(--soft);color:var(--p2)}
-.btn.ghost{background:#f1eff5;color:#5f5c6b}
-.btn:disabled{background:#ecebf1;color:#a3a1b0;cursor:not-allowed}
-.hint{margin-top:8px;font-size:12px;color:var(--amber);font-weight:600}
-.empty{text-align:center;padding:46px 20px;color:var(--mut);font-size:14px}
-.empty-icon{font-size:38px;margin-bottom:10px}
-.errbox{text-align:center;padding:30px 20px;color:var(--red);font-size:14px}
-.errbox button{margin-top:12px}
-.sk{border:1px solid var(--bd);border-radius:18px;padding:16px;display:grid;gap:10px}
-.sk i{display:block;height:14px;border-radius:7px;background:linear-gradient(90deg,#eeedf3,#f8f7fb,#eeedf3);background-size:200% 100%;animation:sh 1.2s infinite}
-@keyframes sh{to{background-position:-200% 0}}
-.profile{max-width:650px}
-.profile-row{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid var(--bd);font-size:14px}
-.profile-row:last-child{border:0}.profile-row span{color:var(--mut)}.profile-row b{text-align:right;overflow-wrap:anywhere}
-.cancelled-page-note{margin-bottom:14px;background:#fff2f2;border:1px solid #ffd8d8;color:#9f4040;padding:11px 12px;border-radius:12px;font-size:13px}
+/* ===== KABUK ===== */
+.app{display:none;min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:30;transition:width .15s}
+.side-head{height:60px;display:flex;align-items:center;gap:10px;padding:0 14px 0 18px;border-bottom:1px solid var(--line-2)}
+.side-head img{width:26px;height:26px}
+.side-head .wordmark{font-weight:700;letter-spacing:.06em;font-size:14px;flex:1;white-space:nowrap}
+.side-nav{flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.side-sec{font-size:11px;font-weight:600;color:var(--mut-2);text-transform:uppercase;letter-spacing:.06em;padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:var(--r);color:var(--ink-2);font-weight:500;font-size:13.5px;width:100%;text-align:left;white-space:nowrap}
+.nav-item .ic{color:var(--mut)}
+.nav-item:hover{background:var(--hover)}
+.nav-item[aria-current=page]{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.nav-item[aria-current=page] .ic{color:var(--brand)}
+.nav-count{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--brand);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center}
+.nav-count[hidden]{display:none}
+.side-foot{border-top:1px solid var(--line-2);padding:10px}
+.biz{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r);min-width:0}
+.avatar{width:32px;height:32px;border-radius:var(--r);background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:650;font-size:13px;flex:none}
+.biz-t{min-width:0;flex:1}
+.biz-t b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.biz-t small{display:block;font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.collapse-btn{margin-left:auto}
+body.side-collapsed .sidebar{width:var(--side-c)}
+body.side-collapsed .side-head{padding:0;justify-content:center;flex-direction:column;gap:0}
+body.side-collapsed .side-head .wordmark,body.side-collapsed .side-head img,body.side-collapsed .side-sec,body.side-collapsed .nav-label,body.side-collapsed .biz-t,body.side-collapsed .nav-count{display:none}
+body.side-collapsed .collapse-btn{margin:0}
+body.side-collapsed .collapse-btn .ic{transform:rotate(180deg)}
+body.side-collapsed .nav-item{justify-content:center;padding:0;position:relative}
+body.side-collapsed .nav-item .nav-dot{display:block}
+.nav-dot{display:none;position:absolute;top:7px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--brand)}
+.nav-dot[hidden]{display:none!important}
+body.side-collapsed .biz{justify-content:center}
+body.side-collapsed .shell{margin-left:var(--side-c)}
 
-/* modal */
-.modal{display:none;position:fixed;inset:0;background:rgba(16,12,30,.5);z-index:500;place-items:center;padding:20px}
+.shell{margin-left:var(--side);min-width:0;transition:margin-left .15s}
+.topbar{position:sticky;top:0;z-index:20;height:60px;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 24px}
+.crumb{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+.top-search{margin-left:auto;display:flex;align-items:center;gap:8px;width:min(340px,40vw);height:36px;padding:0 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface-2);color:var(--mut)}
+.top-search:focus-within{border-color:var(--brand);background:var(--surface);box-shadow:0 0 0 3px rgba(91,60,196,.15)}
+.top-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;height:100%;font-size:13.5px;color:var(--ink)}
+.top-search kbd{font-family:inherit;font-size:11px;color:var(--mut-2);border:1px solid var(--line);border-radius:4px;padding:0 5px;background:var(--surface)}
+.top-actions{display:flex;align-items:center;gap:4px}
+.top-sep{width:1px;height:20px;background:var(--line);margin:0 6px}
+.m-brand{display:none}
+.page{max-width:1200px;margin:0 auto;padding:28px 24px 48px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:650;letter-spacing:-.02em}
+.page-head p{color:var(--mut);margin-top:3px}
+.page-head .actions{display:flex;gap:8px;flex-wrap:wrap}
+.sync{font-size:12px;color:var(--mut-2);display:inline-flex;align-items:center;gap:6px}
+.sync i{width:6px;height:6px;border-radius:50%;background:#2fb36b;display:inline-block}
+.sync.off i{background:#c9c8d1}
+
+/* ===== KART / PANEL ===== */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1);min-width:0}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line-2)}
+.card-head h2{font-size:14.5px;font-weight:600}
+.card-head p{font-size:12.5px;color:var(--mut);margin-top:1px}
+.card-body{padding:18px}
+.card-foot{padding:10px 18px;border-top:1px solid var(--line-2);font-size:12.5px;color:var(--mut)}
+.grid-2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}
+.stack{display:grid;gap:16px}
+
+/* ===== KPI ===== */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpis.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;box-shadow:var(--sh-1);text-align:left;width:100%;min-width:0;display:block}
+button.kpi:hover{border-color:#d6d6de}
+.kpi-top{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:12.5px;font-weight:500}
+.kpi-top .ic{width:15px;height:15px}
+.kpi-val{font-size:26px;font-weight:650;letter-spacing:-.02em;margin-top:10px;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-sub{font-size:12px;color:var(--mut);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-sub b{color:var(--ink-2);font-weight:600}
+
+/* ===== ROZETLER ===== */
+.badge{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:550;white-space:nowrap;background:var(--gray-bg);color:var(--gray)}
+.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85}
+.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.badge.violet{background:var(--violet-bg);color:var(--violet)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.tag{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:5px;font-size:11.5px;font-weight:550;white-space:nowrap;border:1px solid}
+.tag .ic{width:12px;height:12px}
+.tag.amber{background:var(--amber-bg);border-color:var(--amber-line);color:var(--amber)}
+.tag.green{background:var(--green-bg);border-color:var(--green-line);color:var(--green)}
+.tag.red{background:var(--red-bg);border-color:var(--red-line);color:var(--red)}
+
+/* ===== SİPARİŞ LİSTESİ ===== */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line-2);align-items:center}
+.search{flex:1 1 240px;display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--mut);min-width:0}
+.search:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(91,60,196,.15)}
+.search input{flex:1;min-width:0;border:0;outline:0;height:100%;background:transparent;font-size:14px;color:var(--ink)}
+.toolbar .select,.toolbar .input{height:36px;width:auto;font-size:13.5px}
+.toolbar .select{padding-right:28px}
+.tabs{display:flex;gap:2px;padding:0 10px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+.tab{position:relative;display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 10px;font-size:13.5px;font-weight:500;color:var(--mut)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected=true]{color:var(--ink);font-weight:600}
+.tab[aria-selected=true]:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:2px;background:var(--brand)}
+.tab .cnt{font-size:11.5px;font-weight:600;color:var(--mut);background:var(--gray-bg);border-radius:10px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.tab[aria-selected=true] .cnt{background:var(--brand-soft);color:var(--brand)}
+.list-head,.row{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(0,1.7fr) minmax(0,1.2fr) minmax(0,1.1fr) 24px;gap:16px;align-items:center;padding:0 18px}
+.list-head{height:36px;font-size:12px;font-weight:550;color:var(--mut);background:var(--surface-2);border-bottom:1px solid var(--line-2)}
+.row{width:100%;text-align:left;min-height:64px;padding-top:11px;padding-bottom:11px;border-bottom:1px solid var(--line-2);transition:background .1s}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--surface-2)}
+.row.busy{opacity:.6}
+.cell{min-width:0}
+.cell b{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell small{display:block;font-size:12.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.cell .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--mut)}
+.cell .flags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.chev{color:var(--mut-2)}
+.list-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-top:1px solid var(--line-2);font-size:12.5px;color:var(--mut)}
+
+/* öncelikli işler */
+.todo{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 18px;border-bottom:1px solid var(--line-2)}
+.todo:last-child{border-bottom:0}
+.todo:hover{background:var(--surface-2)}
+.todo-ic{width:32px;height:32px;border-radius:var(--r);display:grid;place-items:center;flex:none}
+.todo-ic .ic{width:16px;height:16px}
+.todo-ic.amber{background:var(--amber-bg);color:var(--amber)}
+.todo-ic.green{background:var(--green-bg);color:var(--green)}
+.todo-ic.violet{background:var(--violet-bg);color:var(--violet)}
+.todo-ic.blue{background:var(--blue-bg);color:var(--blue)}
+.todo-t{flex:1;min-width:0}
+.todo-t b{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.todo-t small{display:block;color:var(--mut);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.todo-r{font-size:12.5px;color:var(--mut);white-space:nowrap;text-align:right}
+
+/* ===== BOŞ / HATA / YÜKLEME ===== */
+.empty{text-align:center;padding:44px 20px}
+.empty-ic{width:44px;height:44px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface-2);color:var(--mut);display:grid;place-items:center;margin:0 auto 12px}
+.empty-ic .ic{width:20px;height:20px}
+.empty b{display:block;font-weight:600;font-size:14px}
+.empty p{color:var(--mut);font-size:13px;margin-top:4px;max-width:380px;margin-inline:auto}
+.empty .btn{margin-top:14px}
+.empty.err .empty-ic{color:var(--red);background:var(--red-bg);border-color:var(--red-line)}
+.sk{display:block;height:12px;border-radius:4px;background:linear-gradient(90deg,#efeff3 25%,#f7f7f9 50%,#efeff3 75%);background-size:200% 100%;animation:shimmer 1.3s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.sk-row{display:grid;gap:8px;padding:16px 18px;border-bottom:1px solid var(--line-2)}
+.ok-line{display:flex;align-items:center;gap:10px;padding:18px;color:var(--mut);font-size:13.5px}
+.ok-line .ic{color:var(--green)}
+
+/* ===== TABLO (kazanç/istatistik) ===== */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:12px;font-weight:550;color:var(--mut);background:var(--surface-2);padding:9px 18px;border-bottom:1px solid var(--line-2)}
+.tbl td{padding:11px 18px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{display:flex;gap:10px;font-size:12.5px;color:var(--mut);line-height:1.55;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r)}
+.note .ic{width:16px;height:16px;margin-top:1px;color:var(--mut-2)}
+.dl{display:grid;grid-template-columns:180px minmax(0,1fr);border-top:1px solid var(--line-2)}
+.dl dt,.dl dd{padding:12px 18px;border-bottom:1px solid var(--line-2);font-size:13.5px}
+.dl dt{color:var(--mut)}
+.dl dd{font-weight:500;overflow-wrap:anywhere}
+.dl>:nth-last-child(-n+2){border-bottom:0}
+.setting{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line-2)}
+.setting:last-child{border-bottom:0}
+.setting b{display:block;font-weight:600;font-size:13.5px}
+.setting small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.switch{position:relative;width:36px;height:20px;border-radius:10px;background:#d9d8e0;flex:none;transition:background .12s}
+.switch:after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .12s}
+.switch[aria-checked=true]{background:var(--brand)}
+.switch[aria-checked=true]:after{transform:translateX(16px)}
+
+/* ===== ÇEKMECE (sipariş detayı) ===== */
+.scrim{position:fixed;inset:0;background:rgba(22,21,29,.32);z-index:200;opacity:0;pointer-events:none;transition:opacity .15s}
+.scrim.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);z-index:210;box-shadow:var(--sh-3);display:flex;flex-direction:column;transform:translateX(102%);transition:transform .2s ease;visibility:hidden}
+.drawer.show{transform:none;visibility:visible}
+.dr-head{display:flex;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line-2)}
+.dr-head .t{flex:1;min-width:0}
+.dr-head h2{font-size:17px;font-weight:650;letter-spacing:-.01em}
+.dr-head .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:12.5px;color:var(--mut)}
+.dr-head .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2)}
+.dr-body{flex:1;overflow-y:auto;padding:4px 20px 24px;overscroll-behavior:contain}
+.dr-sec{padding-top:18px}
+.dr-sec h3{font-size:12px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.kv{display:grid;grid-template-columns:140px minmax(0,1fr);gap:4px 12px;font-size:13.5px}
+.kv dt{color:var(--mut);padding:5px 0}
+.kv dd{padding:5px 0;font-weight:500;overflow-wrap:anywhere}
+.kv dd a{color:var(--brand);text-decoration:none;font-weight:600}
+.kv dd a:hover{text-decoration:underline}
+.textbox{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);padding:10px 12px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.timeline{list-style:none;position:relative;padding-left:18px}
+.timeline:before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.timeline li{position:relative;padding:4px 0 10px;font-size:13px}
+.timeline li:before{content:"";position:absolute;left:-18px;top:9px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--mut-2)}
+.timeline li.c-green:before{border-color:var(--green)}.timeline li.c-red:before{border-color:var(--red)}.timeline li.c-amber:before{border-color:#d49a16}.timeline li.c-violet:before{border-color:var(--brand)}
+.timeline b{font-weight:600}
+.timeline small{display:block;color:var(--mut);font-size:12px}
+.dr-foot{border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:var(--surface)}
+.dr-foot .acts{display:flex;gap:8px}
+.dr-foot .acts .btn{flex:1;height:42px}
+.dr-foot .why{font-size:12.5px;color:var(--amber);margin-bottom:10px;display:flex;gap:6px;align-items:flex-start}
+.dr-foot .why .ic{width:15px;height:15px;margin-top:1px}
+.dr-foot .closed{font-size:13px;color:var(--mut);text-align:center}
+
+/* saat önerisi kutusu */
+.prop{border:1px solid;border-radius:var(--r-lg);padding:14px;margin-top:16px}
+.prop-h{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px}
+.prop-h .ic{width:16px;height:16px}
+.prop-times{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:12px}
+.prop-times>div{background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:8px 12px}
+.prop-times small{display:block;font-size:11.5px;color:var(--mut)}
+.prop-times strong{font-size:18px;font-weight:650;font-variant-numeric:tabular-nums}
+.prop-times .arrow{color:var(--mut-2)}
+.prop p{font-size:12.5px;margin-top:10px;line-height:1.5}
+.prop.pending{background:var(--amber-bg);border-color:var(--amber-line);color:var(--amber)}
+.prop.accepted{background:var(--green-bg);border-color:var(--green-line);color:var(--green)}
+.prop.declined{background:var(--red-bg);border-color:var(--red-line);color:var(--red)}
+.prop .muted{color:var(--ink-2)}
+
+/* ===== MODAL ===== */
+.modal{position:fixed;inset:0;z-index:300;display:none;place-items:center;padding:20px;background:rgba(22,21,29,.4)}
 .modal.show{display:grid}
-.modal-box{width:min(430px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 24px 60px rgba(16,12,30,.25)}
-.modal-box h3{margin-bottom:6px;font-size:18px}
-.modal-box p{font-size:13px;color:var(--mut);margin-bottom:16px;line-height:1.5}
-.modal-box select,.modal-box input[type=time]{width:100%;height:48px;border:1px solid var(--bd);border-radius:12px;padding:0 12px;font-size:16px;background:#fff;outline:0}
-.modal-box select:focus,.modal-box input[type=time]:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(106,75,224,.12)}
-.modal-actions{display:flex;gap:8px;margin-top:18px}
-.modal-actions .btn{flex:1;min-height:46px}
-.btn.danger{background:var(--red);color:#fff}
-.more-list{display:grid;gap:6px}
-.more-list button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:#faf9fd;border-radius:13px;padding:14px;font-weight:650;font-size:14px;text-align:left}
-.more-list button.out{color:var(--red);background:#fff5f5}
+.modal-box{width:min(440px,100%);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-3);max-height:calc(100vh - 40px);overflow:auto}
+.modal-h{padding:18px 20px 0}
+.modal-h h2{font-size:16px;font-weight:650}
+.modal-h p{font-size:13px;color:var(--mut);margin-top:4px;line-height:1.5}
+.modal-b{padding:16px 20px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px 18px}
+.modal-f .btn{height:38px}
+.ctx{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.ctx div{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px;min-width:0}
+.ctx small{display:block;font-size:11.5px;color:var(--mut)}
+.ctx b{font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.reasons{display:grid;gap:6px}
+.reason{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;font-size:13.5px}
+.reason:hover{background:var(--surface-2)}
+.reason input{accent-color:var(--brand);width:16px;height:16px}
+.reason:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
 
-/* toast */
-.toast{position:fixed;right:24px;bottom:24px;z-index:1000;padding:13px 18px;border-radius:13px;background:#171622;color:#fff;opacity:0;transform:translateY(15px);pointer-events:none;transition:.2s;font-size:14px;max-width:min(420px,calc(100vw - 30px));line-height:1.4}
-.toast.show{opacity:1;transform:none}.toast.error{background:#a72f2f}.toast.success{background:#1f7b50}
+/* ===== POPOVER (bildirim / profil) ===== */
+.pop{position:absolute;top:52px;right:16px;width:min(360px,calc(100vw - 24px));background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-2);z-index:120;display:none;overflow:hidden}
+.pop.show{display:block}
+.pop-h{padding:12px 14px;border-bottom:1px solid var(--line-2);font-weight:600;font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.pop-h small{font-weight:500;color:var(--mut);font-size:12px}
+.pop-list{max-height:min(420px,60vh);overflow:auto}
+.pop .todo{padding:10px 14px}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;font-size:13.5px;text-align:left}
+.menu-item:hover{background:var(--hover)}
+.menu-item .ic{color:var(--mut)}
+.menu-item.danger{color:var(--red)}.menu-item.danger .ic{color:var(--red)}
 
-/* mobile */
+/* ===== TOAST ===== */
+.toasts{position:fixed;right:20px;bottom:20px;z-index:1000;display:grid;gap:8px;width:min(380px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--r-lg);background:var(--ink);color:#fff;box-shadow:var(--sh-2);font-size:13.5px;line-height:1.45;animation:tin .18s ease}
+.toast .ic{width:16px;height:16px;margin-top:2px}
+.toast.success .ic{color:#6fdca2}.toast.error{background:#7f1d1d}.toast.error .ic{color:#fecaca}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}}
+
+/* ===== MOBİL ===== */
 .bottom{display:none}
-@media(max-width:850px){
+.sheet-nav{display:grid;gap:2px;padding:8px}
+@media(max-width:1100px){
+  .kpis.k5{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid-2{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:960px){
   .sidebar{display:none}
-  .main{margin-left:0;padding:calc(18px + env(safe-area-inset-top)) 15px calc(92px + env(safe-area-inset-bottom))}
-  .top h1{font-size:21px}
-  .business span,.icon-btn .lbl{display:none}
-  .business{padding:6px}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .stats .stat:last-child:nth-child(odd){grid-column:1/-1}
-  .content{padding:16px;border-radius:18px}
-  .bottom{display:flex;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--bd);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-  .bottom button{flex:1;height:62px;border:0;background:none;font-size:11px;color:var(--mut);font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
-  .bottom button span{font-size:20px}
-  .bottom button.active{color:var(--p2)}
-  .bottom .nbadge{position:absolute;top:6px;left:calc(50% + 6px);margin:0;font-size:10px;padding:1px 6px}
-  .modal{align-items:end;padding:0}
-  .modal.show{display:grid}
-  .modal-box{width:100%;max-width:none;border-radius:24px 24px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom))}
-  .toast{left:15px;right:15px;bottom:calc(80px + env(safe-area-inset-bottom));max-width:none}
+  .shell,body.side-collapsed .shell{margin-left:0}
+  .topbar{padding:0 12px 0 16px;padding-top:env(safe-area-inset-top);height:calc(56px + env(safe-area-inset-top))}
+  .crumb,.top-search,.top-sep,#topRefresh{display:none}
+  .m-brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.06em;font-size:14px}
+  .m-brand img{width:24px;height:24px}
+  .top-actions{margin-left:auto}
+  .page{padding:18px 16px calc(96px + env(safe-area-inset-bottom))}
+  .page-head{margin-bottom:16px;align-items:flex-start}
+  .page-head h1{font-size:20px}
+  .bottom{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .bottom button{flex:1;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:550;color:var(--mut);position:relative}
+  .bottom button .ic{width:21px;height:21px}
+  .bottom button[aria-current=page]{color:var(--brand)}
+  .bottom .nav-count{position:absolute;top:6px;left:calc(50% + 6px);height:17px;min-width:17px;font-size:10px;padding:0 5px}
+  .list-head{display:none}
+  .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"a d" "b b" "c c";gap:6px 12px;padding:14px 16px}
+  .row .c-a{grid-area:a}.row .c-b{grid-area:b}.row .c-c{grid-area:c}.row .c-d{grid-area:d;align-self:start}.row .chev{display:none}
+  .row .c-b b,.row .c-c b{display:inline;font-weight:500;font-size:13px}
+  .row .c-b small,.row .c-c small{display:inline;margin-left:6px}
+  .row .c-b b,.row .c-c b,.row .c-b small,.row .c-c small{white-space:normal}
+  .toolbar{padding:12px}
+  .toolbar .select,.toolbar .input{flex:1 1 140px;min-width:0}
+  .search{flex-basis:100%}
+  .search input,.toolbar .select,.toolbar .input,.input,.select{font-size:16px}
+  .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px 6px}
+  .tab{height:40px;padding:0 2px;font-size:12.5px;gap:4px;justify-content:center;white-space:nowrap;min-width:0}
+  .tab .cnt{padding:1px 5px;font-size:11px}
+  .tab[aria-selected=true]:after{left:12px;right:12px}
+  .drawer{top:auto;height:calc(100% - 24px);width:100%;border-radius:16px 16px 0 0;transform:translateY(102%)}
+  .drawer.show{transform:none}
+  .modal{place-items:end stretch;padding:0}
+  .modal-box{width:100%;border-radius:16px 16px 0 0;max-height:92vh;padding-bottom:env(safe-area-inset-bottom)}
+  .modal-f .btn{flex:1;height:44px}
+  .dr-foot .acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .dr-foot .acts .btn:first-child:nth-last-child(2),.dr-foot .acts .btn:only-child{grid-column:1/-1}
+  .dr-foot .acts .btn-primary,.dr-foot .acts .btn-success{grid-column:1/-1;order:-1;height:46px}
+  .dr-foot .acts .btn{min-width:0}
+  .pop{position:fixed;top:calc(60px + env(safe-area-inset-top));right:12px}
+  .toasts{left:12px;right:12px;width:auto;bottom:auto;top:calc(8px + env(safe-area-inset-top))}
+  .dl{grid-template-columns:minmax(0,1fr)}
+  .dl dt{border-bottom:0;padding-bottom:0;font-size:12.5px}
+  .dl dd{padding-top:4px}
+  .dl>:nth-last-child(2){border-bottom:0}
 }
-@media(max-width:520px){
-  .profile-row{flex-direction:column;gap:6px}.profile-row b{text-align:left}
-  .login-box{padding:28px 20px}
-  .actions .btn{flex:1 1 auto}
-}
-/* ===== v2 görünüm ===== */
-body{background:#f4f4f9;letter-spacing:-.005em}
-.main{max-width:1180px}
-.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.menu button .ic{opacity:.75}.menu button.active .ic{opacity:1}
-.menu button,.sidebar .logout{gap:12px}
-.avatar .ic{width:18px;height:18px}
-.hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:16px;border-radius:24px;padding:26px 28px;margin-bottom:16px;color:#fff;background:linear-gradient(135deg,#3f1fa8,#6a4be0 62%,#8b6cf6);box-shadow:0 16px 36px rgba(85,56,200,.22)}
-.hero:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-120px;background:rgba(255,255,255,.1)}
-.hero>*{position:relative}
-.hero small{opacity:.8;font-size:12px;text-transform:capitalize}
-.hero h2{font-size:24px;letter-spacing:-.6px;margin:6px 0}
-.hero p{opacity:.92;font-size:14px}
-.hero-btn{background:#fff;color:var(--p2);border:0;border-radius:12px;padding:12px 18px;font-weight:750;font-size:13px;white-space:nowrap}
-.stat{transition:transform .15s,box-shadow .15s}.stat:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(23,22,34,.08)}
-.stat-icon{color:var(--p2)}
-.tone-wait .stat-icon{background:#fff3d7;color:var(--amber)}.tone-prog .stat-icon{background:var(--soft2);color:var(--p2)}.tone-done .stat-icon{background:#e4f7ed;color:var(--green)}.tone-canc .stat-icon{background:#eeedf3;color:#6a6874}.tone-earn .stat-icon{background:#e4f7ed;color:var(--green)}
-.todo-ico .ic{width:19px;height:19px}
-.t-new{color:var(--p2)}.t-wait{color:var(--amber)}.t-resp{color:var(--green)}
-.order{border-left:4px solid var(--c,#d9d7e3);padding:18px 18px 16px;box-shadow:var(--sh)}
-.st-wait{--c:#f2b134}.st-acc{--c:#4b8be8}.st-prog{--c:var(--p)}.st-done{--c:#32a874}.st-rej{--c:#e06666}.st-canc{--c:#b5b3c2}
-.order.closed{box-shadow:none;background:#fcfcfe}
-.order.closed .kv{background:transparent;border-color:transparent;padding:4px 2px}
-.order-title{font-size:17px;letter-spacing:-.3px}
-.kv span{display:flex;align-items:center;gap:5px}.kv span .ic{width:13px;height:13px}
-.prop-head .ic{width:18px;height:18px}
-.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:0 12px;height:46px;color:var(--mut)}
-.search input{border:0;outline:0;flex:1;font-size:16px;background:transparent;height:100%;color:var(--ink)}
-.search:focus-within{border-color:var(--p);box-shadow:0 0 0 4px rgba(106,75,224,.1)}
-.toolbar select{height:46px;border:1px solid var(--bd);border-radius:12px;padding:0 12px;background:#fff;font-size:14px}
-.empty-ic{width:64px;height:64px;border-radius:20px;background:var(--soft);color:var(--p);display:grid;place-items:center;margin:0 auto 14px}
-.empty-ic .ic{width:28px;height:28px}
-.ok-note .ic{width:20px;height:20px}
-.more-list .ic{color:var(--p)}.more-list .out .ic{color:var(--red)}
-@media(max-width:850px){
-  .hero{flex-direction:column;align-items:flex-start;padding:20px}
-  .hero-btn{width:100%}
-  .bottom button .ic{width:22px;height:22px}
+@media(max-width:560px){
+  .kpis,.kpis.k5{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .kpis .kpi:last-child:nth-child(odd){grid-column:1/-1}
+  .kpi{padding:14px}
+  .kpi-val{font-size:22px}
+  .kv{grid-template-columns:112px minmax(0,1fr)}
+  .page-head .actions{width:100%}
+  .page-head .actions .btn{flex:1}
+  .tbl th,.tbl td{padding:10px 12px}
+  .tbl .hide-s{display:none}
+  .login-box{padding:22px 18px}
 }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></symbol>
-<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></symbol>
-<symbol id="i-cycle" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 3v6h-6"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
-<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
-<symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/></symbol>
-<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7zm0 0V6a2 2 0 012-2h11M16 14h2"/></symbol>
-<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></symbol>
-<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
-<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
-<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
-<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></symbol>
+<symbol id="i-orders" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2"/><path d="M3 6v12a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-3"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15v2M11 11v6M15 7v10M19 12v5"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.25.4-1.51 1z"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/></symbol>
-<symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2M5.5 5h13l3.5 7v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6l3.5-7z"/></symbol>
-<symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></symbol>
-<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
-<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></symbol>
 <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
-<symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 012-2h8a2 2 0 012 2v16M16 9h2a2 2 0 012 2v10M3 21h18M8 8h4M8 12h4M8 16h4"/></symbol>
-<symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.5 3.5-5.5 7-5.5s7 2 7 5.5"/></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+<symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-check-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-x-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+<symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8z"/></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.7 5.7 12.6 12.6"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
 </defs></svg>
 
-<!-- LOGIN -->
+<!-- ===== GİRİŞ ===== -->
 <div class="login" id="loginScreen">
-  <div class="login-box">
-    <img src="baksana-logo-cropped.png" class="logo" alt="BAKSANA">
-    <span class="test-pill">TEST SÜRÜMÜ</span>
-    <h1>İşletme Paneli</h1>
-    <p>İşletme hesabınızla güvenli şekilde giriş yapın</p>
-    <div class="error" id="loginError" role="alert"></div>
-    <div id="loginForm">
-      <div class="field"><label for="email">E-posta</label><input id="email" type="email" autocomplete="username" placeholder="ornek@baksana.com"></div>
-      <div class="field"><label for="password">Şifre</label><input id="password" type="password" autocomplete="current-password" placeholder="Şifreniz"></div>
-      <button class="login-btn" id="loginButton" type="button" onclick="loginBusiness()">GİRİŞ YAP</button>
-    </div>
+  <div class="login-card">
+    <div class="login-brand"><img src="baksana-mark.png" alt=""><b>BAKSANA</b></div>
+    <form class="login-box" id="loginForm" novalidate>
+      <h1>İşletme paneline giriş</h1>
+      <p>İşletme hesabınızın e-posta adresi ve şifresiyle giriş yapın.</p>
+      <div class="alert alert-error" id="loginError" role="alert" hidden></div>
+      <div class="field"><label class="label" for="email">E-posta</label><input class="input" id="email" type="email" autocomplete="username" inputmode="email" placeholder="isletme@ornek.com" required></div>
+      <div class="field"><label class="label" for="password">Şifre</label><input class="input" id="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn-primary btn-lg btn-block" id="loginButton" type="submit">Giriş yap</button>
+    </form>
+    <div class="login-foot"><span class="env-tag">Test sürümü</span><span>BAKSANA İşletme Paneli</span></div>
   </div>
 </div>
 
-<!-- PANEL -->
-<div class="panel" id="panel">
-  <aside class="sidebar">
-    <img src="baksana-logo-cropped.png" class="logo" alt="BAKSANA">
-    <div class="menu">
-      <button data-page="home" class="active" onclick="showPage('home',this)"><svg class="ic"><use href="#i-home"/></svg>Ana Sayfa</button>
-      <button data-page="orders" onclick="showPage('orders',this)"><svg class="ic"><use href="#i-box"/></svg>Siparişler <span class="nbadge" id="navBadge" style="display:none">0</span></button>
-      <button data-page="ongoing" onclick="showPage('ongoing',this)"><svg class="ic"><use href="#i-cycle"/></svg>Devam Edenler</button>
-      <button data-page="completed" onclick="showPage('completed',this)"><svg class="ic"><use href="#i-check"/></svg>Tamamlananlar</button>
-      <button data-page="rejected" onclick="showPage('rejected',this)"><svg class="ic"><use href="#i-x"/></svg>Reddedilenler</button>
-      <button data-page="cancelled" onclick="showPage('cancelled',this)"><svg class="ic"><use href="#i-ban"/></svg>İptal Edilenler</button>
-      <button data-page="earnings" onclick="showPage('earnings',this)"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
-      <button data-page="stats" onclick="showPage('stats',this)"><svg class="ic"><use href="#i-chart"/></svg>İstatistikler</button>
-      <button data-page="profile" onclick="showPage('profile',this)"><svg class="ic"><use href="#i-user"/></svg>Profil</button>
+<!-- ===== PANEL ===== -->
+<div class="app" id="app">
+  <aside class="sidebar" aria-label="Ana menü">
+    <div class="side-head">
+      <img src="baksana-mark.png" alt="">
+      <span class="wordmark">BAKSANA</span>
+      <button class="icon-btn collapse-btn" id="collapseBtn" type="button" aria-label="Menüyü daralt" title="Menüyü daralt"><svg class="ic"><use href="#i-panel"/></svg></button>
     </div>
-    <button class="logout" onclick="logout()"><svg class="ic"><use href="#i-logout"/></svg>Çıkış Yap</button>
+    <nav class="side-nav">
+      <button class="nav-item" type="button" data-nav="home" title="Genel Bakış"><svg class="ic"><use href="#i-home"/></svg><span class="nav-label">Genel Bakış</span></button>
+      <button class="nav-item" type="button" data-nav="orders" title="Siparişler"><svg class="ic"><use href="#i-orders"/></svg><span class="nav-label">Siparişler</span><span class="nav-count" data-count="pending" hidden>0</span><span class="nav-dot" data-dot="pending" hidden></span></button>
+      <div class="side-sec">Raporlar</div>
+      <button class="nav-item" type="button" data-nav="earnings" title="Kazançlar"><svg class="ic"><use href="#i-wallet"/></svg><span class="nav-label">Kazançlar</span></button>
+      <button class="nav-item" type="button" data-nav="stats" title="İstatistikler"><svg class="ic"><use href="#i-chart"/></svg><span class="nav-label">İstatistikler</span></button>
+      <div class="side-sec">Hesap</div>
+      <button class="nav-item" type="button" data-nav="profile" title="Profil ve Ayarlar"><svg class="ic"><use href="#i-settings"/></svg><span class="nav-label">Profil ve Ayarlar</span></button>
+    </nav>
+    <div class="side-foot">
+      <div class="biz"><div class="avatar" data-initials>İ</div><div class="biz-t"><b data-bizname>İşletme</b><small data-bizmail></small></div></div>
+      <button class="nav-item" type="button" data-action="logout" title="Çıkış yap"><svg class="ic"><use href="#i-logout"/></svg><span class="nav-label">Çıkış yap</span></button>
+    </div>
   </aside>
 
-  <main class="main">
-    <div class="top">
-      <div><h1 id="pageTitle">Hoş geldin 👋</h1><p id="pageSubtitle">İşletme paneliniz</p></div>
-      <div class="top-right">
-        <button class="icon-btn" id="refreshBtn" onclick="loadOrders(true)" aria-label="Yenile"><svg class="ic"><use href="#i-refresh"/></svg> <span class="lbl">Yenile</span></button>
-        <div class="business"><div class="avatar"><svg class="ic"><use href="#i-building"/></svg></div><span id="businessName">İşletme</span></div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="m-brand"><img src="baksana-mark.png" alt=""><span>BAKSANA</span></div>
+      <div class="crumb" id="crumb">Genel Bakış</div>
+      <label class="top-search"><svg class="ic"><use href="#i-search"/></svg><span class="sr">Sipariş ara</span><input id="topSearch" type="search" placeholder="Sipariş, müşteri veya kod ara" autocomplete="off"><kbd>/</kbd></label>
+      <div class="top-sep"></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="topRefresh" type="button" aria-label="Verileri yenile" title="Yenile"><svg class="ic"><use href="#i-refresh"/></svg></button>
+        <button class="icon-btn" id="bellBtn" type="button" aria-label="Bildirimler" aria-haspopup="true" aria-expanded="false" aria-controls="bellPop"><svg class="ic"><use href="#i-bell"/></svg><span class="dot-count" id="bellCount" hidden>0</span></button>
+        <button class="icon-btn" id="meBtn" type="button" aria-label="Hesap menüsü" aria-haspopup="true" aria-expanded="false" aria-controls="mePop"><span class="avatar" data-initials style="width:28px;height:28px;font-size:12px">İ</span></button>
       </div>
-    </div>
-    <div id="homePage"></div>
-    <div id="dynamicPage" style="display:none"><div id="dynamicContent"></div></div>
-  </main>
+      <div class="pop" id="bellPop" role="region" aria-label="Bildirimler"></div>
+      <div class="pop" id="mePop" role="menu" aria-label="Hesap menüsü">
+        <div class="pop-h"><span data-bizname>İşletme</span></div>
+        <button class="menu-item" type="button" role="menuitem" data-nav="profile"><svg class="ic"><use href="#i-settings"/></svg>Profil ve Ayarlar</button>
+        <button class="menu-item danger" type="button" role="menuitem" data-action="logout"><svg class="ic"><use href="#i-logout"/></svg>Çıkış yap</button>
+      </div>
+    </header>
+    <main class="page" id="view" tabindex="-1"></main>
+  </div>
 
-  <nav class="bottom">
-    <button data-page="home" onclick="showPageByName('home')"><svg class="ic"><use href="#i-home"/></svg>Ana Sayfa</button>
-    <button data-page="orders" onclick="showPageByName('orders')"><svg class="ic"><use href="#i-box"/></svg>Sipariş<b class="nbadge" id="navBadgeM" style="display:none">0</b></button>
-    <button data-page="ongoing" onclick="showPageByName('ongoing')"><svg class="ic"><use href="#i-cycle"/></svg>Devam</button>
-    <button data-page="more" onclick="openModal('moreModal')"><svg class="ic"><use href="#i-menu"/></svg>Daha Fazla</button>
+  <nav class="bottom" aria-label="Alt menü">
+    <button type="button" data-nav="home"><svg class="ic"><use href="#i-home"/></svg>Genel</button>
+    <button type="button" data-nav="orders"><svg class="ic"><use href="#i-orders"/></svg>Siparişler<span class="nav-count" data-count="pending" hidden>0</span></button>
+    <button type="button" data-nav="earnings"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
+    <button type="button" data-action="more" aria-haspopup="dialog"><svg class="ic"><use href="#i-menu"/></svg>Menü</button>
   </nav>
 </div>
 
-<!-- MODALS -->
-<div class="modal" id="rejectModal"><div class="modal-box">
-  <h3>Siparişi Reddet</h3><p>Lütfen red nedenini seçin. Bu işlem geri alınamaz.</p>
-  <select id="rejectReason" aria-label="Red nedeni">
-    <option value="">Red nedeni seçin</option><option>Müsait değil</option><option>Personel yetersiz</option><option>Tarih/saat uygun değil</option><option>Bölge dışında</option><option>Diğer</option>
-  </select>
-  <div class="modal-actions"><button class="btn ghost" onclick="closeRejectModal()">Vazgeç</button><button class="btn danger" onclick="confirmReject()">Siparişi Reddet</button></div>
+<!-- ===== SİPARİŞ DETAYI ===== -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle" aria-hidden="true"></aside>
+
+<!-- ===== MODALLAR ===== -->
+<div class="modal" id="rejectModal" aria-hidden="true"><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="rjTitle">
+  <div class="modal-h"><h2 id="rjTitle">Siparişi reddet</h2><p id="rjSub">Red nedeni müşteriye iletilir. Bu işlem geri alınamaz.</p></div>
+  <div class="modal-b">
+    <fieldset style="border:0"><legend class="label">Red nedeni</legend>
+      <div class="reasons" id="rejectReasons">
+        <label class="reason"><input type="radio" name="rr" value="Müsait değil">Müsait değil</label>
+        <label class="reason"><input type="radio" name="rr" value="Personel yetersiz">Personel yetersiz</label>
+        <label class="reason"><input type="radio" name="rr" value="Tarih/saat uygun değil">Tarih/saat uygun değil</label>
+        <label class="reason"><input type="radio" name="rr" value="Bölge dışında">Bölge dışında</label>
+        <label class="reason"><input type="radio" name="rr" value="Diğer">Diğer</label>
+      </div>
+    </fieldset>
+    <div class="field-err" id="rejectErr" role="alert"></div>
+  </div>
+  <div class="modal-f"><button class="btn btn-secondary" type="button" data-close>Vazgeç</button><button class="btn btn-danger" type="button" id="rejectOk">Siparişi reddet</button></div>
 </div></div>
 
-<div class="modal" id="proposalModal"><div class="modal-box">
-  <h3>Saat Öner</h3><p>Müşterinin istediği saat uygun değilse size uygun başka bir saat önerin. Müşteri yanıt verene kadar sipariş kabul edilemez.</p>
-  <input id="proposalTime" type="time" aria-label="Önerilen saat">
-  <div class="modal-actions"><button class="btn ghost" onclick="closeProposalModal()">Vazgeç</button><button class="btn primary" onclick="confirmProposal()">Saati Öner</button></div>
+<div class="modal" id="proposalModal" aria-hidden="true"><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
+  <div class="modal-h"><h2 id="ppTitle">Yeni saat öner</h2><p>Müşteri öneriyi kabul edene ya da reddedene kadar sipariş kabul edilemez.</p></div>
+  <div class="modal-b">
+    <div class="ctx" id="ppCtx"></div>
+    <label class="label" for="proposalTime">Önerilen saat</label>
+    <input class="input" id="proposalTime" type="time" required aria-describedby="ppHelp proposalErr">
+    <div class="field-help" id="ppHelp">Saat, 24 saat biçiminde (SS:DD) kaydedilir; örneğin 14:30.</div>
+    <div class="field-err" id="proposalErr" role="alert"></div>
+  </div>
+  <div class="modal-f"><button class="btn btn-secondary" type="button" data-close>Vazgeç</button><button class="btn btn-primary" type="button" id="proposalOk">Öneriyi gönder</button></div>
 </div></div>
 
-<div class="modal" id="confirmModal"><div class="modal-box">
-  <h3 id="confirmTitle">Emin misiniz?</h3><p id="confirmText"></p>
-  <div class="modal-actions"><button class="btn ghost" onclick="closeConfirm()">Vazgeç</button><button class="btn done" id="confirmOk" onclick="runConfirm()">Onayla</button></div>
+<div class="modal" id="confirmModal" aria-hidden="true"><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="cfTitle">
+  <div class="modal-h"><h2 id="cfTitle">Emin misiniz?</h2><p id="cfText"></p></div>
+  <div class="field-err" id="cfErr" role="alert" style="padding:0 20px"></div>
+  <div class="modal-f"><button class="btn btn-secondary" type="button" data-close>Vazgeç</button><button class="btn btn-primary" type="button" id="cfOk">Onayla</button></div>
 </div></div>
 
-<div class="modal" id="moreModal"><div class="modal-box">
-  <h3>Menü</h3><p style="margin-bottom:12px">Diğer sayfalar</p>
-  <div class="more-list">
-    <button onclick="closeModal('moreModal');showPageByName('completed')"><svg class="ic"><use href="#i-check"/></svg>Tamamlananlar</button>
-    <button onclick="closeModal('moreModal');showPageByName('rejected')"><svg class="ic"><use href="#i-x"/></svg>Reddedilenler</button>
-    <button onclick="closeModal('moreModal');showPageByName('cancelled')"><svg class="ic"><use href="#i-ban"/></svg>İptal Edilenler</button>
-    <button onclick="closeModal('moreModal');showPageByName('earnings')"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
-    <button onclick="closeModal('moreModal');showPageByName('stats')"><svg class="ic"><use href="#i-chart"/></svg>İstatistikler</button>
-    <button onclick="closeModal('moreModal');showPageByName('profile')"><svg class="ic"><use href="#i-user"/></svg>Profil</button>
-    <button class="out" onclick="closeModal('moreModal');logout()"><svg class="ic"><use href="#i-logout"/></svg>Çıkış Yap</button>
+<div class="modal" id="moreModal" aria-hidden="true"><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mmTitle">
+  <div class="modal-h" style="display:flex;align-items:center;gap:10px;padding-bottom:6px"><div class="avatar" data-initials>İ</div><div style="min-width:0;flex:1"><h2 id="mmTitle" data-bizname style="font-size:15px">İşletme</h2><p data-bizmail style="margin:0"></p></div><button class="icon-btn" type="button" data-close aria-label="Kapat"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="sheet-nav">
+    <button class="menu-item" type="button" data-nav="home"><svg class="ic"><use href="#i-home"/></svg>Genel Bakış</button>
+    <button class="menu-item" type="button" data-nav="orders"><svg class="ic"><use href="#i-orders"/></svg>Siparişler</button>
+    <button class="menu-item" type="button" data-nav="earnings"><svg class="ic"><use href="#i-wallet"/></svg>Kazançlar</button>
+    <button class="menu-item" type="button" data-nav="stats"><svg class="ic"><use href="#i-chart"/></svg>İstatistikler</button>
+    <button class="menu-item" type="button" data-nav="profile"><svg class="ic"><use href="#i-settings"/></svg>Profil ve Ayarlar</button>
+    <button class="menu-item" type="button" data-action="refresh"><svg class="ic"><use href="#i-refresh"/></svg>Verileri yenile</button>
+    <button class="menu-item danger" type="button" data-action="logout"><svg class="ic"><use href="#i-logout"/></svg>Çıkış yap</button>
   </div>
 </div></div>
 
-<div class="toast" id="toast" role="status"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
 <script>
 /* ===== SUPABASE ===== */
@@ -330,91 +583,180 @@ const SUPABASE_URL="https://ahvplyeunubpbtsdzldj.supabase.co";
 const SUPABASE_KEY="sb_publishable_qF3PlPnw-g4dXeOiL-OSOw_LzKQ9kuO";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-const ic=(n,c)=>`<svg class="ic ${c||""}"><use href="#i-${n}"/></svg>`;
-const EMOJI2IC={"📦":"box","🔄":"cycle","✅":"check","❌":"x","🚫":"ban","💰":"wallet","📈":"chart","📥":"inbox","💬":"msg","🕒":"clock"};
-const SKEY={"Beklemede":"wait","Kabul Edildi":"acc","Devam Ediyor":"prog","Tamamlandı":"done","Reddedildi":"rej","İptal Edildi":"canc"};
-let fq="",fs="";
-function statCard(emoji,n,label,tone){return `<div class="stat tone-${tone||""}"><div class="stat-icon">${ic(EMOJI2IC[emoji]||"box")}</div><div class="stat-number">${n}</div><div class="stat-label">${label}</div></div>`}
+const ic=n=>`<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 
-/* ===== GLOBAL ===== */
+/* ===== DURUM ===== */
 let session=null,business=null,orders=[];
-let rejectId=null,proposalId=null,confirmCb=null;
 let poll=null,channel=null,reloadTimer=null;
-let currentPage="home",ordersLoaded=false,loadError="";
-let loading=false,again=false;
+let ordersLoaded=false,loadError="",lastSync=null,loadP=null;
+let route="home";
 const busyIds=new Set();
+const ui={tab:"pending",q:"",date:"all",day:"",service:"",sort:"created",openId:null};
 
-const titles={
-  home:["Hoş geldin","İşletme paneliniz"],
-  orders:["Siparişler","Tüm işletme siparişleri"],
-  ongoing:["Devam Edenler","Kabul edilen ve devam eden işler"],
-  completed:["Tamamlananlar","Tamamlanan işler ve geçmiş"],
-  rejected:["Reddedilenler","Reddedilmiş siparişler"],
-  cancelled:["İptal Edilenler","Müşteri tarafından iptal edilen siparişler"],
-  earnings:["Kazançlar","Tamamlanan siparişlerden kazanç"],
-  stats:["İstatistikler","İşletme performansı"],
-  profile:["Profil","İşletme bilgileri"]
+const STATUS={
+  "Beklemede":{tone:"amber"},
+  "Kabul Edildi":{tone:"blue"},
+  "Devam Ediyor":{tone:"violet"},
+  "Tamamlandı":{tone:"green"},
+  "Reddedildi":{tone:"red"},
+  "İptal Edildi":{tone:"gray"}
 };
+const CLOSED=["Tamamlandı","Reddedildi","İptal Edildi"];
+const TABS=[
+  ["pending","Bekleyen",o=>o.status==="Beklemede"],
+  ["active","Devam eden",o=>o.status==="Kabul Edildi"||o.status==="Devam Ediyor"],
+  ["completed","Tamamlanan",o=>o.status==="Tamamlandı"],
+  ["rejected","Reddedilen",o=>o.status==="Reddedildi"],
+  ["cancelled","İptal edilen",o=>o.status==="İptal Edildi"],
+  ["all","Tümü",()=>true]
+];
+/* Eski sayfa adları sipariş sekmelerine yönlenir */
+const LEGACY={ongoing:"active",completed:"completed",rejected:"rejected",cancelled:"cancelled"};
+const PAGES={home:"Genel Bakış",orders:"Siparişler",earnings:"Kazançlar",stats:"İstatistikler",profile:"Profil ve Ayarlar"};
 
 /* ===== YARDIMCILAR ===== */
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function money(v){return Number(v||0).toLocaleString("tr-TR")+" ₺"}
+function money(v){return Number(v||0).toLocaleString("tr-TR",{maximumFractionDigits:2})+" ₺"}
+function hasPrice(o){return o.price!==null&&o.price!==undefined&&o.price!==""&&!isNaN(Number(o.price))}
+/* Saat değerleri "14:00" ya da "14:00:00" gelebilir; karşılaştırma hep SS:DD üzerinden yapılır */
+function hhmm(v){const m=/^(\d{1,2}):(\d{2})/.exec(String(v||"").trim());return m?m[1].padStart(2,"0")+":"+m[2]:""}
+function phoneDigits(v){return String(v||"").replace(/[^\d+]/g,"")}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function dateOnly(v){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(v||""));return m?m[0]:""}
+function addDays(s,n){const[y,m,d]=s.split("-").map(Number);return ymd(new Date(y,m-1,d+n))}
+const TODAY=()=>ymd(new Date());
+/* Yalnızca tarih içeren değerler (YYYY-MM-DD) saat dilimi kaymasına uğramadan biçimlenir */
 function dateTR(v){
   if(!v)return "-";
-  try{return new Intl.DateTimeFormat("tr-TR",{day:"2-digit",month:"2-digit",year:"numeric"}).format(new Date(v))}catch{return String(v)}
+  const s=String(v);
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){const[y,m,d]=s.split("-");return `${d}.${m}.${y}`}
+  const d=new Date(s);return isNaN(d)?s:new Intl.DateTimeFormat("tr-TR",{day:"2-digit",month:"2-digit",year:"numeric"}).format(d);
 }
-function dateTimeTR(v){
+function dayLabel(v){
+  const s=dateOnly(v);if(!s)return "-";
+  const t=TODAY();
+  if(s===t)return "Bugün";
+  if(s===addDays(t,1))return "Yarın";
+  if(s===addDays(t,-1))return "Dün";
+  const[y,m,d]=s.split("-").map(Number);
+  return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",weekday:"short",...(y!==new Date().getFullYear()?{year:"numeric"}:{})}).format(new Date(y,m-1,d));
+}
+function stamp(v){
   if(!v)return "";
-  try{return new Intl.DateTimeFormat("tr-TR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(v))}catch{return ""}
+  const d=new Date(v);if(isNaN(d))return String(v);
+  return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}).format(d);
 }
-function hhmm(v){return String(v||"").slice(0,5)}
-function phoneDigits(v){return String(v||"").replace(/[^\d+]/g,"")}
-function toast(message,type="success"){
-  const x=$("toast");
-  x.textContent=message;x.className="toast show "+type;
-  clearTimeout(toast.timer);
-  toast.timer=setTimeout(()=>{x.className="toast"},3500);
+function ago(v){
+  const d=new Date(v);if(!v||isNaN(d))return "";
+  const s=Math.round((Date.now()-d)/1000);
+  if(s<60)return "az önce";
+  if(s<3600)return Math.floor(s/60)+" dk önce";
+  if(s<86400)return Math.floor(s/3600)+" sa önce";
+  if(s<86400*7)return Math.floor(s/86400)+" gün önce";
+  return stamp(v);
 }
-function openModal(id){$(id).classList.add("show")}
-function closeModal(id){$(id).classList.remove("show")}
+function initials(n){return String(n||"İ").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toLocaleUpperCase("tr-TR")||"İ"}
+function optionOf(o){
+  try{return o.details?.option||(typeof o.details==="string"?JSON.parse(o.details||"{}").option:"")||""}catch{return ""}
+}
+function lsGet(k){try{return localStorage.getItem(k)}catch{return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch{}}
 
-/* Saat önerisi durumu: pending | accepted | declined | null */
+function toast(message,type="success"){
+  const box=$("toasts");
+  const t=document.createElement("div");
+  t.className="toast "+type;
+  if(type==="error")t.setAttribute("role","alert");
+  t.innerHTML=ic(type==="error"?"alert":"check-c")+`<span>${esc(message)}</span>`;
+  box.appendChild(t);
+  while(box.children.length>3)box.firstChild.remove();
+  setTimeout(()=>t.remove(),type==="error"?6000:3500);
+}
+
+/* ===== SAAT ÖNERİSİ DURUMU =====
+   Müşteri sitesiyle (site-hizmet) aynı değer listeleri kullanılır. Önerilmiş saat varken
+   tanınmayan her değer güvenli tarafta kalmak için "yanıt bekleniyor" sayılır. */
+const PROPOSAL_ACCEPTED=["accepted","approved","kabul","kabul edildi","kabul_edildi"];
+const PROPOSAL_REJECTED=["rejected","declined","ret","red","reddedildi","reddedilen"];
 function propState(o){
   if(!o||!o.proposed_service_time)return null;
   const s=String(o.time_proposal_status||"").trim().toLowerCase();
-  if(s==="pending")return "pending";
-  if(s==="accepted")return "accepted";
-  if(s==="declined"||s==="rejected")return "declined";
-  return null;
+  if(PROPOSAL_ACCEPTED.includes(s))return "accepted";
+  if(PROPOSAL_REJECTED.includes(s))return "declined";
+  return "pending";
+}
+/* Hizmetin geçerli saati: müşteri öneriyi kabul ettiyse önerilen saat */
+function effTime(o){return propState(o)==="accepted"?hhmm(o.proposed_service_time):hhmm(o.service_time)}
+
+/* ===== KATMANLAR (modal / çekmece) — odak yönetimi ===== */
+const layers=[];
+function openLayer(el,focusEl){
+  if(!layers.some(l=>l.el===el))layers.push({el,ret:document.activeElement});
+  el.classList.add("show");el.setAttribute("aria-hidden","false");
+  if(el.id==="drawer")$("scrim").classList.add("show");
+  document.body.classList.add("locked");
+  requestAnimationFrame(()=>{(focusEl||el.querySelector("[data-autofocus]")||el.querySelector("button:not([disabled]),input,select"))?.focus()});
+}
+function closeLayer(el){
+  const i=layers.findIndex(l=>l.el===el);
+  el.classList.remove("show");el.setAttribute("aria-hidden","true");
+  if(el.id==="drawer"){$("scrim").classList.remove("show");ui.openId=null}
+  if(i>-1){const[l]=layers.splice(i,1);if(l.ret&&l.ret.isConnected)l.ret.focus()}
+  if(!layers.length)document.body.classList.remove("locked");
+}
+function topLayer(){return layers[layers.length-1]?.el}
+function trapFocus(e){
+  const el=topLayer();if(!el||e.key!=="Tab")return;
+  const f=[...el.querySelectorAll("button:not([disabled]),a[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex='-1'])")].filter(x=>x.offsetParent!==null);
+  if(!f.length)return;
+  const first=f[0],last=f[f.length-1];
+  if(!el.contains(document.activeElement)){e.preventDefault();first.focus();return}
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+}
+function closePops(){["bellPop","mePop"].forEach(id=>$(id).classList.remove("show"));$("bellBtn").setAttribute("aria-expanded","false");$("meBtn").setAttribute("aria-expanded","false")}
+function togglePop(id,btn){
+  const open=!$(id).classList.contains("show");
+  closePops();
+  if(open){$(id).classList.add("show");btn.setAttribute("aria-expanded","true");if(id==="bellPop")renderBell()}
 }
 
 /* ===== EKRANLAR ===== */
 function showLogin(){
-  $("panel").style.display="none";
+  $("app").style.display="none";
   $("loginScreen").style.display="grid";
   if(channel){supabaseClient.removeChannel(channel);channel=null}
   clearInterval(poll);poll=null;clearTimeout(reloadTimer);
-  business=null;orders=[];ordersLoaded=false;loadError="";
+  [...layers].forEach(l=>closeLayer(l.el));closePops();
+  business=null;orders=[];ordersLoaded=false;loadError="";lastSync=null;
 }
 function showPanel(){
   $("loginScreen").style.display="none";
-  $("panel").style.display="block";
+  $("app").style.display="block";
 }
-function loginMsg(text){const b=$("loginError");b.textContent=text;b.style.display="block"}
+function loginMsg(text){const b=$("loginError");b.textContent=text;b.hidden=false}
 
 /* ===== GİRİŞ ===== */
 async function loginBusiness(){
   const email=$("email").value.trim(),password=$("password").value;
   const btn=$("loginButton");
-  $("loginError").style.display="none";
-  if(!email||!password){loginMsg("E-posta ve şifreyi gir.");return}
-  btn.disabled=true;btn.textContent="GİRİŞ YAPILIYOR...";
-  const{data,error}=await supabaseClient.auth.signInWithPassword({email:email,password:password});
-  btn.disabled=false;btn.textContent="GİRİŞ YAP";
-  if(error){console.error("SUPABASE LOGIN ERROR:",error);loginMsg("Giriş hatası: "+error.message);return}
-  if(!data||!data.session){loginMsg("Oturum oluşturulamadı.");return}
-  session=data.session;
-  await loadBusiness();
+  $("loginError").hidden=true;
+  $("email").removeAttribute("aria-invalid");$("password").removeAttribute("aria-invalid");
+  if(!email||!/^\S+@\S+\.\S+$/.test(email)){loginMsg("Geçerli bir e-posta adresi girin.");$("email").setAttribute("aria-invalid","true");$("email").focus();return}
+  if(!password){loginMsg("Şifrenizi girin.");$("password").setAttribute("aria-invalid","true");$("password").focus();return}
+  btn.disabled=true;btn.classList.add("loading");
+  try{
+    const{data,error}=await supabaseClient.auth.signInWithPassword({email:email,password:password});
+    if(error){console.error("SUPABASE LOGIN ERROR:",error);loginMsg(/invalid login credentials/i.test(error.message)?"E-posta veya şifre hatalı.":"Giriş hatası: "+error.message);return}
+    if(!data||!data.session){loginMsg("Oturum oluşturulamadı.");return}
+    session=data.session;
+    $("password").value="";
+    await loadBusiness();
+  }catch(e){
+    loginMsg("Bağlantı hatası: "+(e.message||"Bilinmeyen hata"));
+  }finally{
+    btn.disabled=false;btn.classList.remove("loading");
+  }
 }
 
 /* ===== İŞLETMEYİ BUL: profiles → business_id → businesses ===== */
@@ -429,8 +771,8 @@ async function loadBusiness(){
       .eq("id",session.user.id).maybeSingle();
     if(profileError)throw profileError;
     if(!profile||profile.role!=="business"||!profile.business_id){
-      loginMsg("Bu hesap bir işletme hesabına bağlı değil.");
-      await supabaseClient.auth.signOut();return;
+      await supabaseClient.auth.signOut();
+      loginMsg("Bu hesap bir işletme hesabına bağlı değil.");return;
     }
 
     const{data:businessData,error:businessError}=await supabaseClient
@@ -438,19 +780,21 @@ async function loadBusiness(){
       .eq("id",profile.business_id).maybeSingle();
     if(businessError)throw businessError;
     if(!businessData||!businessData.active){
-      loginMsg("İşletme hesabı aktif değil.");
-      await supabaseClient.auth.signOut();return;
+      await supabaseClient.auth.signOut();
+      loginMsg("İşletme hesabı aktif değil.");return;
     }
 
     business=businessData;
-    $("businessName").textContent=business.name;
+    document.querySelectorAll("[data-bizname]").forEach(e=>e.textContent=business.name);
+    document.querySelectorAll("[data-bizmail]").forEach(e=>e.textContent=session.user.email||business.email||"");
+    document.querySelectorAll("[data-initials]").forEach(e=>e.textContent=initials(business.name));
     ordersLoaded=false;loadError="";
     showPanel();
-    showPageByName("home");
+    go(routeFromHash()||"home",{replace:true});
     await loadOrders();
     setupRealtime();
     clearInterval(poll);
-    poll=setInterval(()=>{loadOrders(false)},20000);
+    poll=setInterval(()=>{if(!document.hidden)loadOrders(false)},20000);
   }catch(error){
     console.error("LOAD BUSINESS ERROR:",error);
     showLogin();
@@ -458,12 +802,11 @@ async function loadBusiness(){
   }
 }
 
-/* ===== SİPARİŞLER ===== */
-async function loadOrders(notify){
-  if(!business)return;
-  if(loading){again=true;return}
-  loading=true;
-  const rb=$("refreshBtn");if(rb)rb.disabled=true;
+/* ===== SİPARİŞLER =====
+   Sorgu her zaman oturumdaki işletmenin business_id'si ile sınırlanır. Asıl işletme
+   ayrımı veritabanındaki RLS kurallarıyla sağlanmalıdır (bkz. teslim notu). */
+async function fetchOrders(notify){
+  const rb=$("topRefresh");rb.disabled=true;rb.classList.add("spinning");
   try{
     const result=await supabaseClient.from("orders").select(`
       id,service,customer_name,phone,block,apartment,service_date,service_time,details,note,status,created_at,
@@ -472,27 +815,40 @@ async function loadOrders(notify){
       sites(name,slug)
     `).eq("business_id",business.id).order("created_at",{ascending:false});
 
+    let list;
     if(result.error){
       console.error(result.error);
       const fallback=await supabaseClient.from("orders").select("*")
         .eq("business_id",business.id).order("created_at",{ascending:false});
       if(fallback.error){
         loadError=fallback.error.message||"Bilinmeyen hata";
-        if(ordersLoaded)toast("Siparişler yüklenemedi: "+loadError,"error");
-        renderAll();return;
+        if(ordersLoaded||notify)toast("Siparişler yüklenemedi: "+loadError,"error");
+        renderAll();return false;
       }
-      orders=fallback.data||[];
-    }else{
-      orders=result.data||[];
-    }
-    loadError="";ordersLoaded=true;
+      list=fallback.data||[];
+    }else list=result.data||[];
+    /* Savunma amaçlı: başka işletmeye ait satır gelirse gösterilmez */
+    orders=list.filter(o=>String(o.business_id)===String(business.id));
+    if(orders.length!==list.length)console.warn("Başka işletmeye ait sipariş satırları döndü; RLS kurallarını kontrol edin.");
+    loadError="";ordersLoaded=true;lastSync=new Date();
     renderAll();
     if(notify)toast("Siparişler güncellendi");
+    return true;
+  }catch(e){
+    loadError=e.message||"Bağlantı hatası";
+    if(ordersLoaded||notify)toast("Siparişler yüklenemedi: "+loadError,"error");
+    renderAll();return false;
   }finally{
-    loading=false;
-    if(rb)rb.disabled=false;
-    if(again){again=false;loadOrders(false)}
+    rb.disabled=false;rb.classList.remove("spinning");
   }
+}
+/* Aynı anda tek yükleme çalışır; bekleyen çağrı mevcut yükleme bitince taze veri çeker */
+async function loadOrders(notify){
+  if(!business)return false;
+  while(loadP){try{await loadP}catch{}}
+  if(!business)return false;
+  loadP=fetchOrders(notify);
+  try{return await loadP}finally{loadP=null}
 }
 function scheduleLoad(){clearTimeout(reloadTimer);reloadTimer=setTimeout(()=>loadOrders(false),400)}
 
@@ -504,292 +860,653 @@ function setupRealtime(){
     .subscribe();
 }
 
-/* ===== ROZET ===== */
-function badge(status){
-  const map={"Tamamlandı":["green","Tamamlandı"],"Reddedildi":["red","Reddedildi"],"İptal Edildi":["gray","İptal Edildi"],"Kabul Edildi":["blue","Kabul Edildi"],"Devam Ediyor":["purple","Devam Ediyor"]};
-  const m=map[status];
-  if(m)return `<span class="badge ${m[0]}">${m[1]}</span>`;
-  return `<span class="badge">● ${esc(status||"Beklemede")}</span>`;
+/* ===== YÖNLENDİRME ===== */
+function routeFromHash(){
+  const h=location.hash.replace(/^#\/?/,"");
+  if(PAGES[h])return h;
+  if(LEGACY[h]){ui.tab=LEGACY[h];return "orders"}
+  if(h.startsWith("orders/")){const t=h.split("/")[1];if(TABS.some(x=>x[0]===t))ui.tab=t;return "orders"}
+  return "";
 }
-function empty(icon,text){return `<div class="empty"><div class="empty-ic">${ic(EMOJI2IC[icon]||"box")}</div>${esc(text)}</div>`}
-function skeleton(){return `<div class="orders">${[1,2,3].map(()=>`<div class="sk"><i style="width:40%"></i><i style="width:75%"></i><i style="width:55%"></i></div>`).join("")}</div>`}
-function errorBox(){return `<div class="errbox">Siparişler yüklenemedi.<br><small>${esc(loadError)}</small><br><button class="btn soft" onclick="loadOrders(true)">Tekrar Dene</button></div>`}
+function go(page,opts={}){
+  if(LEGACY[page]){ui.tab=LEGACY[page];page="orders"}
+  if(!PAGES[page])page="home";
+  route=page;
+  const hash="#/"+(page==="orders"?"orders/"+ui.tab:page);
+  if(location.hash!==hash)history[opts.replace?"replaceState":"pushState"](null,"",hash);
+  document.querySelectorAll("[data-nav]").forEach(b=>{if(b.closest(".side-nav,.bottom"))b.toggleAttribute("aria-current",b.dataset.nav===page),b.dataset.nav===page&&b.setAttribute("aria-current","page")});
+  $("crumb").textContent=PAGES[page];
+  document.title=PAGES[page]+" · BAKSANA İşletme (TEST)";
+  closePops();
+  render();
+  if(!opts.keepScroll)window.scrollTo(0,0);
+}
+/* Eski sürümle uyumluluk */
+function showPageByName(p){go(p)}
 
-/* ===== SİPARİŞ KARTI ===== */
+/* ===== ÇİZİM ===== */
+function renderAll(){
+  const pend=orders.filter(o=>o.status==="Beklemede").length;
+  document.querySelectorAll("[data-count=pending]").forEach(b=>{b.textContent=pend;b.hidden=!pend});
+  document.querySelectorAll("[data-dot=pending]").forEach(b=>b.hidden=!pend);
+  const att=attention().length;
+  $("bellCount").textContent=att;$("bellCount").hidden=!att;
+  $("bellBtn").setAttribute("aria-label",att?`Bildirimler, ${att} işlem bekliyor`:"Bildirimler");
+  if($("bellPop").classList.contains("show"))renderBell();
+  render();
+  if(ui.openId!=null)renderDrawer();
+}
+function render(){
+  if(!business)return;
+  const v=$("view");
+  /* Arama kutusuna yazarken odak ve imleç kaybolmasın */
+  const ae=document.activeElement,aeId=ae&&v.contains(ae)?ae.id:null,sel=aeId&&ae.selectionStart!=null?[ae.selectionStart,ae.selectionEnd]:null;
+  if(route==="home")v.innerHTML=homeHTML();
+  else if(route==="orders")v.innerHTML=ordersHTML();
+  else if(route==="earnings")v.innerHTML=earningsHTML();
+  else if(route==="stats")v.innerHTML=statsHTML();
+  else if(route==="profile")v.innerHTML=profileHTML();
+  if(aeId&&$(aeId)){const el=$(aeId);el.focus();if(sel)try{el.setSelectionRange(sel[0],sel[1])}catch{}}
+}
+function syncHTML(){
+  if(loadError&&ordersLoaded)return `<span class="sync off"><i></i>Son güncelleme başarısız</span>`;
+  if(!lastSync)return `<span class="sync off"><i></i>Yükleniyor…</span>`;
+  return `<span class="sync"><i></i>Canlı · ${esc(new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(lastSync))} itibarıyla</span>`;
+}
+function badge(status){
+  const s=STATUS[status];
+  return `<span class="badge ${s?s.tone:"amber"}">${esc(status||"Beklemede")}</span>`;
+}
+function propTag(o){
+  if(CLOSED.includes(o.status))return "";
+  const ps=propState(o);
+  if(ps==="pending")return `<span class="tag amber">${ic("clock")}Müşteri yanıtı bekleniyor</span>`;
+  if(ps==="accepted")return `<span class="tag green">${ic("check")}Saat onaylandı</span>`;
+  if(ps==="declined"&&o.status==="Beklemede")return `<span class="tag red">${ic("x")}Öneri reddedildi</span>`;
+  return "";
+}
+function emptyHTML(icon,title,text,btn){
+  return `<div class="empty"><div class="empty-ic">${ic(icon)}</div><b>${esc(title)}</b>${text?`<p>${esc(text)}</p>`:""}${btn||""}</div>`;
+}
+function errorHTML(){
+  return `<div class="empty err"><div class="empty-ic">${ic("alert")}</div><b>Siparişler yüklenemedi</b><p>${esc(loadError)}</p><button class="btn btn-secondary" type="button" data-action="refresh">${ic("refresh")}Tekrar dene</button></div>`;
+}
+function skeletonRows(n){return Array.from({length:n},()=>`<div class="sk-row"><span class="sk" style="width:38%"></span><span class="sk" style="width:62%"></span></div>`).join("")}
+function dataGate(){
+  if(loadError&&!ordersLoaded)return errorHTML();
+  if(!ordersLoaded)return skeletonRows(4);
+  return null;
+}
+
+function rowHTML(o){
+  const site=o.sites?.name||"";
+  const loc=[o.block,o.apartment].filter(Boolean).join(" / ");
+  const t=effTime(o);
+  return `<button class="row ${busyIds.has(String(o.id))?"busy":""}" type="button" data-open="${esc(o.id)}" aria-label="${esc((o.service||"Hizmet")+" "+(o.order_code||""))} siparişini aç">
+    <div class="cell c-a"><b>${esc(o.service||"Hizmet")}</b><small><span class="code">${esc(o.order_code||("#"+o.id))}</span>${optionOf(o)?` · ${esc(optionOf(o))}`:""}</small>${propTag(o)?`<div class="flags">${propTag(o)}</div>`:""}</div>
+    <div class="cell c-b"><b>${esc(o.customer_name||"Müşteri")}</b><small>${esc([site,loc].filter(Boolean).join(" · ")||"-")}</small></div>
+    <div class="cell c-c"><b class="num">${esc(dayLabel(o.service_date))}${t?` · ${esc(t)}`:""}</b><small>${esc(ago(o.created_at)?"Oluşturuldu "+ago(o.created_at):"")}</small></div>
+    <div class="cell c-d">${badge(o.status)}</div>
+    <svg class="ic chev" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>`;
+}
+function listHead(){return `<div class="list-head" aria-hidden="true"><span>Hizmet</span><span>Müşteri / konum</span><span>Randevu</span><span>Durum</span><span></span></div>`}
+
+/* ===== GENEL BAKIŞ ===== */
+function attention(){
+  const b=orders.filter(o=>o.status==="Beklemede");
+  const list=[];
+  b.filter(o=>propState(o)==="accepted").forEach(o=>list.push({o,tone:"green",icon:"check-c",t:"Müşteri önerilen saati kabul etti",s:"Siparişi onaylayabilirsiniz"}));
+  b.filter(o=>propState(o)==="declined").forEach(o=>list.push({o,tone:"amber",icon:"msg",t:"Müşteri saat önerisini reddetti",s:"Kabul edin, yeni saat önerin veya reddedin"}));
+  b.filter(o=>!propState(o)).forEach(o=>list.push({o,tone:"violet",icon:"inbox",t:"Yeni sipariş onay bekliyor",s:"Kabul edin, saat önerin veya reddedin"}));
+  return list;
+}
+function todoHTML(x){
+  const o=x.o;
+  return `<button class="todo" type="button" data-open="${esc(o.id)}"><div class="todo-ic ${x.tone}">${ic(x.icon)}</div><div class="todo-t"><b>${esc(o.service||"Hizmet")} · ${esc(o.customer_name||"Müşteri")}</b><small>${esc(x.t)}</small></div><div class="todo-r num">${esc(dayLabel(o.service_date))}${effTime(o)?`<br>${esc(effTime(o))}`:""}</div></button>`;
+}
+function homeHTML(){
+  const today=TODAY();
+  const cnt=f=>orders.filter(f).length;
+  const todays=orders.filter(o=>dateOnly(o.service_date)===today&&!["Reddedildi","İptal Edildi"].includes(o.status));
+  const pend=orders.filter(o=>o.status==="Beklemede");
+  const waiting=pend.filter(o=>propState(o)==="pending");
+  const active=cnt(o=>o.status==="Kabul Edildi"||o.status==="Devam Ediyor");
+  const inProg=cnt(o=>o.status==="Devam Ediyor");
+  const done=orders.filter(o=>o.status==="Tamamlandı");
+  const doneMonth=done.filter(o=>String(o.completed_at||"").slice(0,7)===today.slice(0,7)).length;
+  const priced=done.filter(hasPrice);
+  const total=priced.reduce((s,o)=>s+Number(o.price),0);
+  const L=!ordersLoaded;
+  const v=x=>L?`<span class="sk" style="width:48px;height:22px;margin-top:2px"></span>`:x;
+  const kpi=(icon,label,val,sub,act)=>`<button class="kpi" type="button" ${act}><div class="kpi-top">${ic(icon)}${label}</div><div class="kpi-val">${v(val)}</div><div class="kpi-sub">${L?"&nbsp;":sub}</div></button>`;
+  const gate=dataGate();
+  const att=attention();
+  const greet=(()=>{const h=new Date().getHours();return h<6?"İyi geceler":h<12?"Günaydın":h<18?"İyi günler":"İyi akşamlar"})();
+  const upcoming=orders.filter(o=>(o.status==="Kabul Edildi"||o.status==="Devam Ediyor")&&dateOnly(o.service_date)>=today)
+    .sort((a,b)=>(dateOnly(a.service_date)+effTime(a)).localeCompare(dateOnly(b.service_date)+effTime(b))).slice(0,5);
+  return `
+  <div class="page-head">
+    <div><h1>${greet}, ${esc(business.name)}</h1><p>${esc(new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date()))} · ${syncHTML()}</p></div>
+    <div class="actions"><button class="btn btn-primary" type="button" data-tab="pending">${ic("inbox")}Bekleyen siparişler</button></div>
+  </div>
+  <div class="kpis ${priced.length?"k5":""}">
+    ${kpi("calendar","Bugünkü işler",todays.length,`Hizmet tarihi bugün`,`data-filter-today`)}
+    ${kpi("inbox","Bekleyen",pend.length,waiting.length?`<b>${waiting.length}</b> müşteri yanıtı bekliyor`:"Onayınızı bekliyor",`data-tab="pending"`)}
+    ${kpi("activity","Devam eden",active,`<b>${inProg}</b> iş başladı`,`data-tab="active"`)}
+    ${kpi("check-c","Tamamlanan",done.length,`Bu ay <b>${doneMonth}</b>`,`data-tab="completed"`)}
+    ${priced.length?kpi("wallet","Kazanç",money(total),`${priced.length} siparişin fiyatından`,`data-nav="earnings"`):""}
+  </div>
+  <div class="grid-2">
+    <section class="card">
+      <div class="card-head"><div><h2>Öncelikli işlemler</h2><p>Sizden yanıt bekleyen siparişler</p></div>${att.length?`<span class="badge amber">${att.length}</span>`:""}</div>
+      ${gate||(att.length?att.slice(0,6).map(todoHTML).join("")+(att.length>6?`<div class="card-foot"><button class="btn btn-ghost" type="button" data-tab="pending">Tümünü gör (${att.length})</button></div>`:""):`<div class="ok-line">${ic("check-c")}Sizden yanıt bekleyen sipariş yok.</div>`)}
+      ${!gate&&waiting.length?`<div class="card-foot">${ic("clock").replace('class="ic"','class="ic" style="width:14px;height:14px;vertical-align:-2px"')} ${waiting.length} siparişte müşterinin saat önerinize yanıtı bekleniyor; yanıt gelene kadar bu siparişler kabul edilemez.</div>`:""}
+    </section>
+    <section class="card">
+      <div class="card-head"><div><h2>Yaklaşan işler</h2><p>Kabul edilmiş ve devam eden</p></div></div>
+      ${gate||(upcoming.length?upcoming.map(o=>`<button class="todo" type="button" data-open="${esc(o.id)}"><div class="todo-ic ${o.status==="Devam Ediyor"?"violet":"blue"}">${ic(o.status==="Devam Ediyor"?"activity":"calendar")}</div><div class="todo-t"><b>${esc(o.service||"Hizmet")}</b><small>${esc(o.customer_name||"Müşteri")}${o.sites?.name?" · "+esc(o.sites.name):""}</small></div><div class="todo-r num">${esc(dayLabel(o.service_date))}${effTime(o)?`<br>${esc(effTime(o))}`:""}</div></button>`).join(""):`<div class="ok-line" style="color:var(--mut)">${ic("calendar").replace('class="ic"','class="ic" style="color:var(--mut-2)"')}Planlanmış iş yok.</div>`)}
+    </section>
+  </div>
+  <section class="card" style="margin-top:16px">
+    <div class="card-head"><div><h2>Son siparişler</h2><p>En son oluşturulan 6 sipariş</p></div><button class="btn btn-ghost" type="button" data-tab="all">Tümünü gör${ic("chev-r")}</button></div>
+    ${gate||(orders.length?listHead()+orders.slice(0,6).map(rowHTML).join(""):emptyHTML("inbox","Henüz sipariş yok","Sitelerden gelen siparişler burada görünecek."))}
+  </section>`;
+}
+
+/* ===== SİPARİŞLER ===== */
+function matchDate(o){
+  const d=dateOnly(o.service_date),t=TODAY();
+  switch(ui.date){
+    case "today":return d===t;
+    case "tomorrow":return d===addDays(t,1);
+    case "week":return d>=t&&d<=addDays(t,6);
+    case "past":return !!d&&d<t;
+    case "day":return !ui.day||d===ui.day;
+    default:return true;
+  }
+}
+function matchText(o){
+  const q=ui.q.trim().toLocaleLowerCase("tr-TR");
+  if(!q)return true;
+  const qd=q.replace(/\D/g,"");
+  return [o.service,o.order_code,o.customer_name,o.block,o.apartment,o.sites?.name,optionOf(o)].some(v=>String(v||"").toLocaleLowerCase("tr-TR").includes(q))
+    ||(qd.length>=3&&phoneDigits(o.phone).replace(/\D/g,"").includes(qd));
+}
+function baseFiltered(){return orders.filter(o=>matchDate(o)&&matchText(o)&&(!ui.service||o.service===ui.service))}
+function sortList(list){
+  if(ui.sort==="service")return [...list].sort((a,b)=>(dateOnly(a.service_date)+effTime(a)).localeCompare(dateOnly(b.service_date)+effTime(b)));
+  return list;
+}
+function ordersHTML(){
+  const base=baseFiltered();
+  const tab=TABS.find(t=>t[0]===ui.tab)||TABS[0];
+  const list=sortList(base.filter(tab[2]));
+  const services=[...new Set(orders.map(o=>o.service).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"tr"));
+  const filtered=ui.q||ui.date!=="all"||ui.service;
+  const gate=dataGate();
+  const opt=(v,l,cur)=>`<option value="${esc(v)}" ${cur===v?"selected":""}>${esc(l)}</option>`;
+  return `
+  <div class="page-head">
+    <div><h1>Siparişler</h1><p>Sitelerden gelen tüm siparişleriniz · ${syncHTML()}</p></div>
+  </div>
+  <section class="card">
+    <div class="tabs" role="tablist" aria-label="Sipariş durumu">
+      ${TABS.map(t=>`<button class="tab" type="button" role="tab" aria-selected="${t[0]===ui.tab}" data-tab="${t[0]}">${t[1]}<span class="cnt">${ordersLoaded?base.filter(t[2]).length:"–"}</span></button>`).join("")}
+    </div>
+    <div class="toolbar">
+      <label class="search">${ic("search")}<span class="sr">Siparişlerde ara</span><input id="ordSearch" type="search" placeholder="Kod, müşteri, site veya telefon" value="${esc(ui.q)}" autocomplete="off"></label>
+      <select class="select" id="ordDate" aria-label="Hizmet tarihi">
+        ${opt("all","Tüm tarihler",ui.date)}${opt("today","Bugün",ui.date)}${opt("tomorrow","Yarın",ui.date)}${opt("week","Önümüzdeki 7 gün",ui.date)}${opt("past","Geçmiş tarihler",ui.date)}${opt("day","Belirli bir gün…",ui.date)}
+      </select>
+      ${ui.date==="day"?`<input class="input" id="ordDay" type="date" aria-label="Gün seçin" value="${esc(ui.day)}">`:""}
+      ${services.length>1?`<select class="select" id="ordService" aria-label="Hizmet türü">${opt("","Tüm hizmetler",ui.service)}${services.map(s=>opt(s,s,ui.service)).join("")}</select>`:""}
+      <select class="select" id="ordSort" aria-label="Sıralama">${opt("created","En yeni sipariş",ui.sort)}${opt("service","Randevu tarihine göre",ui.sort)}</select>
+      ${filtered?`<button class="btn btn-ghost" type="button" data-action="clear-filters">${ic("x")}Temizle</button>`:""}
+    </div>
+    ${gate||(list.length?listHead()+list.map(rowHTML).join("")+`<div class="list-foot"><span>${list.length} sipariş</span>${ui.tab==="cancelled"?"<span>Müşteri tarafından iptal edilenler</span>":""}</div>`
+      :filtered?emptyHTML("search","Sonuç bulunamadı","Arama veya filtrelere uyan sipariş yok.",`<button class="btn btn-secondary" type="button" data-action="clear-filters">Filtreleri temizle</button>`)
+      :emptyHTML(ui.tab==="pending"?"check-c":"inbox",{pending:"Bekleyen sipariş yok",active:"Devam eden iş yok",completed:"Henüz tamamlanan iş yok",rejected:"Reddedilen sipariş yok",cancelled:"İptal edilen sipariş yok",all:"Henüz sipariş yok"}[ui.tab],ui.tab==="pending"?"Yeni siparişler geldiğinde burada görünecek.":""))}
+  </section>`;
+}
+
+/* ===== SİPARİŞ DETAYI ===== */
+const findOrder=id=>orders.find(x=>String(x.id)===String(id));
+function openOrder(id){
+  ui.openId=String(id);
+  renderDrawer();
+  openLayer($("drawer"),$("drawer").querySelector("[data-close]"));
+}
 function proposalHTML(o){
   const ps=propState(o);
   if(!ps)return "";
   const req=hhmm(o.service_time)||"-",prop=hhmm(o.proposed_service_time);
-  const when=o.time_proposed_at?` · ${esc(dateTimeTR(o.time_proposed_at))}`:"";
-  const times=`<div class="prop-times"><div><small>İstenen saat</small><strong>${esc(req)}</strong></div><span>→</span><div><small>Önerilen saat</small><strong>${esc(prop)}</strong></div></div>`;
-  if(ps==="pending")return `<div class="prop pending"><div class="prop-head">${ic("clock")} <b>Müşteri yanıtı bekleniyor${when}</b></div>${times}</div>`;
-  if(ps==="accepted")return `<div class="prop accepted"><div class="prop-head">${ic("check")} <b>Müşteri önerilen saati kabul etti</b></div>${times}</div>`;
-  return `<div class="prop declined"><div class="prop-head">${ic("x")} <b>Müşteri saat önerisini reddetti</b></div>${times}<div style="margin-top:8px">Müşteri ilk istediği saati tercih ediyor. Yeniden saat önerebilir veya siparişi kabul edebilirsiniz.</div></div>`;
+  const times=`<div class="prop-times"><div><small>Müşterinin istediği</small><strong>${esc(req)}</strong></div><span class="arrow">${ic("chev-r")}</span><div><small>Önerdiğiniz</small><strong>${esc(prop)}</strong></div></div>`;
+  const when=o.time_proposed_at?`<p class="muted">Öneri gönderildi: ${esc(stamp(o.time_proposed_at))}</p>`:"";
+  const closed=CLOSED.includes(o.status);
+  if(ps==="pending")return `<div class="prop pending"><div class="prop-h">${ic("clock")}${closed?"Saat önerisi yanıtlanmadı":"Müşteri yanıtı bekleniyor"}</div>${times}${closed?"":`<p class="muted">Müşteri öneriyi kabul edene ya da reddedene kadar sipariş kabul edilemez. Gerekirse farklı bir saat önerebilir veya siparişi reddedebilirsiniz.</p>`}${when}</div>`;
+  if(ps==="accepted")return `<div class="prop accepted"><div class="prop-h">${ic("check-c")}Müşteri önerilen saati kabul etti</div>${times}<p class="muted">Hizmet saati: <b>${esc(prop)}</b></p>${when}</div>`;
+  return `<div class="prop declined"><div class="prop-h">${ic("x-c")}Müşteri saat önerisini reddetti</div>${times}${o.status==="Beklemede"?`<p class="muted">Müşteri ilk istediği saati (${esc(req)}) tercih ediyor. Bu saatte kabul edebilir, yeniden saat önerebilir veya siparişi reddedebilirsiniz.</p>`:""}${when}</div>`;
 }
-
-function orderHTML(o){
-  const ps=propState(o);
-  let option="";
-  try{
-    option=o.details?.option||(typeof o.details==="string"?JSON.parse(o.details||"{}").option:"")||"";
-  }catch(e){option=""}
-  let actions="";
+function timelineHTML(o){
+  const ev=[];
+  if(o.created_at)ev.push(["","Sipariş oluşturuldu",o.created_at]);
+  if(o.time_proposed_at)ev.push(["c-amber",`Saat önerildi (${hhmm(o.proposed_service_time)||"-"})`,o.time_proposed_at]);
+  if(o.accepted_at)ev.push(["c-violet","Sipariş kabul edildi",o.accepted_at]);
+  if(o.rejected_at)ev.push(["c-red","Sipariş reddedildi",o.rejected_at,o.rejection_reason]);
+  if(o.completed_at)ev.push(["c-green","İş tamamlandı",o.completed_at]);
+  if(o.cancelled_at)ev.push(["c-red","Müşteri siparişi iptal etti",o.cancelled_at,o.cancellation_reason]);
+  ev.sort((a,b)=>new Date(a[2])-new Date(b[2]));
+  if(o.status==="Devam Ediyor")ev.push(["c-violet","İş devam ediyor",null]);
+  return `<ol class="timeline">${ev.map(e=>`<li class="${e[0]}"><b>${esc(e[1])}</b><small>${e[2]?esc(stamp(e[2])):"Şu an"}${e[3]?" · "+esc(e[3]):""}</small></li>`).join("")}</ol>`;
+}
+function actionsHTML(o){
+  const busy=busyIds.has(String(o.id));
+  const dis=busy?"disabled":"";
   if(o.status==="Beklemede"){
+    const ps=propState(o);
     const wait=ps==="pending";
-    const label=ps==="pending"?"Yeni Saat Öner":ps==="declined"?"Yeniden Saat Öner":"Saat Öner";
-    actions=`<div class="actions">
-      <button class="btn primary" ${wait?'disabled title="Müşteri yanıtı bekleniyor"':""} onclick="acceptOrder(${o.id})">Kabul Et</button>
-      ${ps==="accepted"?"":`<button class="btn soft" onclick="openProposal(${o.id})">${label}</button>`}
-      <button class="btn ghost" onclick="openReject(${o.id})">Reddet</button>
-    </div>${wait?'<div class="hint">Müşteri öneriye yanıt verene kadar sipariş kabul edilemez.</div>':""}`;
+    const label=ps==="pending"?"Farklı saat öner":ps==="declined"?"Yeniden saat öner":"Saat öner";
+    return `${wait?`<div class="why">${ic("info")}Müşteri saat önerinize yanıt verene kadar sipariş kabul edilemez.</div>`:""}
+      <div class="acts">
+        <button class="btn btn-danger-soft" type="button" data-act="reject" ${dis}>Reddet</button>
+        ${ps==="accepted"?"":`<button class="btn btn-secondary" type="button" data-act="propose" ${dis}>${ic("clock")}${label}</button>`}
+        <button class="btn btn-primary" type="button" data-act="accept" ${wait||busy?"disabled":""} ${wait?'aria-describedby="whyAccept"':""}>${ic("check")}Kabul et</button>
+      </div>`;
   }
-  if(o.status==="Kabul Edildi")actions=`<div class="actions"><button class="btn start" onclick="startOrder(${o.id})">İşi Başlat ▶</button></div>`;
-  if(o.status==="Devam Ediyor")actions=`<div class="actions"><button class="btn done" onclick="completeOrder(${o.id})">İşi Tamamla ✓</button></div>`;
-  const closed=["Tamamlandı","Reddedildi","İptal Edildi"].includes(o.status);
-  const tel=phoneDigits(o.phone);
-  return `
-  <div class="order st-${SKEY[o.status]||"wait"} ${closed?"closed":""} ${busyIds.has(o.id)?"busy":""}" data-id="${esc(o.id)}">
-    <div class="order-top">
-      <div><div class="order-title">${esc(o.service||"Hizmet")}</div><div class="order-code">${esc(o.order_code||("#"+o.id))}</div></div>
-      ${badge(o.status)}
-    </div>
-    <div class="kvs">
-      <div class="kv"><span>${ic("building")} Site</span><b>${esc(o.sites?.name||"Site bilgisi")}</b></div>
-      <div class="kv"><span>${ic("pin")} Konum</span><b>${esc(o.block||"-")} / ${esc(o.apartment||"-")}</b></div>
-      <div class="kv"><span>${ic("person")} Müşteri</span><b>${esc(o.customer_name||"Müşteri")}</b></div>
-      <div class="kv"><span>${ic("phone")} Telefon</span><b>${tel?`<a href="tel:${esc(tel)}">${esc(o.phone)}</a>`:"-"}</b></div>
-      <div class="kv"><span>${ic("calendar")} Tarih</span><b>${esc(dateTR(o.service_date))}</b></div>
-      <div class="kv hi"><span>${ic("clock")} Müşterinin istediği saat</span><b>${esc(hhmm(o.service_time)||"-")}</b></div>
-    </div>
-    <div class="chips">
-      ${option?`<span class="chip">${esc(option)}</span>`:""}
-      <span class="chip price">${o.price!=null?money(o.price):"Fiyat belirtilmedi"}</span>
-    </div>
-    ${proposalHTML(o)}
-    ${o.note?`<div class="order-note"><b>Müşteri notu:</b> ${esc(o.note)}</div>`:""}
-    ${o.rejection_reason?`<div class="order-note"><b>Red nedeni:</b> ${esc(o.rejection_reason)}</div>`:""}
-    ${o.status==="İptal Edildi"?`<div class="order-cancelled"><b>Müşteri siparişi iptal etti.</b>${o.cancellation_reason?`<br>İptal nedeni: ${esc(o.cancellation_reason)}`:""}${o.cancelled_at?`<br>İptal zamanı: ${esc(dateTR(o.cancelled_at))}`:""}</div>`:""}
-    ${actions}
-  </div>`;
+  if(o.status==="Kabul Edildi")return `<div class="acts"><button class="btn btn-primary" type="button" data-act="start" ${dis}>${ic("play")}İşi başlat</button></div>`;
+  if(o.status==="Devam Ediyor")return `<div class="acts"><button class="btn btn-success" type="button" data-act="complete" ${dis}>${ic("check-c")}İşi tamamla</button></div>`;
+  return `<div class="closed">${o.status==="Tamamlandı"?"Bu iş tamamlandı.":o.status==="Reddedildi"?"Bu sipariş reddedildi.":o.status==="İptal Edildi"?"Bu sipariş müşteri tarafından iptal edildi.":"Bu sipariş için işlem yok."}</div>`;
 }
-function listHTML(list,icon,text){
-  if(loadError&&!ordersLoaded)return errorBox();
-  if(!ordersLoaded)return skeleton();
-  return `<div class="orders">${list.length?list.map(orderHTML).join(""):empty(icon,text)}</div>`;
-}
-
-/* ===== ANA SAYFA ===== */
-function renderAll(){
-  const pend=orders.filter(o=>o.status==="Beklemede").length;
-  [["navBadge"],["navBadgeM"]].forEach(([id])=>{const b=$(id);if(b){b.textContent=pend;b.style.display=pend?"":"none"}});
-  renderHome();
-  if(currentPage!=="home")renderPage(currentPage);
-}
-
-function renderHome(){
-  const completed=orders.filter(o=>o.status==="Tamamlandı");
-  const total=completed.reduce((s,o)=>s+Number(o.price||0),0);
-  const cnt=f=>orders.filter(f).length;
-  const b=orders.filter(o=>o.status==="Beklemede");
-  const waiting=b.filter(o=>propState(o)==="pending").length;
-  const responded=b.filter(o=>["accepted","declined"].includes(propState(o))).length;
-  const fresh=b.length-waiting-responded;
-  const row=(cls,ico,title,sub,n)=>`<button class="todo-row" onclick="showPageByName('orders')"><div class="todo-ico ${cls}">${ic(ico)}</div><main><strong>${title}</strong><small>${sub}</small></main><span class="todo-n">${n}</span></button>`;
-  const rows=[
-    responded?row("t-resp","msg","Müşteri saat önerisine yanıt verdi","Karar vermeniz bekleniyor",responded):"",
-    fresh?row("t-new","inbox","Onay bekleyen siparişler","Kabul et, saat öner ya da reddet",fresh):"",
-    waiting?row("t-wait","clock","Müşteri yanıtı bekleniyor","Bu siparişler yanıt gelene kadar kabul edilemez",waiting):""
-  ].join("");
-  let pendingBody;
-  if(loadError&&!ordersLoaded)pendingBody=errorBox();
-  else if(!ordersLoaded)pendingBody=`<div class="sk"><i style="width:50%"></i><i style="width:70%"></i></div>`;
-  else pendingBody=rows?`<div class="todo">${rows}</div>`:`<div class="ok-note">${ic("check")} Bekleyen işlem yok</div>`;
-  const today=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
-  const heroText=!ordersLoaded?"Siparişler yükleniyor...":b.length?`${b.length} sipariş işleminizi bekliyor`:"Bekleyen sipariş yok, her şey güncel";
-  $("homePage").innerHTML=`
-    <div class="hero">
-      <div><small>${esc(today)}</small><h2>${business?esc(business.name):"İşletme"}</h2><p>${heroText}</p></div>
-      <button class="hero-btn" onclick="showPageByName('orders')">Siparişlere git →</button>
-    </div>
-    <div class="stats">
-      ${statCard("📦",cnt(o=>o.status==="Beklemede"),"Bekleyen","wait")}
-      ${statCard("🔄",cnt(o=>["Kabul Edildi","Devam Ediyor"].includes(o.status)),"Devam Eden","prog")}
-      ${statCard("✅",completed.length,"Tamamlanan","done")}
-      ${statCard("🚫",cnt(o=>o.status==="İptal Edildi"),"İptal Edilen","canc")}
-      ${statCard("💰",money(total),"Toplam Kazanç","earn")}
-    </div>
-    <div class="content"><div class="content-head"><h2>Bekleyen İşlemler</h2></div>${pendingBody}</div>
-    <div class="content"><div class="content-head"><h2>Son Siparişler</h2><button class="btn soft" onclick="showPageByName('orders')">Tümü →</button></div>
-      ${listHTML(orders.slice(0,5),"📦","Henüz size atanmış sipariş yok.")}</div>`;
-}
-
-/* ===== SAYFA GEÇİŞİ ===== */
-function showPage(page,button){showPageByName(page)}
-function showPageByName(page){
-  currentPage=page;
-  document.querySelectorAll(".menu button[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
-  document.querySelectorAll(".bottom button[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
-  $("homePage").style.display=page==="home"?"block":"none";
-  $("dynamicPage").style.display=page==="home"?"none":"block";
-  $("pageTitle").textContent=titles[page]?.[0]||"BAKSANA";
-  $("pageSubtitle").textContent=titles[page]?.[1]||"İşletme yönetimi";
-  window.scrollTo(0,0);
-  if(page==="home")renderHome();else renderPage(page);
-}
-
-function pageCard(title,inner,extra){
-  return `<div class="content">${extra||""}<div class="content-head"><h2>${title}</h2></div>${inner}</div>`;
-}
-function filteredOrders(){
-  const t=fq.trim().toLowerCase();
-  return orders.filter(o=>(!fs||o.status===fs)&&(!t||[o.service,o.order_code,o.customer_name,o.phone,o.block,o.apartment,o.sites?.name].some(v=>String(v||"").toLowerCase().includes(t))));
-}
-function filteredHTML(){return listHTML(filteredOrders(),"📦",(fq||fs)?"Aramanıza uyan sipariş yok.":"Henüz sipariş bulunmuyor.")}
-function onOrderFilter(){fq=$("ordSearch").value;fs=$("ordStatus").value;$("ordersListBox").innerHTML=filteredHTML()}
-function renderPage(page){
-  const box=$("dynamicContent");
-  const prev=box.dataset.page;box.dataset.page=page;
-  const by=s=>orders.filter(o=>o.status===s);
-  if(page==="orders"){
-    if(prev==="orders"&&$("ordersListBox")){$("ordersListBox").innerHTML=filteredHTML();return}
-    const opts=["","Beklemede","Kabul Edildi","Devam Ediyor","Tamamlandı","Reddedildi","İptal Edildi"].map(v=>`<option value="${v}" ${fs===v?"selected":""}>${v||"Tüm durumlar"}</option>`).join("");
-    box.innerHTML=`<div class="content"><div class="content-head"><h2>Tüm Siparişler</h2></div>
-      <div class="toolbar"><label class="search">${ic("search")}<input id="ordSearch" type="search" placeholder="Kod, müşteri, hizmet veya telefon ara" value="${esc(fq)}" oninput="onOrderFilter()"></label>
-      <select id="ordStatus" onchange="onOrderFilter()" aria-label="Durum filtresi">${opts}</select></div>
-      <div id="ordersListBox">${filteredHTML()}</div></div>`;
+function renderDrawer(){
+  const d=$("drawer");
+  const o=findOrder(ui.openId);
+  if(!o){
+    d.innerHTML=`<div class="dr-head"><div class="t"><h2 id="drTitle">Sipariş bulunamadı</h2></div><button class="icon-btn" type="button" data-close aria-label="Kapat">${ic("x")}</button></div><div class="dr-body">${emptyHTML("alert","Sipariş artık listede değil","Sipariş silinmiş ya da erişiminiz kaldırılmış olabilir.")}</div>`;
     return;
   }
-  if(page==="ongoing"){box.innerHTML=pageCard("Devam Eden İşler",listHTML(orders.filter(o=>["Kabul Edildi","Devam Ediyor"].includes(o.status)),"🔄","Devam eden iş bulunmuyor."));return}
-  if(page==="completed"){box.innerHTML=pageCard("Tamamlanan İşler",listHTML(by("Tamamlandı"),"✅","Henüz tamamlanan iş yok."));return}
-  if(page==="rejected"){box.innerHTML=pageCard("Reddedilen İşler",listHTML(by("Reddedildi"),"❌","Reddedilen sipariş yok."));return}
-  if(page==="cancelled"){box.innerHTML=pageCard("İptal Edilen Siparişler",listHTML(by("İptal Edildi"),"🚫","İptal edilen sipariş yok."),`<div class="cancelled-page-note">Müşteri tarafından iptal edilen siparişler burada görünür.</div>`);return}
+  const scroll=d.querySelector(".dr-body")?.scrollTop||0;
+  const tel=phoneDigits(o.phone);
+  const ps=propState(o);
+  const opt=optionOf(o);
+  d.innerHTML=`
+    <div class="dr-head">
+      <div class="t"><h2 id="drTitle">${esc(o.service||"Hizmet")}</h2>
+        <div class="meta"><span class="code">${esc(o.order_code||("#"+o.id))}</span>${badge(o.status)}${propTag(o)}</div></div>
+      <button class="icon-btn" type="button" data-close aria-label="Detayı kapat">${ic("x")}</button>
+    </div>
+    <div class="dr-body">
+      ${o.status==="İptal Edildi"?`<div class="alert alert-error" style="margin-top:16px">${ic("ban")}<div><b>Müşteri siparişi iptal etti.</b>${o.cancellation_reason?`<br>Neden: ${esc(o.cancellation_reason)}`:""}${o.cancelled_at?`<br>${esc(stamp(o.cancelled_at))}`:""}</div></div>`:""}
+      ${o.status==="Reddedildi"&&o.rejection_reason?`<div class="alert alert-info" style="margin-top:16px">${ic("x-c")}<div><b>Red nedeni:</b> ${esc(o.rejection_reason)}</div></div>`:""}
+      ${proposalHTML(o)}
+      <div class="dr-sec"><h3>Randevu</h3><dl class="kv">
+        <dt>Tarih</dt><dd>${esc(dateTR(o.service_date))} <span style="color:var(--mut);font-weight:400">· ${esc(dayLabel(o.service_date))}</span></dd>
+        <dt>${ps==="accepted"?"Kesinleşen saat":"İstenen saat"}</dt><dd class="num">${esc(effTime(o)||"-")}</dd>
+        ${ps==="accepted"?`<dt>İlk istenen saat</dt><dd class="num">${esc(hhmm(o.service_time)||"-")}</dd>`:""}
+        ${ps==="pending"&&!CLOSED.includes(o.status)?`<dt>Önerilen saat</dt><dd class="num">${esc(hhmm(o.proposed_service_time))} <span class="tag amber" style="margin-left:4px">Yanıt bekleniyor</span></dd>`:""}
+      </dl></div>
+      <div class="dr-sec"><h3>Müşteri</h3><dl class="kv">
+        <dt>Ad soyad</dt><dd>${esc(o.customer_name||"-")}</dd>
+        <dt>Telefon</dt><dd>${tel?`<a href="tel:${esc(tel)}">${esc(o.phone)}</a>`:"-"}</dd>
+        <dt>Site</dt><dd>${esc(o.sites?.name||"-")}</dd>
+        <dt>Blok / Daire</dt><dd>${esc(o.block||"-")} / ${esc(o.apartment||"-")}</dd>
+      </dl></div>
+      <div class="dr-sec"><h3>Hizmet</h3><dl class="kv">
+        <dt>Hizmet</dt><dd>${esc(o.service||"-")}</dd>
+        ${opt?`<dt>Seçenek</dt><dd>${esc(opt)}</dd>`:""}
+        <dt>Fiyat</dt><dd class="num">${hasPrice(o)?esc(money(o.price)):'<span style="color:var(--mut);font-weight:400">Belirtilmedi</span>'}</dd>
+      </dl>
+      ${o.note?`<div style="margin-top:8px"><div class="label" style="color:var(--mut);font-weight:500">Müşteri notu</div><div class="textbox">${esc(o.note)}</div></div>`:""}
+      </div>
+      <div class="dr-sec"><h3>Geçmiş</h3>${timelineHTML(o)}</div>
+    </div>
+    <div class="dr-foot" id="whyAccept">${actionsHTML(o)}</div>`;
+  const b=d.querySelector(".dr-body");if(b)b.scrollTop=scroll;
+}
 
-  const stat=(icon,n,label)=>statCard(icon,n,label,icon==="💰"?"earn":icon==="✅"?"done":"");
-  if(page==="earnings"){
-    const list=by("Tamamlandı"),total=list.reduce((s,o)=>s+Number(o.price||0),0);
-    box.innerHTML=pageCard("Kazançlar",`<div class="stats">${stat("💰",money(total),"Tamamlanan siparişlerin toplamı")}${stat("✅",list.length,"Tamamlanan sipariş")}</div>`);return;
-  }
-  if(page==="stats"){
-    const total=orders.length,completed=by("Tamamlandı").length,rejected=by("Reddedildi").length;
-    const accepted=orders.filter(o=>["Kabul Edildi","Devam Ediyor","Tamamlandı"].includes(o.status)).length;
-    const rate=total?Math.round(accepted/total*100):0;
-    box.innerHTML=pageCard("İstatistikler",`<div class="stats">${stat("📦",total,"Toplam Sipariş")}${stat("✅",completed,"Tamamlanan")}${stat("❌",rejected,"Reddedilen")}${stat("📈","%"+rate,"Kabul Oranı")}</div>`);return;
-  }
-  if(page==="profile"&&business){
-    const r=(l,v,st)=>`<div class="profile-row"><span>${l}</span><b ${st?`style="${st}"`:""}>${v}</b></div>`;
-    box.innerHTML=`<div class="content profile"><div class="content-head"><h2>İşletme Profili</h2></div>
-      ${r("İşletme",esc(business.name))}
-      ${r("E-posta",esc(session?.user?.email||business.email||"-"))}
-      ${r("Telefon",esc(business.phone||"-"))}
-      ${r("Kategori",esc(business.category||"-"))}
-      ${r("Durum",business.active?"Aktif":"Pasif","color:#1f8a58")}
-      ${r("Hesap oluşturulma",esc(dateTR(business.created_at)))}
-    </div>`;
-  }
+/* ===== KAZANÇLAR ===== */
+function monthKey(o){return String(o.completed_at||o.service_date||"").slice(0,7)}
+function monthName(k){const[y,m]=k.split("-").map(Number);return new Intl.DateTimeFormat("tr-TR",{month:"long",year:"numeric"}).format(new Date(y,m-1,1))}
+function earningsHTML(){
+  const gate=dataGate();
+  const head=`<div class="page-head"><div><h1>Kazançlar</h1><p>Tamamlanan siparişlerin kayıtlı fiyatlarından hesaplanır</p></div></div>`;
+  if(gate)return head+`<section class="card">${gate}</section>`;
+  const done=orders.filter(o=>o.status==="Tamamlandı");
+  const priced=done.filter(hasPrice),unpriced=done.length-priced.length;
+  if(!done.length)return head+`<section class="card">${emptyHTML("wallet","Henüz kazanç verisi yok","Tamamlanan siparişleriniz olduğunda kazanç özeti burada görünecek. Örnek veya tahmini tutar gösterilmez.")}</section>`;
+  const sum=l=>l.reduce((s,o)=>s+Number(o.price),0);
+  const total=sum(priced);
+  const thisM=TODAY().slice(0,7);
+  const pm=new Date();pm.setDate(1);pm.setMonth(pm.getMonth()-1);const prevM=ymd(pm).slice(0,7);
+  const mThis=priced.filter(o=>monthKey(o)===thisM),mPrev=priced.filter(o=>monthKey(o)===prevM);
+  const months={};priced.forEach(o=>{const k=monthKey(o);if(!k)return;(months[k]=months[k]||[]).push(o)});
+  const mKeys=Object.keys(months).sort().reverse().slice(0,12);
+  const bySvc={};priced.forEach(o=>{const k=o.service||"Diğer";(bySvc[k]=bySvc[k]||[]).push(o)});
+  const svcKeys=Object.keys(bySvc).sort((a,b)=>sum(bySvc[b])-sum(bySvc[a]));
+  const recent=[...priced].sort((a,b)=>String(b.completed_at||"").localeCompare(String(a.completed_at||""))).slice(0,8);
+  return head+`
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-top">${ic("wallet")}Toplam</div><div class="kpi-val">${money(total)}</div><div class="kpi-sub">${priced.length} tamamlanan sipariş</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("calendar")}Bu ay</div><div class="kpi-val">${money(sum(mThis))}</div><div class="kpi-sub">${mThis.length} sipariş</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("calendar")}Geçen ay</div><div class="kpi-val">${money(sum(mPrev))}</div><div class="kpi-sub">${mPrev.length} sipariş</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("chart")}Ortalama sipariş</div><div class="kpi-val">${priced.length?money(total/priced.length):"-"}</div><div class="kpi-sub">Fiyatı kayıtlı siparişler</div></div>
+  </div>
+  <div class="note" style="margin-top:16px">${ic("info")}<div>Tutarlar <b>orders.price</b> alanındaki sipariş fiyatlarıdır. Sistemde ödeme, tahsilat veya komisyon kaydı bulunmadığından gerçek tahsilatı yansıtmayabilir.${unpriced?` <b>${unpriced}</b> tamamlanan siparişte fiyat kayıtlı değil ve toplama dahil edilmedi.`:""} Aylar, tamamlanma tarihine göre gruplanır.</div></div>
+  <div class="grid-2">
+    <section class="card"><div class="card-head"><h2>Aylık özet</h2></div>
+      ${mKeys.length?`<table class="tbl"><thead><tr><th>Ay</th><th class="r">Sipariş</th><th class="r">Tutar</th></tr></thead><tbody>${mKeys.map(k=>`<tr><td>${esc(monthName(k))}</td><td class="r">${months[k].length}</td><td class="r">${money(sum(months[k]))}</td></tr>`).join("")}</tbody></table>`:emptyHTML("calendar","Veri yok","")}
+    </section>
+    <section class="card"><div class="card-head"><h2>Hizmete göre</h2></div>
+      <table class="tbl"><thead><tr><th>Hizmet</th><th class="r">Sipariş</th><th class="r">Tutar</th></tr></thead><tbody>${svcKeys.map(k=>`<tr><td>${esc(k)}</td><td class="r">${bySvc[k].length}</td><td class="r">${money(sum(bySvc[k]))}</td></tr>`).join("")}</tbody></table>
+    </section>
+  </div>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Son tamamlanan işler</h2></div>
+    ${listHead()}${recent.map(rowHTML).join("")}
+  </section>`;
+}
+
+/* ===== İSTATİSTİKLER ===== */
+function statsHTML(){
+  const gate=dataGate();
+  const head=`<div class="page-head"><div><h1>İstatistikler</h1><p>Tüm siparişleriniz üzerinden hesaplanan performans göstergeleri</p></div></div>`;
+  if(gate)return head+`<section class="card">${gate}</section>`;
+  if(!orders.length)return head+`<section class="card">${emptyHTML("chart","Henüz istatistik yok","İlk siparişleriniz geldiğinde performans göstergeleri burada görünecek.")}</section>`;
+  const by=s=>orders.filter(o=>o.status===s).length;
+  const total=orders.length,acc=orders.filter(o=>["Kabul Edildi","Devam Ediyor","Tamamlandı"].includes(o.status)).length,rej=by("Reddedildi"),canc=by("İptal Edildi"),done=by("Tamamlandı");
+  const pct=(a,b)=>b?"%"+Math.round(a/b*100):"-";
+  /* Yanıt süresi: sipariş oluşturulmasından kabul/red anına kadar */
+  const resp=orders.map(o=>{const t=o.accepted_at||o.rejected_at;if(!t||!o.created_at)return null;const d=(new Date(t)-new Date(o.created_at))/60000;return d>=0&&isFinite(d)?d:null}).filter(x=>x!=null).sort((a,b)=>a-b);
+  const med=resp.length?resp[Math.floor(resp.length/2)]:null;
+  const dur=m=>m==null?"-":m<60?Math.round(m)+" dk":m<1440?(m/60).toFixed(1).replace(".",",")+" sa":(m/1440).toFixed(1).replace(".",",")+" gün";
+  const props=orders.filter(o=>propState(o));
+  const pA=props.filter(o=>propState(o)==="accepted").length,pD=props.filter(o=>propState(o)==="declined").length,pP=props.filter(o=>propState(o)==="pending"&&!CLOSED.includes(o.status)).length;
+  const group=key=>{const g={};orders.forEach(o=>{const k=key(o)||"Belirtilmemiş";(g[k]=g[k]||{n:0,done:0,rej:0});g[k].n++;if(o.status==="Tamamlandı")g[k].done++;if(o.status==="Reddedildi")g[k].rej++});return Object.entries(g).sort((a,b)=>b[1].n-a[1].n)};
+  const tbl=(rows,label)=>`<table class="tbl"><thead><tr><th>${label}</th><th class="r">Sipariş</th><th class="r">Tamamlanan</th><th class="r hide-s">Reddedilen</th></tr></thead><tbody>${rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td class="r">${v.n}</td><td class="r">${v.done}</td><td class="r hide-s">${v.rej}</td></tr>`).join("")}</tbody></table>`;
+  return head+`
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-top">${ic("orders")}Toplam sipariş</div><div class="kpi-val">${total}</div><div class="kpi-sub">${done} tamamlandı</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("check-c")}Kabul oranı</div><div class="kpi-val">${pct(acc,acc+rej)}</div><div class="kpi-sub">${acc} kabul · ${rej} red</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("ban")}İptal oranı</div><div class="kpi-val">${pct(canc,total)}</div><div class="kpi-sub">${canc} müşteri iptali</div></div>
+    <div class="kpi"><div class="kpi-top">${ic("clock")}Ortalama yanıt (medyan)</div><div class="kpi-val">${dur(med)}</div><div class="kpi-sub">${resp.length} yanıtlanan siparişten</div></div>
+  </div>
+  <div class="note" style="margin-top:16px">${ic("info")}<div>Kabul oranı, kabul edilen siparişlerin kabul + red toplamına oranıdır; bekleyen ve iptal edilen siparişler dahil edilmez. Yanıt süresi, sipariş oluşturulma zamanından kabul veya red zamanına kadar geçen süredir.</div></div>
+  <div class="grid-2">
+    <section class="card"><div class="card-head"><h2>Hizmete göre</h2></div>${tbl(group(o=>o.service),"Hizmet")}</section>
+    <div class="stack">
+      <section class="card"><div class="card-head"><h2>Saat önerileri</h2></div>
+        ${props.length?`<table class="tbl"><tbody><tr><td>Toplam öneri</td><td class="r">${props.length}</td></tr><tr><td>Müşteri kabul etti</td><td class="r">${pA}</td></tr><tr><td>Müşteri reddetti</td><td class="r">${pD}</td></tr><tr><td>Yanıt bekleniyor</td><td class="r">${pP}</td></tr></tbody></table>`:emptyHTML("clock","Saat önerisi yapılmamış","")}
+      </section>
+      <section class="card"><div class="card-head"><h2>Siteye göre</h2></div>${tbl(group(o=>o.sites?.name),"Site")}</section>
+    </div>
+  </div>`;
+}
+
+/* ===== PROFİL VE AYARLAR ===== */
+function profileHTML(){
+  const collapsed=document.body.classList.contains("side-collapsed");
+  return `
+  <div class="page-head"><div><h1>Profil ve Ayarlar</h1><p>İşletme bilgileriniz ve panel tercihleri</p></div></div>
+  <div class="stack" style="max-width:760px">
+    <section class="card">
+      <div class="card-head"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:40px;height:40px;font-size:15px">${esc(initials(business.name))}</div><div><h2>${esc(business.name)}</h2><p>${esc(business.category||"İşletme")}</p></div></div><span class="badge ${business.active?"green":"gray"}">${business.active?"Aktif":"Pasif"}</span></div>
+      <dl class="dl">
+        <dt>İşletme adı</dt><dd>${esc(business.name)}</dd>
+        <dt>Giriş e-postası</dt><dd>${esc(session?.user?.email||"-")}</dd>
+        <dt>İşletme e-postası</dt><dd>${esc(business.email||"-")}</dd>
+        <dt>Telefon</dt><dd>${esc(business.phone||"-")}</dd>
+        <dt>Kategori</dt><dd>${esc(business.category||"-")}</dd>
+        <dt>Kayıt tarihi</dt><dd>${esc(dateTR(business.created_at))}</dd>
+      </dl>
+      <div class="card-foot">İşletme bilgilerinde değişiklik için BAKSANA ekibiyle iletişime geçin.</div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Panel</h2></div>
+      <div class="setting"><div><b>Daraltılmış kenar menüsü</b><small>Masaüstünde yalnızca simgeler gösterilir.</small></div><button class="switch" type="button" role="switch" aria-checked="${collapsed}" aria-label="Daraltılmış kenar menüsü" data-action="toggle-side"></button></div>
+      <div class="setting"><div><b>Canlı güncelleme</b><small>Sipariş değişiklikleri anlık olarak alınır; ayrıca 20 saniyede bir kontrol edilir.</small></div>${syncHTML()}</div>
+    </section>
+    <section class="card">
+      <div class="setting"><div><b>Oturumu kapat</b><small>Bu cihazdaki oturumunuz sonlandırılır.</small></div><button class="btn btn-danger-soft" type="button" data-action="logout">${ic("logout")}Çıkış yap</button></div>
+    </section>
+  </div>`;
+}
+
+/* ===== BİLDİRİMLER ===== */
+function renderBell(){
+  const att=attention();
+  $("bellPop").innerHTML=`<div class="pop-h">Bildirimler<small>${att.length?att.length+" işlem bekliyor":""}</small></div>
+    <div class="pop-list">${att.length?att.map(todoHTML).join(""):`<div class="ok-line">${ic("check-c")}Yanıt bekleyen işlem yok.</div>`}</div>`;
 }
 
 /* ===== GÜVENLİ GÜNCELLEME =====
-   Her işlem business_id + beklenen durum ile sınırlanır. Hiçbir satır güncellenmezse
-   (ör. müşteri o sırada iptal ettiyse) başarı mesajı gösterilmez. */
+   Her işlem id + business_id + beklenen durum ile sınırlanır. Hiçbir satır güncellenmezse
+   (ör. müşteri o sırada iptal ettiyse) başarı mesajı gösterilmez. Dönüş: "ok" | "stale" | "error" */
 function setBusy(id,on){
+  id=String(id);
   if(on)busyIds.add(id);else busyIds.delete(id);
-  document.querySelectorAll(`.order[data-id="${id}"]`).forEach(c=>c.classList.toggle("busy",on));
+  document.querySelectorAll(`.row[data-open="${CSS.escape(id)}"]`).forEach(r=>r.classList.toggle("busy",on));
+  if(ui.openId===id)$("drawer").querySelectorAll(".dr-foot button").forEach(b=>b.disabled=on||b.dataset.act==="accept"&&propState(findOrder(id))==="pending");
 }
 async function runUpdate(id,patch,guard,okMsg,errPrefix){
-  if(busyIds.has(id))return false;
+  if(busyIds.has(String(id))||!business)return "error";
   setBusy(id,true);
   try{
     let q=supabaseClient.from("orders").update(patch).eq("id",id).eq("business_id",business.id);
     q=guard(q);
     const{data,error}=await q.select("id");
-    if(error){toast(errPrefix+": "+error.message,"error");return false}
+    if(error){toast(errPrefix+": "+error.message,"error");return "error"}
     if(!data||!data.length){
-      toast("İşlem yapılamadı: sipariş durumu değişmiş olabilir. Liste yenilendi.","error");
-      await loadOrders(false);return false;
+      busyIds.delete(String(id));
+      await loadOrders(false);
+      toast("İşlem yapılamadı: sipariş durumu değişmiş. Güncel bilgiler yüklendi.","error");
+      return "stale";
     }
+    busyIds.delete(String(id));
     await loadOrders(false);
     toast(okMsg);
-    return true;
+    return "ok";
+  }catch(e){
+    toast(errPrefix+": "+(e.message||"Bağlantı hatası"),"error");return "error";
   }finally{
     setBusy(id,false);
+    if(ui.openId===String(id))renderDrawer();
   }
 }
-const findOrder=id=>orders.find(x=>x.id===id);
 
 /* ===== KABUL ET (bekleyen öneri varken engellenir) ===== */
-async function acceptOrder(id){
+async function acceptOrder(id,btn){
   const o=findOrder(id);
-  if(o&&propState(o)==="pending"){toast("Müşteri saat önerisine yanıt verene kadar sipariş kabul edilemez.","error");return}
-  await runUpdate(id,{status:"Kabul Edildi",accepted_at:new Date().toISOString()},
+  if(!o||o.status!=="Beklemede"){toast("Bu sipariş artık kabul edilemez.","error");return}
+  if(propState(o)==="pending"){toast("Müşteri saat önerisine yanıt verene kadar sipariş kabul edilemez.","error");return}
+  btn?.classList.add("loading");
+  await runUpdate(o.id,{status:"Kabul Edildi",accepted_at:new Date().toISOString()},
     q=>q.eq("status","Beklemede").or("time_proposal_status.is.null,time_proposal_status.neq.pending"),
-    "Sipariş kabul edildi ✓","Sipariş kabul edilemedi");
+    "Sipariş kabul edildi","Sipariş kabul edilemedi");
 }
 
 /* ===== SAAT ÖNER ===== */
+let proposalId=null;
 function openProposal(id){
-  proposalId=id;
-  $("proposalTime").value=hhmm(findOrder(id)?.service_time);
-  openModal("proposalModal");
+  const o=findOrder(id);if(!o)return;
+  proposalId=String(o.id);
+  const ps=propState(o);
+  $("ppTitle").textContent=ps==="pending"?"Farklı saat öner":ps==="declined"?"Yeniden saat öner":"Yeni saat öner";
+  $("ppCtx").innerHTML=`<div><small>Hizmet tarihi</small><b>${esc(dateTR(o.service_date))}</b></div><div><small>Müşterinin istediği saat</small><b>${esc(hhmm(o.service_time)||"-")}</b></div>${ps==="pending"?`<div style="grid-column:1/-1"><small>Yanıt bekleyen öneriniz</small><b>${esc(hhmm(o.proposed_service_time))}</b></div>`:""}`;
+  const t=$("proposalTime");t.value=ps==="pending"?hhmm(o.proposed_service_time):"";t.removeAttribute("aria-invalid");
+  $("proposalErr").textContent="";
+  openLayer($("proposalModal"),t);
 }
-function closeProposalModal(){proposalId=null;closeModal("proposalModal")}
+function validateProposal(o,raw){
+  const v=String(raw||"").trim();
+  if(!v)return[null,"Bir saat seçin."];
+  if(!/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(v))return[null,"Saat SS:DD biçiminde olmalı (ör. 14:30)."];
+  const t=v.slice(0,5);
+  if(t===hhmm(o.service_time))return[null,"Önerilen saat, müşterinin istediği saatle aynı. Bu saat uygunsa siparişi doğrudan kabul edin."];
+  if(propState(o)==="pending"&&t===hhmm(o.proposed_service_time))return[null,"Bu saat zaten önerildi ve müşteri yanıtı bekleniyor."];
+  if(dateOnly(o.service_date)===TODAY()){const n=new Date();if(t<=String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0"))return[null,"Bugün için geçmiş bir saat önerilemez."]}
+  if(dateOnly(o.service_date)&&dateOnly(o.service_date)<TODAY())return[null,"Hizmet tarihi geçmiş bir sipariş için saat önerilemez."];
+  return[t,null];
+}
 async function confirmProposal(){
-  if(!proposalId)return;
-  const time=$("proposalTime").value;
-  if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){toast("Geçerli bir saat seç.","error");return}
-  const id=proposalId;
-  closeProposalModal();
-  await runUpdate(id,{proposed_service_time:time,time_proposal_status:"pending",time_proposed_at:new Date().toISOString()},
-    q=>q.eq("status","Beklemede"),
-    "Saat önerisi müşteriye gönderildi ✓","Saat önerilemedi");
+  const o=findOrder(proposalId);
+  if(!o||o.status!=="Beklemede"){closeLayer($("proposalModal"));toast("Bu sipariş için artık saat önerilemez.","error");return}
+  const[time,err]=validateProposal(o,$("proposalTime").value);
+  if(err){$("proposalErr").textContent=err;$("proposalTime").setAttribute("aria-invalid","true");$("proposalTime").focus();return}
+  const btn=$("proposalOk");btn.disabled=true;btn.classList.add("loading");
+  try{
+    const r=await runUpdate(o.id,{proposed_service_time:time,time_proposal_status:"pending",time_proposed_at:new Date().toISOString()},
+      q=>q.eq("status","Beklemede"),
+      "Saat önerisi müşteriye gönderildi","Saat önerilemedi");
+    if(r==="error")$("proposalErr").textContent="Öneri gönderilemedi. Tekrar deneyebilirsiniz.";
+    else closeLayer($("proposalModal"));
+  }finally{btn.disabled=false;btn.classList.remove("loading")}
 }
 
 /* ===== REDDET ===== */
-function openReject(id){rejectId=id;$("rejectReason").value="";openModal("rejectModal")}
-function closeRejectModal(){rejectId=null;closeModal("rejectModal")}
+let rejectId=null;
+function openReject(id){
+  const o=findOrder(id);if(!o)return;
+  rejectId=String(o.id);
+  document.querySelectorAll("#rejectReasons input").forEach(x=>x.checked=false);
+  $("rejectErr").textContent="";
+  $("rjSub").textContent=`${o.service||"Sipariş"} · ${o.order_code||"#"+o.id} — red nedeni müşteriye iletilir. Bu işlem geri alınamaz.`;
+  openLayer($("rejectModal"),document.querySelector("#rejectReasons input"));
+}
 async function confirmReject(){
-  if(!rejectId)return;
-  const reason=$("rejectReason").value;
-  if(!reason){toast("Red nedeni seç.","error");return}
-  const id=rejectId;
-  closeRejectModal();
-  await runUpdate(id,{status:"Reddedildi",rejection_reason:reason,rejected_at:new Date().toISOString()},
-    q=>q.eq("status","Beklemede"),
-    "Sipariş reddedildi","Sipariş reddedilemedi");
+  const o=findOrder(rejectId);
+  if(!o||o.status!=="Beklemede"){closeLayer($("rejectModal"));toast("Bu sipariş artık reddedilemez.","error");return}
+  const reason=document.querySelector("#rejectReasons input:checked")?.value;
+  if(!reason){$("rejectErr").textContent="Lütfen bir red nedeni seçin.";return}
+  const btn=$("rejectOk");btn.disabled=true;btn.classList.add("loading");
+  try{
+    const r=await runUpdate(o.id,{status:"Reddedildi",rejection_reason:reason,rejected_at:new Date().toISOString()},
+      q=>q.eq("status","Beklemede"),
+      "Sipariş reddedildi","Sipariş reddedilemedi");
+    if(r==="error")$("rejectErr").textContent="Sipariş reddedilemedi. Tekrar deneyebilirsiniz.";
+    else closeLayer($("rejectModal"));
+  }finally{btn.disabled=false;btn.classList.remove("loading")}
 }
 
 /* ===== İŞİ BAŞLAT ===== */
-async function startOrder(id){
-  await runUpdate(id,{status:"Devam Ediyor"},q=>q.eq("status","Kabul Edildi"),"İş başladı ▶","İş başlatılamadı");
+async function startOrder(id,btn){
+  btn?.classList.add("loading");
+  await runUpdate(findOrder(id)?.id??id,{status:"Devam Ediyor"},q=>q.eq("status","Kabul Edildi"),"İş başlatıldı","İş başlatılamadı");
 }
 
 /* ===== TAMAMLA (onaylı) ===== */
+let confirmCb=null;
+function askConfirm(title,text,label,cls,cb){
+  $("cfTitle").textContent=title;$("cfText").textContent=text;
+  const ok=$("cfOk");ok.textContent=label;ok.className="btn "+cls;
+  $("cfErr").textContent="";
+  confirmCb=cb;openLayer($("confirmModal"),ok);
+}
+async function runConfirm(){
+  if(!confirmCb)return;
+  const ok=$("cfOk");ok.disabled=true;ok.classList.add("loading");
+  try{
+    const r=await confirmCb();
+    if(r==="error")$("cfErr").textContent="İşlem tamamlanamadı. Tekrar deneyebilirsiniz.";
+    else{confirmCb=null;closeLayer($("confirmModal"))}
+  }finally{ok.disabled=false;ok.classList.remove("loading")}
+}
 function completeOrder(id){
-  askConfirm("İşi tamamla?","Sipariş tamamlandı olarak işaretlenecek ve kazanca eklenecek.","Tamamla ✓",()=>
-    runUpdate(id,{status:"Tamamlandı",completed_at:new Date().toISOString()},q=>q.eq("status","Devam Ediyor"),"İş tamamlandı ✓","İş tamamlanamadı"));
+  const o=findOrder(id);if(!o)return;
+  askConfirm("İşi tamamla","\""+(o.service||"Sipariş")+"\" ("+(o.order_code||"#"+o.id)+") tamamlandı olarak işaretlenecek. Bu işlem geri alınamaz.","İşi tamamla","btn-success",()=>
+    runUpdate(o.id,{status:"Tamamlandı",completed_at:new Date().toISOString()},q=>q.eq("status","Devam Ediyor"),"İş tamamlandı","İş tamamlanamadı"));
 }
-function askConfirm(title,text,label,cb){
-  $("confirmTitle").textContent=title;$("confirmText").textContent=text;$("confirmOk").textContent=label;
-  confirmCb=cb;openModal("confirmModal");
-}
-function closeConfirm(){confirmCb=null;closeModal("confirmModal")}
-function runConfirm(){const cb=confirmCb;closeConfirm();if(cb)cb()}
 
 /* ===== ÇIKIŞ ===== */
-async function logout(){await supabaseClient.auth.signOut();showLogin()}
+async function logout(){
+  try{await supabaseClient.auth.signOut()}catch(e){console.error(e)}
+  showLogin();
+}
 
 supabaseClient.auth.onAuthStateChange((event,newSession)=>{
   session=newSession;
   if(event==="SIGNED_OUT")showLogin();
 });
 
-/* ===== KLAVYE / MODAL KAPATMA ===== */
-["email","password"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")loginBusiness()}));
-const modalClosers={rejectModal:closeRejectModal,proposalModal:closeProposalModal,confirmModal:closeConfirm,moreModal:()=>closeModal("moreModal")};
-Object.keys(modalClosers).forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id===id)modalClosers[id]()}));
-document.addEventListener("keydown",e=>{
-  if(e.key!=="Escape")return;
-  Object.keys(modalClosers).forEach(id=>{if($(id).classList.contains("show"))modalClosers[id]()});
+/* ===== OLAYLAR ===== */
+$("loginForm").addEventListener("submit",e=>{e.preventDefault();loginBusiness()});
+document.addEventListener("click",e=>{
+  const t=e.target;
+  if(!t.closest(".pop,#bellBtn,#meBtn"))closePops();
+  const open=t.closest("[data-open]");
+  if(open){closePops();if($("moreModal").classList.contains("show"))closeLayer($("moreModal"));openOrder(open.dataset.open);return}
+  const nav=t.closest("[data-nav]");
+  if(nav){if($("moreModal").classList.contains("show"))closeLayer($("moreModal"));go(nav.dataset.nav);return}
+  const tab=t.closest("[data-tab]");
+  if(tab){ui.tab=tab.dataset.tab;if(route!=="orders")go("orders");else{history.replaceState(null,"","#/orders/"+ui.tab);render()}return}
+  if(t.closest("[data-filter-today]")){ui.date="today";ui.tab="all";go("orders");return}
+  const act=t.closest("[data-act]");
+  if(act&&!act.disabled&&ui.openId!=null){
+    const id=ui.openId,a=act.dataset.act;
+    if(a==="accept")acceptOrder(id,act);
+    else if(a==="propose")openProposal(id);
+    else if(a==="reject")openReject(id);
+    else if(a==="start")startOrder(id,act);
+    else if(a==="complete")completeOrder(id);
+    return;
+  }
+  const ac=t.closest("[data-action]");
+  if(ac){
+    const a=ac.dataset.action;
+    if(a==="logout"){closePops();[...layers].forEach(l=>closeLayer(l.el));logout()}
+    else if(a==="more")openLayer($("moreModal"));
+    else if(a==="refresh"){if($("moreModal").classList.contains("show"))closeLayer($("moreModal"));loadOrders(true)}
+    else if(a==="clear-filters"){ui.q="";ui.date="all";ui.day="";ui.service="";$("topSearch").value="";render()}
+    else if(a==="toggle-side")toggleSide();
+    return;
+  }
+  const close=t.closest("[data-close]");
+  if(close){const m=close.closest(".modal,.drawer");if(m)closeLayer(m);return}
 });
+["rejectModal","proposalModal","confirmModal","moreModal"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id===id)closeLayer($(id))}));
+$("scrim").addEventListener("click",()=>closeLayer($("drawer")));
+$("proposalOk").addEventListener("click",confirmProposal);
+$("proposalTime").addEventListener("keydown",e=>{if(e.key==="Enter")confirmProposal()});
+$("proposalTime").addEventListener("input",()=>{$("proposalErr").textContent="";$("proposalTime").removeAttribute("aria-invalid")});
+$("rejectOk").addEventListener("click",confirmReject);
+$("rejectReasons").addEventListener("change",()=>$("rejectErr").textContent="");
+$("cfOk").addEventListener("click",runConfirm);
+$("topRefresh").addEventListener("click",()=>loadOrders(true));
+$("bellBtn").addEventListener("click",e=>{e.stopPropagation();togglePop("bellPop",$("bellBtn"))});
+$("meBtn").addEventListener("click",e=>{e.stopPropagation();if(matchMedia("(max-width:960px)").matches){openLayer($("moreModal"))}else togglePop("mePop",$("meBtn"))});
+$("collapseBtn").addEventListener("click",toggleSide);
+function toggleSide(){
+  const on=!document.body.classList.contains("side-collapsed");
+  document.body.classList.toggle("side-collapsed",on);
+  lsSet("bk_side",on?"1":"0");
+  $("collapseBtn").setAttribute("aria-label",on?"Menüyü genişlet":"Menüyü daralt");
+  if(route==="profile")render();
+}
+if(lsGet("bk_side")==="1"){document.body.classList.add("side-collapsed");$("collapseBtn").setAttribute("aria-label","Menüyü genişlet")}
+
+/* Filtreler: olay yetkilendirmesi ile (liste yeniden çizildiğinde de çalışır) */
+document.addEventListener("input",e=>{
+  if(e.target.id==="ordSearch"){ui.q=e.target.value;$("topSearch").value=ui.q;render()}
+  else if(e.target.id==="topSearch"){ui.q=e.target.value;if(route!=="orders"){ui.tab="all";go("orders",{keepScroll:true});$("topSearch").focus()}else render()}
+});
+document.addEventListener("change",e=>{
+  const id=e.target.id;
+  if(id==="ordDate"){ui.date=e.target.value;if(ui.date!=="day")ui.day="";render();if(ui.date==="day")$("ordDay")?.focus()}
+  else if(id==="ordDay"){ui.day=e.target.value;render()}
+  else if(id==="ordService"){ui.service=e.target.value;render()}
+  else if(id==="ordSort"){ui.sort=e.target.value;render()}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if($("bellPop").classList.contains("show")||$("mePop").classList.contains("show")){closePops();return}
+    const top=topLayer();if(top){e.preventDefault();closeLayer(top)}
+    return;
+  }
+  trapFocus(e);
+  if(e.key==="/"&&!layers.length&&business&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"")){e.preventDefault();$("topSearch").focus()}
+});
+window.addEventListener("popstate",()=>{if(business){const r=routeFromHash()||"home";route=r;go(r,{replace:true})}});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&business)loadOrders(false)});
+/* Göreli zamanlar ("5 dk önce") ve "bugün" etiketleri bayatlamasın */
+setInterval(()=>{if(business&&!layers.length&&!/INPUT|SELECT/.test(document.activeElement?.tagName||""))render()},60000);
 
 /* ===== BAŞLANGIÇ ===== */
 (async function(){
